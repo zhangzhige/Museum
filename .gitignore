@@ -5,6 +5,6 @@ build/
 .gradle/
 .idea/
 .settings/
-/3D_Store/.classpath
+.classpath
 proguard/
 *.apk
