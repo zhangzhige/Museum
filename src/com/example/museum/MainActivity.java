@@ -4,24 +4,24 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-public class MainActivity extends android.support.v4.app.FragmentActivity{
-	
+public class MainActivity extends android.support.v4.app.FragmentActivity {
+
 	private XL_Log log = new XL_Log(MainActivity.class);
-	
+
 	public static final int FINISH_THIS = 0;
 
 	private long waitTime = 2000;
 	private long touchTime = 0;
-	
+
 	private MainView mXlMainView;
-	
+
 	public static final int MSG_SHOW_UNICOM3G_TOAST = 1000 + 1;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		log.debug("onCreate=="+this);
-		mXlMainView=new MainView(this,savedInstanceState);
+		log.debug("onCreate==" + this);
+		mXlMainView = new MainView(this, savedInstanceState);
 		setContentView(mXlMainView);
 	}
 
@@ -44,7 +44,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity{
 	public void onResume() {
 		super.onResume();
 	}
-	
+
 	@Override
 	public void onPause() {
 		log.debug("onPause");
@@ -67,23 +67,23 @@ public class MainActivity extends android.support.v4.app.FragmentActivity{
 	protected void onRestart() {
 		log.debug("onRestart");
 		super.onRestart();
-		
+
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		log.debug("-----onDestroy start********************");
 		super.onDestroy();
-		if(mXlMainView!=null){
+		if (mXlMainView != null) {
 			mXlMainView.onDestroy();
 		}
 	}
-	
+
 	/**
 	 * 这个是真正释放所有资源，包括kill虚拟机
 	 */
-	private void releaseAll(){
-		//置空静态对象
+	private void releaseAll() {
+		// 置空静态对象
 		finish();
 		android.os.Process.killProcess(android.os.Process.myPid());
 	}
