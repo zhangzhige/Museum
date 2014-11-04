@@ -1,0 +1,10 @@
+bin/
+gen/
+obj/
+build/
+.gradle/
+.idea/
+.settings/
+/3D_Store/.classpath
+proguard/
+*.apk

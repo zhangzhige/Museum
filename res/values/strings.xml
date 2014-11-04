@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Museum</string>
+    <string name="home_tab">首页</string>
+    <string name="history_video">历史视频</string>
+    <string name="cultural_tab">文物藏品</string>
+    <string name="signature_wall">签名墙</string>
+    <string name="meseum_location">展馆位置</string>
+
+</resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name="back_ground">#fafafa</color>
+
+
+    <color name="transparent">#00000000</color>
+    <color name="holo_blue_dark">#ff0099cc</color>
+    <color name="setting_item_pressed">#19000000</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="holo_blue">#FF33E5B5</color>
+    <color name="big_txt_color">#333333</color>
+    <color name="mid_txt_color">#787878</color>
+    <color name="gray">#999999</color>
+    <color name="background_green">#E2F0B6</color>
+    <color name="transparent_bg">#50000000</color>
+    <color name="title_color">#999999</color>
+    <color name="tab_txt_unselect">#999999</color>
+    <color name="list_title_text_color">#999</color>
+    <color name="message_text_color">#666666</color>
+    
+    <color name="share_text_color">#fff</color>
+    <color name="all_list_background">#dddddd</color>
+    <color name="big_title_color">#676d7c</color>
+    <color name="vod_info_txt_color">#555555</color>
+    <color name="list_line">#19000000</color>
+    <color name="resolution_not_supported">#606060</color>
+    <color name="resolution_selected">#63caff</color>
+    <color name="resolution_supported">#ffffff</color>
+    <color name="transparent_background">#80ffffff</color>
+    <color name="xiaomi_guide_bg">#1000</color>
+    <color name="task_text_red">#ff6262</color>
+	 <color name="action_bar_bg">#323a45</color>
+	 <color name="local_space_gv_item_progress_bg">#66ffffff</color>
+	 <color name="local_space_gv_item_progress_front">#71bc1e</color>
+	 
+	 <color name="button_green_text_color">#5fa611</color>
+	 <color name="text_color_bg_default">#040910</color>
+	 
+	 
+	 <color name="game_item_download_common">#71bc1e</color>
+	 <color name="game_item_download_press">#4f8c0e</color>
+	 
+	 <color name="home_cut_title_tab_color">#1e91eb</color>
+	 <color name="multi_delete_menu_seletor_pressed">#0d000000</color>
+	 
+	 <color name="red_btn_normal">#eb0371</color>
+	 <color name="red_btn_select">#d10263</color>
+	 
+	 <color name="blue_btn_normal">#1e91eb</color>
+	 <color name="blue_btn_select">#1b82d1</color>
+	 <color name="home_tab_select_color">#1e91eb</color>
+	 <color name="home_tab_bg_select_color">#1c2430</color>
+	 
+	 <color name="list_item_select">#0D000000</color>
+    <color name="movie_choose_bg">#90000000</color>
+    <color name="movie_choose_button_bg_normal">#40000000</color>
+    <color name="movie_choose_button_bg_pressed">#80000000</color>
+    <color name="movie_choose_text_bg">#999999</color>
+	 <color name="cut_line_color">#e5e5e5</color>
+	 <color name="player_actionbar_bg">#cc000000</color>
+	 
+	 <color name="gif_bkgcolor">#ebebeb</color>
+	 <color name="home_blur_color">#33000000</color>
+</resources>
