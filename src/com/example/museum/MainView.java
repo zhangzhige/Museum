@@ -52,12 +52,6 @@ public class MainView extends LinearLayout implements OnClickListener {
 	private TextView[] textViewArray = new TextView[5];
 	private ViewGroup[] linearLayoutArray = new ViewGroup[5];
 
-	private int[] menu_image_array_common = { R.drawable.ic_toolbar_home_normal, R.drawable.ic_toolbar_channel_normal, R.drawable.ic_toolbar_radar_normal, R.drawable.ic_toolbar_my_normal,
-			R.drawable.ic_toolbar_my_normal };
-
-	private int[] menu_image_array_click = { R.drawable.ic_toolbar_home_selected, R.drawable.ic_toolbar_channel_selected, R.drawable.ic_toolbar_radar_selected, R.drawable.ic_toolbar_my_selected,
-			R.drawable.ic_toolbar_my_selected };
-
 	/**
 	 * @param context
 	 */
@@ -179,11 +173,9 @@ public class MainView extends LinearLayout implements OnClickListener {
 	private void changeBottomUI(int tab_id) {
 		for (int i = 0, size = imageViewArray.length; i < size; i++) {
 			if (i == tab_id) {
-				imageViewArray[i].setImageResource(menu_image_array_click[i]);
 				linearLayoutArray[i].setBackgroundResource(R.drawable.ic_toolbar_iconbackground);
 				textViewArray[i].setTextColor(getResources().getColor(R.color.white));
 			} else {
-				imageViewArray[i].setImageResource(menu_image_array_common[i]);
 				linearLayoutArray[i].setBackgroundColor(Color.TRANSPARENT);
 				textViewArray[i].setTextColor(getResources().getColor(R.color.tab_txt_unselect));
 			}

@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/toolbar_bg"
+        android:background="@drawable/buttom_tab"
         android:orientation="horizontal"
         android:baselineAligned="false" >
 
@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
-                android:src="@drawable/ic_toolbar_home_selected"
+                android:src="@drawable/icon_home"
                 android:contentDescription="@string/app_name" />
 
             <TextView
@@ -60,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
-                android:src="@drawable/ic_toolbar_channel_normal"
+                android:src="@drawable/icon_video"
                 android:contentDescription="@string/app_name" />
 
             <TextView
@@ -87,7 +87,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
-                android:src="@drawable/ic_toolbar_radar_normal"
+                android:src="@drawable/icon_star"
                 android:contentDescription="@string/app_name" />
 
             <TextView
@@ -114,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
-                android:src="@drawable/ic_toolbar_my_normal"
+                android:src="@drawable/icon_sign"
                 android:contentDescription="@string/app_name" />
 
             <TextView
@@ -141,7 +141,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dip"
-                android:src="@drawable/ic_toolbar_my_normal"
+                android:src="@drawable/icon_location"
                 android:contentDescription="@string/app_name" />
 
             <TextView
