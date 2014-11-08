@@ -15,8 +15,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:background="@drawable/buttom_tab"
-        android:orientation="horizontal"
-        android:baselineAligned="false" >
+        android:baselineAligned="false"
+        android:orientation="horizontal" >
 
         <LinearLayout
             android:id="@+id/home_layout"
@@ -24,7 +24,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
-            android:background="@drawable/ic_toolbar_iconbackground"
             android:gravity="center"
             android:orientation="vertical" >
 
@@ -32,17 +31,8 @@
                 android:id="@+id/imageview1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:src="@drawable/icon_home"
-                android:contentDescription="@string/app_name" />
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/home_tab"
-                android:textColor="@color/tab_txt_unselect"
-                android:textSize="13sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icon_home_done" />
         </LinearLayout>
 
         <LinearLayout
@@ -51,25 +41,16 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
+            android:baselineAligned="false"
             android:gravity="center"
-            android:orientation="vertical"
-            android:baselineAligned="false" >
+            android:orientation="vertical" >
 
             <ImageView
                 android:id="@+id/imageview2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:src="@drawable/icon_video"
-                android:contentDescription="@string/app_name" />
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/history_video"
-                android:textColor="@color/tab_txt_unselect"
-                android:textSize="13sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icon_video_normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -78,25 +59,16 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
+            android:baselineAligned="false"
             android:gravity="center"
-            android:orientation="vertical"
-            android:baselineAligned="false" >
+            android:orientation="vertical" >
 
             <ImageView
                 android:id="@+id/imageview3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:src="@drawable/icon_star"
-                android:contentDescription="@string/app_name" />
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cultural_tab"
-                android:textColor="@color/tab_txt_unselect"
-                android:textSize="13sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icon_stat_normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,25 +77,16 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
+            android:baselineAligned="false"
             android:gravity="center"
-            android:orientation="vertical"
-            android:baselineAligned="false" >
+            android:orientation="vertical" >
 
             <ImageView
                 android:id="@+id/imageview4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:src="@drawable/icon_sign"
-                android:contentDescription="@string/app_name" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/signature_wall"
-                android:textColor="@color/tab_txt_unselect"
-                android:textSize="13sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icon_pen_normal" />
         </LinearLayout>
 
         <LinearLayout
@@ -132,25 +95,16 @@
             android:layout_height="match_parent"
             android:layout_gravity="center_vertical"
             android:layout_weight="1.0"
+            android:baselineAligned="false"
             android:gravity="center"
-            android:orientation="vertical"
-            android:baselineAligned="false" >
+            android:orientation="vertical" >
 
             <ImageView
                 android:id="@+id/imageview5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dip"
-                android:src="@drawable/icon_location"
-                android:contentDescription="@string/app_name" />
-
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/meseum_location"
-                android:textColor="@color/tab_txt_unselect"
-                android:textSize="13sp" />
+                android:contentDescription="@string/app_name"
+                android:src="@drawable/icon_location_normal" />
         </LinearLayout>
     </LinearLayout>
 

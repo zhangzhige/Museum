@@ -46,7 +46,7 @@ public class GuideGallery extends RelativeLayout {
 
 	private DisplayImageOptions mOptions;
 
-	private ImageAdapter mImageAdapter;
+	private RecyclingPagerAdapter mImageAdapter;
 
 	private Runnable myRunnable = new Runnable() {
 		@Override
@@ -97,18 +97,46 @@ public class GuideGallery extends RelativeLayout {
 		}
 		return super.onInterceptTouchEvent(ev);
 	}
+	
+	public void setAdapter(RecyclingPagerAdapter mRecyclingPagerAdapter) {
+		mImageAdapter = mRecyclingPagerAdapter;
+		mPager.setAdapter(mImageAdapter);
+		mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
+		mIndicator.setViewPager(mPager);
+//		title_textview.setText(mImageAdapter.getItem(0).getTitle());
+		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
+
+			@Override
+			public void onPageSelected(int position) {
+//				title_textview.setText(mImageAdapter.getItem(position % mImageAdapter.getRealCount()).getTitle());
+			}
+
+			@Override
+			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void onPageScrollStateChanged(int state) {
+				// TODO Auto-generated method stub
+
+			}
+		});
+	}
+	
 
 	public void setDataSource(ArrayList<CmsItemable> mArrayList) {
 		mImageAdapter = new ImageAdapter(mArrayList);
 		mPager.setAdapter(mImageAdapter);
 		mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
 		mIndicator.setViewPager(mPager);
-		title_textview.setText(mImageAdapter.getItem(0).getTitle());
+//		title_textview.setText(mImageAdapter.getItem(0).getTitle());
 		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 
 			@Override
 			public void onPageSelected(int position) {
-				title_textview.setText(mImageAdapter.getItem(position % mImageAdapter.getRealCount()).getTitle());
+//				title_textview.setText(mImageAdapter.getItem(position % mImageAdapter.getRealCount()).getTitle());
 			}
 
 			@Override

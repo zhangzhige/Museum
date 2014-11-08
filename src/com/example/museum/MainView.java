@@ -49,9 +49,12 @@ public class MainView extends LinearLayout implements OnClickListener {
 	public LocationFragment mLocationFragment;
 
 	private ImageView[] imageViewArray = new ImageView[5];
-	private TextView[] textViewArray = new TextView[5];
 	private ViewGroup[] linearLayoutArray = new ViewGroup[5];
 
+	private int[] menu_image_array_common = { R.drawable.icon_home_normal,  R.drawable.icon_video_normal,R.drawable.icon_stat_normal,R.drawable.icon_pen_normal,R.drawable.icon_location_normal };
+
+	private int[] menu_image_array_click = { R.drawable.icon_home_done,R.drawable.icon_video_done,R.drawable.icon_stat_done,  R.drawable.icon_pen_done,R.drawable.icon_location_done };
+	
 	/**
 	 * @param context
 	 */
@@ -70,11 +73,6 @@ public class MainView extends LinearLayout implements OnClickListener {
 		imageViewArray[3] = (ImageView) findViewById(R.id.imageview4);
 		imageViewArray[4] = (ImageView) findViewById(R.id.imageview5);
 
-		textViewArray[0] = (TextView) findViewById(R.id.textView1);
-		textViewArray[1] = (TextView) findViewById(R.id.textView2);
-		textViewArray[2] = (TextView) findViewById(R.id.textView3);
-		textViewArray[3] = (TextView) findViewById(R.id.textView4);
-		textViewArray[4] = (TextView) findViewById(R.id.textView5);
 
 		linearLayoutArray[0] = (LinearLayout) findViewById(R.id.home_layout);
 		linearLayoutArray[1] = (LinearLayout) findViewById(R.id.video_layout);
@@ -173,11 +171,9 @@ public class MainView extends LinearLayout implements OnClickListener {
 	private void changeBottomUI(int tab_id) {
 		for (int i = 0, size = imageViewArray.length; i < size; i++) {
 			if (i == tab_id) {
-				linearLayoutArray[i].setBackgroundResource(R.drawable.ic_toolbar_iconbackground);
-				textViewArray[i].setTextColor(getResources().getColor(R.color.white));
+				imageViewArray[i].setImageResource(menu_image_array_click[i]);
 			} else {
-				linearLayoutArray[i].setBackgroundColor(Color.TRANSPARENT);
-				textViewArray[i].setTextColor(getResources().getColor(R.color.tab_txt_unselect));
+				imageViewArray[i].setImageResource(menu_image_array_common[i]);
 			}
 		}
 	}
