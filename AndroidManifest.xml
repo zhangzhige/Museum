@@ -39,6 +39,11 @@
             android:name="CollectionListActivity"
             android:theme="@android:style/Theme.Black.NoTitleBar" >
         </activity>
+        <activity
+            android:name="VideoPlayerActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/PlayerTheme" >
+        </activity>
     </application>
 
 </manifest>

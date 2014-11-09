@@ -7,5 +7,9 @@
     <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
         <!-- API 11 theme customizations can go here. -->
     </style>
+    
+    <style name="PlayerTheme" parent="@android:style/Theme.Black.NoTitleBar">
+        <!-- API 11 theme customizations can go here. -->
+    </style>
 
 </resources>
