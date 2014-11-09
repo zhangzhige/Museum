@@ -7,6 +7,7 @@ import org.apache.http.entity.ByteArrayEntity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.example.museum.HttpManager.OnLoadFinishListener;
 import com.google.xlgson.Gson;
 import com.google.xlgson.JsonSyntaxException;
 import com.google.xlgson.reflect.TypeToken;
@@ -115,38 +116,13 @@ public class HomeFragment extends Fragment {
 			}
 		});
 	    
-	    JSONObject jsonRequObj = new JSONObject();
-		try {
-			jsonRequObj.put("pageindex",0);
-			jsonRequObj.put("pagesize",20);
-			jsonRequObj.put("categoryids",3);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		
-		String jsonContent = jsonRequObj.toString();
-		ByteArrayEntity byteEntity = new ByteArrayEntity(jsonContent.getBytes()); 		
-		
-	    mHttpProxy.post(SearchUrl, byteEntity, new AsyncHttpResponseHandler(){
-	    	
-	    	public void onSuccess(int statusCode, Header[] headers, String content){
-	    		Log.d("TAG", "content="+content);
-	    		Gson gson = new Gson();
-	    		try {
-	    			mCulturalList = gson.fromJson(content,  
-	    	                new TypeToken<List<Cultural>>() {  
-	    	                }.getType());  
-	    		} catch (JsonSyntaxException e) {
-	    			e.printStackTrace();
-	    		} catch (Exception e) {
-	    			e.printStackTrace();
-	    		}
-	    		mHandler.obtainMessage().sendToTarget();
-	    	}
-	    	
-	    	public void onFailure(Throwable error, String content){
-	    		mHandler.obtainMessage().sendToTarget();
-	    	}
-	    });
+	    new HttpManager().loadData(3, 0, new OnLoadFinishListener<Cultural>() {
+
+			@Override
+			public void onLoad(List<Cultural> mList) {
+				mCulturalList = mList;
+				mHandler.obtainMessage().sendToTarget();
+			}
+		});
 	}
 }
