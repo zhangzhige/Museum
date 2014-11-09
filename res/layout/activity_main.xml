@@ -4,11 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <FrameLayout
-        android:id="@+id/center_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <LinearLayout
         android:id="@+id/botton_menu"
         android:layout_width="fill_parent"
@@ -107,5 +102,25 @@
                 android:src="@drawable/icon_location_normal" />
         </LinearLayout>
     </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/center_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/botton_menu" />
+
+    <FrameLayout
+        android:id="@+id/mesume_gif_layout"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:layout_above="@+id/botton_menu"
+        android:layout_centerHorizontal="true" >
+
+        <com.example.museum.GifView
+            android:id="@+id/gifView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom" />
+    </FrameLayout>
 
 </RelativeLayout>

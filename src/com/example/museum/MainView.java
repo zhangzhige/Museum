@@ -55,6 +55,7 @@ public class MainView extends LinearLayout implements OnClickListener {
 
 	private int[] menu_image_array_click = { R.drawable.icon_home_done,R.drawable.icon_video_done,R.drawable.icon_stat_done,  R.drawable.icon_pen_done,R.drawable.icon_location_done };
 	
+	private GifView gifView;
 	/**
 	 * @param context
 	 */
@@ -83,6 +84,9 @@ public class MainView extends LinearLayout implements OnClickListener {
 			linearLayoutArray[i].setOnClickListener(this);
 		}
 		switchTabs(R.id.home_layout);
+		
+		gifView = (GifView) findViewById(R.id.gifView);
+		gifView.start();
 	}
 
 	private void changeFragment(Fragment f, String name) {
