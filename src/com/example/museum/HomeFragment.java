@@ -88,8 +88,6 @@ public class HomeFragment extends Fragment {
 	        return imageView;
 	    }
 	}
-	
-	private String SearchUrl = "http://tss.waltzcn.com/Plugins/RestApi/API/Product/SearchProducts?loginName=apiuser&loginPassword=123456";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -116,7 +114,7 @@ public class HomeFragment extends Fragment {
 			}
 		});
 	    
-	    new HttpManager().loadData(3, 0, new OnLoadFinishListener<Cultural>() {
+	    new HttpManager().loadData(3, R.raw.xinshiqishidai, new OnLoadFinishListener<Cultural>() {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {

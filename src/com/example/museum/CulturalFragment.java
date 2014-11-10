@@ -19,6 +19,7 @@ public class CulturalFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), CollectionListActivity.class);
+				intent.putExtra("categoryids", 5);
 				startActivity(intent);
 			}
 		});
@@ -28,6 +29,7 @@ public class CulturalFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), CollectionListActivity.class);
+				intent.putExtra("categoryids", 6);
 				startActivity(intent);
 			}
 		});
