@@ -14,6 +14,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.example.museum.MainApplication.OnNetWorkChangeListener.NetType;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiscCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -50,6 +51,7 @@ public class MainApplication extends Application {
     }
 
     private void init() {
+    	SDKInitializer.initialize(this);
         mWifiStateFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.registerReceiver(mWifiStateReceiver, mWifiStateFilter);
 
