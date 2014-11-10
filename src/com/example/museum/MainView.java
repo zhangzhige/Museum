@@ -68,6 +68,10 @@ public class MainView extends LinearLayout implements OnClickListener {
 	}
 
 	private void onFinishInflate(Bundle savedInstanceState) {
+		
+		gifView = (GifView) findViewById(R.id.gifView);
+		gifView.start();
+		
 		imageViewArray[0] = (ImageView) findViewById(R.id.imageview1);
 		imageViewArray[1] = (ImageView) findViewById(R.id.imageview2);
 		imageViewArray[2] = (ImageView) findViewById(R.id.imageview3);
@@ -85,8 +89,6 @@ public class MainView extends LinearLayout implements OnClickListener {
 		}
 		switchTabs(R.id.home_layout);
 		
-		gifView = (GifView) findViewById(R.id.gifView);
-		gifView.start();
 	}
 
 	private void changeFragment(Fragment f, String name) {
@@ -173,6 +175,7 @@ public class MainView extends LinearLayout implements OnClickListener {
 	}
 
 	private void changeBottomUI(int tab_id) {
+		gifView.setVisibility(tab_id < 2 ? View.VISIBLE:View.INVISIBLE);
 		for (int i = 0, size = imageViewArray.length; i < size; i++) {
 			if (i == tab_id) {
 				imageViewArray[i].setImageResource(menu_image_array_click[i]);

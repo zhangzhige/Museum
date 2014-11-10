@@ -14,8 +14,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
-import at.technikum.mti.fancycoverflow.FancyCoverFlow;
-import at.technikum.mti.fancycoverflow.FancyCoverFlowAdapter;
 
 import com.example.museum.HttpManager.OnLoadFinishListener;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -101,9 +99,7 @@ public class HomeFragment extends Fragment {
 	}
 
 	private void initUI() {
-		
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
-		
 		fancyCoverFlow = (Gallery) mRootView.findViewById(R.id.fancyCoverFlow);
 	    fancyCoverFlow.setOnItemClickListener(new OnItemClickListener() {
 
