@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class CollectionListActivity extends Activity {
 
@@ -27,6 +28,8 @@ public class CollectionListActivity extends Activity {
 	private ListView mainlistView;
 
 	private CustomListAdapter mCustomListAdapter;
+	
+	private TextView textView_listhead;
 
 	private Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -43,10 +46,19 @@ public class CollectionListActivity extends Activity {
 		setContentView(R.layout.activity_collectionlist);
 
 		categoryids = getIntent().getIntExtra("categoryids", 5);
-
+		textView_listhead =(TextView) findViewById(R.id.textView_listhead);
+		textView_listhead.setText(categoryids == 5?"新石器时代":"青铜时代");
 		mGuideGallery = (GuideGallery) findViewById(R.id.listview_head);
 		mGuideGallery.setAdapter(new ImageAdapter());
 
+		findViewById(R.id.actionbar_layout).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				finish();
+			}
+		});
+		
 		mainlistView = (ListView) findViewById(R.id.mainlistView);
 		mainlistView.setOnItemClickListener(new OnItemClickListener() {
 

@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_tab" >
 
-    <ImageView
-        android:id="@+id/imageView_file_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <FrameLayout
+        android:id="@+id/icon_layout"
+        android:layout_width="84dip"
+        android:layout_height="84dip"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginLeft="13dip"
-        android:src="@drawable/ic_launcher" />
+        android:background="@drawable/collection_bg_blue" >
+
+        <ImageView
+            android:id="@+id/imageView_file_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_launcher" />
+    </FrameLayout>
 
     <ImageView
         android:id="@+id/imageView_menu"
@@ -18,14 +27,18 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:src="@drawable/ic_launcher" />
+        android:layout_marginRight="12dip"
+        android:src="@drawable/classfy_menu_seletor" />
 
     <LinearLayout
         android:id="@+id/share_time_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dip"
+        android:layout_marginRight="15dip"
         android:layout_toLeftOf="@+id/imageView_menu"
-        android:layout_toRightOf="@+id/imageView_file_logo"
+        android:layout_toRightOf="@+id/icon_layout"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -36,13 +49,24 @@
                 android:id="@+id/textView_name_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="名称:" />
+                android:text="名称:"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":  "
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/textView_name_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="被铲" />
+                android:text="被铲"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -53,13 +77,24 @@
                 android:id="@+id/textView_location_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":  "
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/textView_location_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -70,13 +105,24 @@
                 android:id="@+id/textView_disability_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":  "
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/textView_textView_disability_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -87,13 +133,24 @@
                 android:id="@+id/textView_level_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":  "
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/textView_level_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="TextView" />
+                android:text="TextView"
+                android:textColor="@color/collection_text_color"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

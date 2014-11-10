@@ -19,7 +19,7 @@ public class DetailActivity extends Activity implements OnClickListener{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
-		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_banner_image).build();
+		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		imageView_detail = (ImageView) findViewById(R.id.imageView_detail);
 		
 		String url = getIntent().getStringExtra("PictureUrl");

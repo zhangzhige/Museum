@@ -49,7 +49,10 @@
     <ListView
         android:id="@+id/mainlistView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:divider="@null"
+        android:layout_marginTop="-5dip"
+        android:scrollbars="none" >
     </ListView>
 
 </LinearLayout>

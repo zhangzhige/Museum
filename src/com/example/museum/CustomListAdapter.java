@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.museum.Cultural.ProductSpecificationAttribute;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CustomListAdapter extends BaseAdapter {
 	
@@ -23,11 +25,14 @@ public class CustomListAdapter extends BaseAdapter {
 	
 	public int offset;
 	
+	private DisplayImageOptions mOptions;
+	
 	public CustomListAdapter(Context context,List<Cultural> list) {
 		super();
 		this.context = context;
 		this.mCulturals = list;
 		this.inflater = LayoutInflater.from(context);
+		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 	}
 
 	@Override
@@ -66,6 +71,9 @@ public class CustomListAdapter extends BaseAdapter {
 			holder = (Holder) convertView.getTag();
 		}
 		Cultural mItem = getItem(position);
+	    String url = mItem.ProductPictures.get(0).PictureUrl;
+	    ImageLoader.getInstance().displayImage(url,holder.imageView_file_logo,mOptions);
+	        
 		List<ProductSpecificationAttribute> mProductSpecificationAttributes = mItem.ProductSpecificationAttributes;
 		if(mProductSpecificationAttributes!=null && mProductSpecificationAttributes.size()>0){
 			try {

@@ -236,5 +236,4 @@ public class CoverFlow extends Gallery {
 		getParent().requestDisallowInterceptTouchEvent(true);
 
 		return super.onScroll(e1, e2, distanceX, distanceY);
-	}
-}
+	}}

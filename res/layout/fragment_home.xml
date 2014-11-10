@@ -1,18 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:fcf="http://schemas.android.com/apk/res-auto"
+    xmlns:fcf="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/home_bg" >
+    android:background="@drawable/home_bg"
+    android:orientation="vertical" >
 
-        <at.technikum.mti.fancycoverflow.FancyCoverFlow
+    <com.example.museum.CoverFlow
         android:id="@+id/fancyCoverFlow"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        fcf:maxRotation="45"
-        fcf:unselectedAlpha="0.3"
-        fcf:unselectedSaturation="0.0"
-        fcf:unselectedScale="0.4"
-        fcf:scaleDownGravity="0.5"/>
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

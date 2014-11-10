@@ -40,7 +40,7 @@ public class GuideGallery extends RelativeLayout {
 
 	private Handler mHandler = new Handler();
 
-	private PageIndicator mIndicator;
+	private CirclePageIndicator mIndicator;
 
 	private ImageLoader mImageLoader;
 
@@ -70,12 +70,11 @@ public class GuideGallery extends RelativeLayout {
 		mInflater = LayoutInflater.from(getContext());
 		mInflater.inflate(R.layout.guide_gallery, this);
 		mPager = (ViewPager) findViewById(R.id.image_wall_gallery);
-		mPager.setPageMargin((int) (25 * density));
 
 		title_textview = (TextView) findViewById(R.id.title_textview);
 
 		mImageLoader = ImageLoader.getInstance();
-		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_banner_image).build();
+		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 	}
 
 	private void resumeTimeTaskDelay() {
@@ -103,6 +102,7 @@ public class GuideGallery extends RelativeLayout {
 		mPager.setAdapter(mImageAdapter);
 		mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
 		mIndicator.setViewPager(mPager);
+		mIndicator.setVisibility(View.INVISIBLE);
 //		title_textview.setText(mImageAdapter.getItem(0).getTitle());
 		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
 

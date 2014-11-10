@@ -2,33 +2,25 @@ package com.example.museum;
 
 import java.util.List;
 
-import org.apache.http.Header;
-import org.apache.http.entity.ByteArrayEntity;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.example.museum.HttpManager.OnLoadFinishListener;
-import com.google.xlgson.Gson;
-import com.google.xlgson.JsonSyntaxException;
-import com.google.xlgson.reflect.TypeToken;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.xunlei.common.httpclient.AsyncHttpProxy;
-import com.xunlei.common.httpclient.handler.AsyncHttpResponseHandler;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.Gallery;
+import android.widget.ImageView;
 import at.technikum.mti.fancycoverflow.FancyCoverFlow;
 import at.technikum.mti.fancycoverflow.FancyCoverFlowAdapter;
+
+import com.example.museum.HttpManager.OnLoadFinishListener;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.xunlei.common.httpclient.AsyncHttpProxy;
 
 public class HomeFragment extends Fragment {
 	
@@ -38,7 +30,7 @@ public class HomeFragment extends Fragment {
 	
 	private List<Cultural> mCulturalList;
 	
-	private FancyCoverFlow fancyCoverFlow;
+	private Gallery fancyCoverFlow;
 	
 	private DisplayImageOptions mOptions;
 	
@@ -53,7 +45,13 @@ public class HomeFragment extends Fragment {
 		};
 	};
 	
-	public class FancyCoverFlowSampleAdapter extends FancyCoverFlowAdapter {
+	public class FancyCoverFlowSampleAdapter extends BaseAdapter {
+		
+		private LayoutInflater inflater;
+		
+		public FancyCoverFlowSampleAdapter(){
+			this.inflater = LayoutInflater.from(getActivity());
+		}
 
 	    @Override
 	    public int getCount() {
@@ -71,22 +69,28 @@ public class HomeFragment extends Fragment {
 	    }
 
 	    @Override
-	    public View getCoverFlowItem(int i, View reuseableView, ViewGroup viewGroup) {
-	        ImageView imageView = null;
-
-	        if (reuseableView != null) {
-	            imageView = (ImageView) reuseableView;
-	        } else {
-	            imageView = new ImageView(viewGroup.getContext());
-	            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-	            imageView.setLayoutParams(new FancyCoverFlow.LayoutParams(300, 400));
-
-	        }
+	    public View getView(int i, View reuseableView, ViewGroup viewGroup) {
+	        Holder holder;
+	        if (reuseableView == null) {
+	        	reuseableView = inflater.inflate(R.layout.item_home,viewGroup,false);
+				
+				holder = new Holder();
+				holder.imageView = (ImageView) reuseableView.findViewById(R.id.imageView1);
+				reuseableView.setTag(holder);
+			} else {
+				holder = (Holder) reuseableView.getTag();
+			}
+	        
 	        Cultural item = getItem(i);
 	        String url = item.ProductPictures.get(0).PictureUrl;
-	        ImageLoader.getInstance().displayImage(url, imageView,mOptions);
-	        return imageView;
+	        ImageLoader.getInstance().displayImage(url, holder.imageView,mOptions);
+	        return reuseableView;
 	    }
+	    
+	    private class Holder {
+			public ImageView imageView;
+		}
+
 	}
 
 	@Override
@@ -98,9 +102,9 @@ public class HomeFragment extends Fragment {
 
 	private void initUI() {
 		
-		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_banner_image).build();
+		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		
-		fancyCoverFlow = (FancyCoverFlow) mRootView.findViewById(R.id.fancyCoverFlow);
+		fancyCoverFlow = (Gallery) mRootView.findViewById(R.id.fancyCoverFlow);
 	    fancyCoverFlow.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -118,7 +122,9 @@ public class HomeFragment extends Fragment {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {
-				mCulturalList = mList;
+				if(mList!=null && mList.size()>0){
+					mCulturalList = mList;
+				}
 				mHandler.obtainMessage().sendToTarget();
 			}
 		});

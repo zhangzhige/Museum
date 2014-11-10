@@ -63,4 +63,6 @@
 	 
 	 <color name="gif_bkgcolor">#ebebeb</color>
 	 <color name="home_blur_color">#33000000</color>
+	 
+	 <color name="collection_text_color">#474747</color>
 </resources>
