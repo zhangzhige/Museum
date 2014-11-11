@@ -25,7 +25,6 @@ public class LoadingActivity extends Activity {
 
 	private ImageView imageView_first;
 	
-	private ImageView imageView_second;
 
 	private Handler loadingCompleteHandler = new Handler() {
 		@Override
@@ -48,18 +47,12 @@ public class LoadingActivity extends Activity {
 		setContentView(R.layout.activity_loading);
 		
 		imageView_first = (ImageView) findViewById(R.id.imageView_first);
-		imageView_second = (ImageView) findViewById(R.id.imageView_second);
-		
 		loadingCompleteHandler.postDelayed(new Runnable() {
 			@Override
 			public void run() {
 				ObjectAnimator mFirst = ObjectAnimator.ofFloat(imageView_first, "alpha", 1f,0f);
-				ObjectAnimator mSecond = ObjectAnimator.ofFloat(imageView_second, "alpha",0f, 1f);
-				mFirst.setDuration(1000);
-				mSecond.setDuration(1000);
-				mSecond.start();
+				mFirst.setDuration(1500);
 				mFirst.start();
-				imageView_second.setVisibility(View.VISIBLE);
 				
 				mFirst.addListener(new AnimatorListener() {
 					
