@@ -1,17 +1,14 @@
 package com.example.museum;
 
-import java.io.InputStream;
-
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Rect;
+import android.graphics.Matrix;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -36,42 +33,21 @@ public class GifView extends View{
 	
 	private int showWidth = -1;
 	private int showHeight = -1;
-	private Rect rect = null;
 	
 	private DrawThread drawThread = null;
 	
-	private GifImageType animationType = GifImageType.SYNC_DECODER;
+	private float rotateAngel = 0;
 	
-	private int resId;
-	/**
-	 * 解码过程中，Gif动画显示的方式<br>
-	 * 如果图片较大，那么解码过程会比较长，这个解码过程中，gif如何显示
-	 * @author liao
-	 *
-	 */
-	public enum GifImageType{
-		/**
-		 * 在解码过程中，不显示图片，直到解码全部成功后，再显示
-		 */
-		WAIT_FINISH (0),
-		/**
-		 * 和解码过程同步，解码进行到哪里，图片显示到哪里
-		 */
-		SYNC_DECODER (1),
-		/**
-		 * 在解码过程中，只显示第一帧图片
-		 */
-		COVER (2);
-		
-		GifImageType(int i){
-			nativeInt = i;
-		}
-		final int nativeInt;
-	}
+	private Bitmap mWallDown;
 	
+	private Bitmap mWallUp;
+	
+	private Matrix matrix;
+	
+	private float density;
 	
 	public GifView(Context context) {
-        super(context);
+		this(context,null);
         
     }
     
@@ -81,6 +57,12 @@ public class GifView extends View{
     
     public GifView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        
+        mWallDown = BitmapFactory.decodeResource(context.getResources(), R.drawable.walk_down);
+        mWallUp = BitmapFactory.decodeResource(getResources(), R.drawable.walk_up);
+        matrix = new Matrix();
+        
+        density = getResources().getDisplayMetrics().density;
     }
     
     public void start(){
@@ -100,43 +82,16 @@ public class GifView extends View{
         	return;
         }
         int saveCount = canvas.getSaveCount();
+        
         canvas.save();
-        canvas.translate(getPaddingLeft(), getPaddingTop());
-        canvas.drawBitmap(currentImage, 0, 0, null);
+        matrix.reset();
+        rotateAngel -= 0.5f;
+        matrix.postRotate(rotateAngel, mWallDown.getWidth()/2, mWallDown.getHeight()/2);
+        matrix.postTranslate(0, 170 *density/2);
+        canvas.drawBitmap(mWallDown, matrix, null);
+        canvas.drawBitmap(currentImage, (getMeasuredWidth() - currentImage.getWidth())/2, 70 * density/2, null);
+        canvas.drawBitmap(mWallUp, matrix, null);
         canvas.restoreToCount(saveCount);
-    }
-    
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    	int pleft = getPaddingLeft();
-        int pright = getPaddingRight();
-        int ptop = getPaddingTop();
-        int pbottom = getPaddingBottom();
-
-        int widthSize;
-        int heightSize;
-        
-        int w;
-        int h;
-       
-        if(gifDecoder == null){
-        	w = showWidth;
-        	h = showHeight;
-        }else{
-        	w = gifDecoder.width;
-        	h = gifDecoder.height;
-        }
-        
-        w += pleft + pright;
-        h += ptop + pbottom;
-
-        w = Math.max(w, getSuggestedMinimumWidth());
-        h = Math.max(h, getSuggestedMinimumHeight());
-
-        widthSize = resolveSize(w, widthMeasureSpec);
-        heightSize = resolveSize(h, heightMeasureSpec);
-        showWidth=widthSize;
-        showHeight=heightSize;
-        setMeasuredDimension(widthSize, heightSize);
     }
     
     public int getCurrentWidth(){
@@ -145,55 +100,6 @@ public class GifView extends View{
     
     public int getCurrentheight(){
     	return gifDecoder.height;
-    }
-    
-    /**
-     * 只显示第一帧图片<br>
-     * 调用本方法后，gif不会显示动画，只会显示gif的第一帧图
-     */
-    public void showCover(){
-    	if(gifDecoder == null){
-    		return;
-    	}
-    	pause = true;
-    	currentImage = gifDecoder.getImage(this.getContext());
-    	invalidate();
-    	onStop();
-    	try {
-			System.gc();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-    }
-    
-    /**
-     * 继续显示动画<br>
-     * 本方法在调用showCover后，会让动画继续显示，如果没有调用showCover方法，则没有任何效果
-     */
-    public void showAnimation(){
-    	if(pause){
-    		pause = false;
-        	isRun=true;
-    	}
-    }
-    
-    /**
-     * 设置gif在解码过程中的显示方式<br>
-     * <strong>本方法只能在setGifImage方法之前设置，否则设置无效</strong>
-     * @param type 显示方式
-     */
-    public void setGifImageType(GifImageType type){
-    	if(gifDecoder == null)
-    		animationType = type;
-    }
-    
-    
-    
-    private void reDraw(){
-    	if(redrawHandler != null){
-			Message msg = redrawHandler.obtainMessage();
-			redrawHandler.sendMessage(msg);
-    	}
     }
     
     private Handler redrawHandler = new Handler(){
@@ -223,27 +129,6 @@ public class GifView extends View{
     				SystemClock.sleep(10);
     			}
     		}
-    	}
-    }
-    
-    /**
-     * 释放资源
-     */
-    public void onStop(){
-    	isRun=false;
-    	if(gifDecoder != null){  		
-    		gifDecoder.onStop();
-    	}
-    }
-    
-    /**
-     * 和onStop的区别是destroy后图片完全不显示。stop会显示第一张图
-     * 方法的一句话概述
-     * <p>方法详述（简单方法可不必详述）</p>
-     */
-    public void onDestroy(){
-    	if(gifDecoder != null){  		
-    		gifDecoder.onDestroy();
     	}
     }
 }

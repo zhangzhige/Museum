@@ -111,8 +111,8 @@
 
     <FrameLayout
         android:id="@+id/mesume_gif_layout"
-        android:layout_width="100dip"
-        android:layout_height="100dip"
+        android:layout_width="match_parent"
+        android:layout_height="200dip"
         android:layout_above="@+id/botton_menu"
         android:layout_centerHorizontal="true" >
 
