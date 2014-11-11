@@ -59,7 +59,7 @@ public class VideoFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				Intent intent = new Intent(getActivity(), DetailActivity.class);
+				Intent intent = new Intent(getActivity(), VideoPlayerActivity.class);
 				Cultural item = mFancyCoverFlowSampleAdapter.getItem(position);
 				String url = item.ProductPictures.get(1).PictureUrl;
 				intent.putExtra("PictureUrl", url);
