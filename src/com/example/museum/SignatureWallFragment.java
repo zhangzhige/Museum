@@ -23,7 +23,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class SignatureWallFragment extends Fragment {
+public class SignatureWallFragment extends BaseFragment {
 
 	private View mRootView;
 
@@ -36,7 +36,7 @@ public class SignatureWallFragment extends Fragment {
 	private RelativeLayout layout_sign_save;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_sign, container, false);
 		sign_area_layout = (FrameLayout) mRootView.findViewById(R.id.sign_area_layout);
 		layout_sign_save = (RelativeLayout) mRootView.findViewById(R.id.layout_sign_save);

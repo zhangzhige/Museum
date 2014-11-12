@@ -91,7 +91,7 @@ public class MainView extends LinearLayout implements OnClickListener {
 		
 	}
 
-	private void changeFragment(Fragment f, String name) {
+	private void changeFragment(BaseFragment f, String name) {
 		changeFragment(f, name, null);
 	}
 
@@ -107,7 +107,7 @@ public class MainView extends LinearLayout implements OnClickListener {
 	 * @param destroyFrament
 	 *            :要销毁的fragment，传空表示正常操作
 	 */
-	private void changeFragment(Fragment f, String name, Fragment destroyFrament) {
+	private void changeFragment(BaseFragment f, String name, Fragment destroyFrament) {
 		FragmentTransaction mFragmentTransaction = mFragmentActivity.getSupportFragmentManager().beginTransaction();
 		log.debug("changefragment lastFragment=" + lastFragment);
 		if (lastFragment != null && lastFragment != f) {

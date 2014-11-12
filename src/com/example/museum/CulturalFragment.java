@@ -7,13 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class CulturalFragment extends Fragment {
-	private View mRootView;
+public class CulturalFragment extends BaseFragment {
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_cultural, container, false);
-		
 		mRootView.findViewById(R.id.xinshiqi_layout).setOnClickListener(new View.OnClickListener() {
 			
 			@Override

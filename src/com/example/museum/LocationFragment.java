@@ -52,7 +52,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LocationFragment extends Fragment implements BaiduMap.OnMapClickListener,OnGetRoutePlanResultListener{
+public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClickListener,OnGetRoutePlanResultListener{
 
 	
 	private static final String LTAG = LocationFragment.class.getSimpleName();
@@ -96,9 +96,9 @@ public class LocationFragment extends Fragment implements BaiduMap.OnMapClickLis
 	
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	mRootView = inflater.inflate(R.layout.activity_routeplan, container, false);
-        
+        Log.d(LTAG, "onCreateView");
     	//初始化地图
 		IntentFilter iFilter = new IntentFilter();
 		iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);

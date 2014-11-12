@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.xunlei.common.httpclient.AsyncHttpProxy;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
 	
 	private View mRootView;
 	
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.fragment_home, container, false);
 		initUI();
 		return mRootView;

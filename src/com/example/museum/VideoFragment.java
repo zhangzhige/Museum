@@ -20,7 +20,7 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class VideoFragment extends Fragment {
+public class VideoFragment extends BaseFragment {
 
 	private List<Cultural> mCulturalList;
 
@@ -42,7 +42,7 @@ public class VideoFragment extends Fragment {
 	};
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+	public View onCreateContentView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		mRootView = inflater.inflate(R.layout.layout_inflate_example,
 				container, false);
