@@ -18,6 +18,7 @@ import android.view.View.MeasureSpec;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
@@ -28,22 +29,16 @@ public class VideoPlayerActivity extends Activity {
 	
 	private VideoView mPlayer;
 	
-    private View mAnchor;
     private View mRoot;
-    private WindowManager mWindowManager;
-    private View mDecor;
-    private WindowManager.LayoutParams mDecorLayoutParams;
     private ProgressBar mProgress;
     private TextView mEndTime, mCurrentTime;
+    private LinearLayout control_layout;
+    
     private boolean mShowing;
     private boolean mDragging;
     private static final int sDefaultTimeout = 3000;
     private static final int FADE_OUT = 1;
     private static final int SHOW_PROGRESS = 2;
-    private boolean mUseFastForward;
-    private boolean mFromXml;
-    private boolean mListenersSet;
-    private View.OnClickListener mNextListener, mPrevListener;
     StringBuilder mFormatBuilder;
     Formatter mFormatter;
     private ImageButton mPauseButton;
@@ -64,26 +59,10 @@ public class VideoPlayerActivity extends Activity {
 		if(file.exists()){
 			mPlayer.setVideoPath(file.getAbsolutePath());
 		}
+		mPlayer.setOnTouchListener(mTouchListener);
 		
+		 mPauseButton.performClick();
 	}
-
-
-    // Update the dynamic parts of mDecorLayoutParams
-    // Must be called with mAnchor != NULL.
-    private void updateFloatingWindowLayout() {
-        int [] anchorPos = new int[2];
-        mAnchor.getLocationOnScreen(anchorPos);
-
-        // we need to know the size of the controller so we can properly position it
-        // within its space
-        mDecor.measure(MeasureSpec.makeMeasureSpec(mAnchor.getWidth(), MeasureSpec.AT_MOST),
-                MeasureSpec.makeMeasureSpec(mAnchor.getHeight(), MeasureSpec.AT_MOST));
-
-        WindowManager.LayoutParams p = mDecorLayoutParams;
-        p.width = mAnchor.getWidth();
-        p.x = anchorPos[0] + (mAnchor.getWidth() - p.width) / 2;
-        p.y = anchorPos[1] + mAnchor.getHeight() - mDecor.getMeasuredHeight();
-    }
 
     private OnTouchListener mTouchListener = new OnTouchListener() {
         public boolean onTouch(View v, MotionEvent event) {
@@ -97,6 +76,8 @@ public class VideoPlayerActivity extends Activity {
     };
 
     private void initControllerView(View v) {
+    	control_layout = (LinearLayout) v.findViewById(R.id.control_layout);
+    	
         mPauseButton = (ImageButton) v.findViewById(R.id.pause);
         if (mPauseButton != null) {
             mPauseButton.requestFocus();
@@ -166,14 +147,13 @@ public class VideoPlayerActivity extends Activity {
      * the controller until hide() is called.
      */
     public void show(int timeout) {
-        if (!mShowing && mAnchor != null) {
+        if (!mShowing) {
+        	control_layout.setVisibility(View.VISIBLE);
             setProgress();
             if (mPauseButton != null) {
                 mPauseButton.requestFocus();
             }
             disableUnsupportedButtons();
-            updateFloatingWindowLayout();
-            mWindowManager.addView(mDecor, mDecorLayoutParams);
             mShowing = true;
         }
         updatePausePlay();
@@ -198,13 +178,10 @@ public class VideoPlayerActivity extends Activity {
      * Remove the controller from the screen.
      */
     public void hide() {
-        if (mAnchor == null)
-            return;
-
         if (mShowing) {
             try {
                 mHandler.removeMessages(SHOW_PROGRESS);
-                mWindowManager.removeView(mDecor);
+                control_layout.setVisibility(View.INVISIBLE);
             } catch (IllegalArgumentException ex) {
                 Log.w("MediaController", "already removed");
             }
