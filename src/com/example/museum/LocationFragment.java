@@ -1,13 +1,21 @@
 package com.example.museum;
 
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapPoi;
+import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationConfiguration;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.map.MyLocationConfiguration.LocationMode;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.overlayutil.DrivingRouteOverlay;
 import com.baidu.mapapi.overlayutil.OverlayManager;
@@ -40,6 +48,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,6 +83,17 @@ public class LocationFragment extends Fragment implements BaiduMap.OnMapClickLis
     private SDKReceiver mReceiver;
     
     private View mRootView;
+    
+    private ImageView imageView_mylocation;
+    
+    LocationClient mLocClient;
+	
+    public MyLocationListenner myListener = new MyLocationListenner();
+	
+    private LocationMode mCurrentMode = LocationMode.FOLLOWING;
+	
+    BitmapDescriptor mCurrentMarker;
+	
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -94,13 +114,57 @@ public class LocationFragment extends Fragment implements BaiduMap.OnMapClickLis
         mBtnNext.setVisibility(View.INVISIBLE);
         //地图点击事件处理
         mBaidumap.setOnMapClickListener(this);
+        mBaidumap.setMyLocationEnabled(true);
+        mBaidumap.setMyLocationConfigeration(new MyLocationConfiguration(mCurrentMode, true, mCurrentMarker));
+        
         // 初始化搜索模块，注册事件监听
         mSearch = RoutePlanSearch.newInstance();
         mSearch.setOnGetRoutePlanResultListener(this);
-        
+        imageView_mylocation = (ImageView) mRootView.findViewById(R.id.imageView_mylocation);
+        imageView_mylocation.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				mLocClient = new LocationClient(getActivity());
+				mLocClient.registerLocationListener(myListener);
+				LocationClientOption option = new LocationClientOption();
+				option.setOpenGps(true);// 打开gps
+				option.setCoorType("bd09ll"); // 设置坐标类型
+				option.setScanSpan(1000);
+				mLocClient.setLocOption(option);
+				mLocClient.start();
+			}
+		});
     	return mRootView;
     }
 
+	/**
+	 * 定位SDK监听函数
+	 */
+	public class MyLocationListenner implements BDLocationListener {
+
+		@Override
+		public void onReceiveLocation(BDLocation location) {
+			// map view 销毁后不在处理新接收的位置
+			if (location == null || mMapView == null)
+				return;
+			MyLocationData locData = new MyLocationData.Builder()
+					.accuracy(location.getRadius())
+					// 此处设置开发者获取到的方向信息，顺时针0-360
+					.direction(100).latitude(location.getLatitude())
+					.longitude(location.getLongitude()).build();
+			mBaidumap.setMyLocationData(locData);
+			LatLng ll = new LatLng(location.getLatitude(),location.getLongitude());
+			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(ll);
+			mBaidumap.animateMapStatus(u);
+			mLocClient.unRegisterLocationListener(myListener);
+			mLocClient.stop();
+		}
+
+		public void onReceivePoi(BDLocation poiLocation) {
+		}
+	}
+	
     /**
      * 发起路线规划搜索示例
      *

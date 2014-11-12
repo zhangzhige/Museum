@@ -29,16 +29,77 @@
                 android:layout_marginBottom="14dp" />
         </FrameLayout>
 
+        <RelativeLayout
+            android:id="@+id/layout_select"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginTop="270dip" >
+
+            <ImageView
+                android:id="@+id/imageView_line"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:src="@drawable/sign_line" />
+
+            <ImageView
+                android:id="@+id/imageView_sign_pic1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="54dp"
+                android:src="@drawable/sign_pic1"
+                android:layout_below="@+id/imageView_line" 
+                android:layout_marginTop="-20dip"/>
+            
+            <ImageView
+                android:id="@+id/imageView_sign_pic2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sign_pic2"
+                android:layout_below="@+id/imageView_line"
+                android:layout_toRightOf="@+id/imageView_sign_pic1"
+                android:layout_marginLeft="20dip" 
+                android:layout_marginTop="-15dip" />
+            
+            <ImageView
+                android:id="@+id/imageView_sign_pic3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sign_pic3"
+                android:layout_below="@+id/imageView_line"
+                android:layout_toRightOf="@+id/imageView_sign_pic2"
+                android:layout_marginLeft="25dip"
+                android:layout_marginTop="-10dip"  />
+
+            <ImageView
+                android:id="@+id/imageView_sign_pic4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/imageView_sign_pic2"
+                android:layout_marginLeft="8dp"
+                android:layout_toRightOf="@+id/imageView_sign_pic3"
+                android:src="@drawable/sign_pic4"
+                android:layout_marginTop="-8dip" />
+            
+            <ImageView
+                android:id="@+id/imageView_sign_pic5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sign_pic5"
+                android:layout_below="@+id/imageView_line" 
+                android:layout_toRightOf="@+id/imageView_sign_pic4"
+                android:layout_marginTop="-15dip" />
+
+        </RelativeLayout>
     </RelativeLayout>
 
-    
-    
     <ImageView
         android:id="@+id/imageView_save_sign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
         android:src="@drawable/send_sign_icon_normal" />
-    
-    
+
 </FrameLayout>
