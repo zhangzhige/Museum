@@ -70,7 +70,7 @@ public class AsyncHttpProxy {
 		mClient.post(mContext,url, entity, "application/json",responseHandler);
 	}
 	
-	public void get(String url,BinaryHttpResponseHandlerEx responseHandler){
+	public void get(String url,AsyncHttpResponseHandler responseHandler){
 		mClient.get(mContext,url, null, null,responseHandler);
 	}
 

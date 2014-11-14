@@ -22,7 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public class VideoFragment extends BaseFragment {
 
-	private List<Cultural> mCulturalList;
+	private List<HistoryVideo> mCulturalList;
 
 	private Gallery fancyCoverFlow;
 
@@ -60,18 +60,18 @@ public class VideoFragment extends BaseFragment {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				Intent intent = new Intent(getActivity(), VideoPlayerActivity.class);
-				Cultural item = mFancyCoverFlowSampleAdapter.getItem(position);
-				String url = item.ProductPictures.get(1).PictureUrl;
-				intent.putExtra("PictureUrl", url);
+				HistoryVideo item = mFancyCoverFlowSampleAdapter.getItem(position);
+				String url = item.url;
+				intent.putExtra("url", url);
 				startActivity(intent);
 			}
 		});
 
-		new HttpManager().loadData(13,0,
-				new OnLoadFinishListener<Cultural>() {
+		new HttpManager().loadHistoryVideoData(0,
+				new OnLoadFinishListener<HistoryVideo>() {
 
 					@Override
-					public void onLoad(List<Cultural> mList) {
+					public void onLoad(List<HistoryVideo> mList) {
 						if (mList != null && mList.size() > 0) {
 							mCulturalList = mList;
 						}
@@ -94,7 +94,7 @@ public class VideoFragment extends BaseFragment {
 		}
 
 		@Override
-		public Cultural getItem(int i) {
+		public HistoryVideo getItem(int i) {
 			return mCulturalList.get(i);
 		}
 
@@ -118,10 +118,9 @@ public class VideoFragment extends BaseFragment {
 				holder = (Holder) reuseableView.getTag();
 			}
 
-			Cultural item = getItem(i);
-			String url = item.ProductPictures.get(0).PictureUrl;
-			ImageLoader.getInstance().displayImage(url, holder.imageView,
-					mOptions);
+			HistoryVideo item = getItem(i);
+			String url = item.photo;
+			ImageLoader.getInstance().displayImage(url, holder.imageView,mOptions);
 			return reuseableView;
 		}
 

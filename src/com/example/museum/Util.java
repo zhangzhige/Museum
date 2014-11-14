@@ -26,5 +26,24 @@ public class Util {
 		}
 		return path;
 	}
+	
+	public static boolean ensureDir(String path) {
+        if (null == path) {
+            return false;
+        }
+
+        boolean ret = false;
+
+        File file = new File(path);
+        if (!file.exists() || !file.isDirectory()) {
+            try {
+                ret = file.mkdirs();
+            } catch (SecurityException se) {
+                se.printStackTrace();
+            }
+        }
+
+        return ret;
+    }
 
 }

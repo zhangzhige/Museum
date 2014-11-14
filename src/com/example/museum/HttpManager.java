@@ -28,13 +28,62 @@ import com.google.xlgson.JsonSyntaxException;
 import com.google.xlgson.reflect.TypeToken;
 import com.xunlei.common.httpclient.AsyncHttpProxy;
 import com.xunlei.common.httpclient.handler.AsyncHttpResponseHandler;
+import com.xunlei.common.httpclient.handler.BinaryHttpResponseHandlerEx;
 
 public class HttpManager {
 
 	private static final String SearchUrl = "http://tss.waltzcn.com/Plugins/RestApi/API/Product/SearchProducts?loginName=apiuser&loginPassword=123456";
+	
+	private final static String HostoryVideoUrl = "http://tss.waltzcn.com/content/videos/GetProducts.txt";
 
 	private AsyncHttpProxy mHttpProxy = AsyncHttpProxy.getInstance();
 
+	
+	public void loadHistoryVideoData(final int rawId,final OnLoadFinishListener<HistoryVideo> mOnLoadFinishListener) {
+		final DiskDataCache mDiskDataCache = new DiskDataCache(MainApplication.INSTANCE);
+		String cacheData = mDiskDataCache.loadDataFromDiskImpl(HostoryVideoUrl);
+		if (cacheData != null && cacheData.length() > 0) {
+
+		} else if (rawId != 0) {
+			cacheData = openRawResource(rawId);
+		}
+		if (cacheData != null && cacheData.length() > 0) {
+			Gson gson = new Gson();
+			try {
+				List<HistoryVideo> mList = gson.fromJson(cacheData,
+						new TypeToken<List<HistoryVideo>>() {
+						}.getType());
+				mOnLoadFinishListener.onLoad(mList);
+			} catch (JsonSyntaxException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
+		mHttpProxy.get(HostoryVideoUrl, new AsyncHttpResponseHandler(){
+			public void onSuccess(int statusCode, Header[] headers,String content) {
+				Log.d("TAG", "content=" + content);
+				Gson gson = new Gson();
+				List<HistoryVideo> mList = null;
+				try {
+					mList = gson.fromJson(content, new TypeToken<List<HistoryVideo>>() {}.getType());
+					mDiskDataCache.saveCacheData(content, HostoryVideoUrl);
+				} catch (JsonSyntaxException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				mOnLoadFinishListener.onLoad(mList);
+			}
+
+			public void onFailure(Throwable error, String content) {
+				mOnLoadFinishListener.onLoad(null);
+			}
+		});
+	}
+	
+	
 	/**
 	 * 
 	 * @param <T>

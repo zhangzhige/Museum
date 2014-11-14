@@ -497,7 +497,7 @@ public class AsyncHttpClient
             HttpUriRequest request = new HttpGet(getUrlWithQueryString(url, params));
             if (headers != null)
                 request.setHeaders(headers);
-            sendRequest(httpClient, httpContext, request, null, responseHandler, context);
+            sendRequest(httpClient, httpContext, request, "application/json", responseHandler, context);
         }
         catch (Exception e)
         {

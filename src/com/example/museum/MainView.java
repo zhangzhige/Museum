@@ -192,17 +192,22 @@ public class MainView extends LinearLayout implements OnClickListener {
 	 * </p>
 	 */
 	public void onDestroy() {
-		if (mHomeFragment != null) {
-			mHomeFragment.onDestroy();
+		try {
+			if (mHomeFragment != null) {
+				mHomeFragment.onDestroy();
+			}
+			if (mCulturalFragment != null) {
+				mCulturalFragment.onDestroy();
+			}
+			if (mVideoFragment != null) {
+				mVideoFragment.onDestroy();
+			}
+			if (mSignatureWallFragment != null) {
+				mSignatureWallFragment.onDestroy();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		if (mCulturalFragment != null) {
-			mCulturalFragment.onDestroy();
-		}
-		if (mVideoFragment != null) {
-			mVideoFragment.onDestroy();
-		}
-		if (mSignatureWallFragment != null) {
-			mSignatureWallFragment.onDestroy();
-		}
+		
 	}
 }

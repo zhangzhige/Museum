@@ -6,6 +6,8 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -45,6 +47,8 @@ public class VideoPlayerActivity extends Activity {
     private ImageButton mFfwdButton;
     private ImageButton mRewButton;
 	
+    private String url;
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -52,16 +56,24 @@ public class VideoPlayerActivity extends Activity {
         mRoot = inflate.inflate(R.layout.media_controller, null);
 		setContentView(mRoot);
 		initControllerView(mRoot);
-		
-		mPlayer=(VideoView) findViewById(R.id.surfaceView1);
-		
-		File file=new File(Util.getSDCardDir(this)+"/"+"DGL031.avi");
-		if(file.exists()){
-			mPlayer.setVideoPath(file.getAbsolutePath());
+		url = getIntent().getStringExtra("url");
+		if(url == null ){
+			finish();
+			return;
 		}
+		mPlayer=(VideoView) findViewById(R.id.surfaceView1);
+		mPlayer.setVideoPath(url);
 		mPlayer.setOnTouchListener(mTouchListener);
 		
-		 mPauseButton.performClick();
+		mPlayer.setOnCompletionListener(new OnCompletionListener() {
+			
+			@Override
+			public void onCompletion(MediaPlayer mp) {
+				// TODO Auto-generated method stub
+				finish();
+			}
+		});
+		mPauseButton.performClick();
 	}
 
     private OnTouchListener mTouchListener = new OnTouchListener() {
