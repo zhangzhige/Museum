@@ -24,7 +24,7 @@ public class VideoFragment extends BaseFragment {
 
 	private List<HistoryVideo> mCulturalList;
 
-	private Gallery fancyCoverFlow;
+	private CoverFlow fancyCoverFlow;
 
 	private DisplayImageOptions mOptions;
 
@@ -53,7 +53,7 @@ public class VideoFragment extends BaseFragment {
 	private void initUI() {
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(
 				R.drawable.default_logo).build();
-		fancyCoverFlow = (Gallery) mRootView.findViewById(R.id.fancyCoverFlow);
+		fancyCoverFlow = (CoverFlow) mRootView.findViewById(R.id.fancyCoverFlow);
 		fancyCoverFlow.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
@@ -111,8 +111,7 @@ public class VideoFragment extends BaseFragment {
 						false);
 
 				holder = new Holder();
-				holder.imageView = (ImageView) reuseableView
-						.findViewById(R.id.imageView1);
+				holder.imageView = (ImageView) reuseableView.findViewById(R.id.imageView1);
 				reuseableView.setTag(holder);
 			} else {
 				holder = (Holder) reuseableView.getTag();
