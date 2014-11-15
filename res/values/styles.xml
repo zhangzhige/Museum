@@ -1,22 +1,58 @@
 <resources>
 
     <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+        Base application theme for API 14+. This theme completely replaces
+        AppBaseTheme from BOTH res/values/styles.xml and
+        res/values-v11/styles.xml on API 14+ devices.
     -->
-    <style name="AppBaseTheme" parent="Theme.AppCompat.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
+    
+    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarDivider">@null</item>
+        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
+        <item name="android:actionBarTabBarStyle">@style/MyActionBarTabBars</item>
+        <item name="android:actionMenuTextColor">@color/white</item>
+        <item name="android:actionMenuTextAppearance">@style/MyMenuTextStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/actionbar_back_seletor</item>
     </style>
 
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+    <!-- ActionBar styles -->
+    <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
+        <item name="android:background">@color/action_bar_bg</item>
+        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
+        <item name="android:backgroundStacked">@android:color/white</item>
+        <item name="android:displayOptions">useLogo|showTitle</item>
+    </style>
+
+    <!-- ActionBar title text -->
+    <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MyMenuTextStyle" parent="@android:style/TextAppearance.Holo.Small">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:attr/actionMenuTextColor</item>
+    </style>
+
+    <!-- ActionBar tabs text -->
+    <style name="MyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="MyActionBarTabBars" parent="@android:style/Widget.Holo.ActionBar.TabBar">
+        <item name="android:showDividers">none</item>
+    </style>
+
+
+    <style name="MyApp.BorderlessButton" parent="@android:style/Widget.Holo.Button.Borderless">
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+      <style name="PlayerTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <!-- API 11 theme customizations can go here. -->
     </style>
     
-    <style name="Widget.GifMoviewView" parent="@android:style/Widget"></style>
 
 </resources>
