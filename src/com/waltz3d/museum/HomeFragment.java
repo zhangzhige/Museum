@@ -107,7 +107,7 @@ public class HomeFragment extends BaseFragment {
 					int position, long id) {
 				Intent intent = new Intent(getActivity(), DetailActivity.class);
 				Cultural item = mFancyCoverFlowSampleAdapter.getItem(position);
-		        String url = item.ProductPictures.get(1).PictureUrl;
+		        String url = item.ProductPictures.get(Math.min(1, item.ProductPictures.size())).PictureUrl;
 		        intent.putExtra("PictureUrl", url);
 				startActivity(intent);
 			}
