@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-public class SignatureWallFragment extends BaseFragment {
+public class SignatureWallFragment extends BaseFragment implements View.OnClickListener{
 
 	private View mRootView;
 
@@ -34,6 +36,9 @@ public class SignatureWallFragment extends BaseFragment {
 	private ImageView imageView_save_sign;
 
 	private RelativeLayout layout_sign_save;
+	
+	private ImageView imageView_sign_big;
+	
 
 	@Override
 	public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -48,6 +53,9 @@ public class SignatureWallFragment extends BaseFragment {
 				startActivity(new Intent(getActivity(), SignActivity.class));
 			}
 		});
+		
+		imageView_sign_big = (ImageView) mRootView.findViewById(R.id.imageView_sign_big);
+		
 		imageView_save_sign = (ImageView) mRootView.findViewById(R.id.imageView_save_sign);
 		imageView_save_sign.setOnClickListener(new View.OnClickListener() {
 
@@ -67,6 +75,12 @@ public class SignatureWallFragment extends BaseFragment {
 				}
 			}
 		});
+		
+		mRootView.findViewById(R.id.imageView_sign_pic1).setOnClickListener(this);
+		mRootView.findViewById(R.id.imageView_sign_pic2).setOnClickListener(this);
+		mRootView.findViewById(R.id.imageView_sign_pic3).setOnClickListener(this);
+		mRootView.findViewById(R.id.imageView_sign_pic4).setOnClickListener(this);
+		mRootView.findViewById(R.id.imageView_sign_pic5).setOnClickListener(this);
 		return mRootView;
 	}
 
@@ -112,4 +126,28 @@ public class SignatureWallFragment extends BaseFragment {
 		}
 		return result;
 	}
+
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.imageView_sign_pic1:
+			imageView_sign_big.setImageResource(R.drawable.sign_big_1);
+			break;
+		case R.id.imageView_sign_pic2:
+			imageView_sign_big.setImageResource(R.drawable.sign_big_2);
+			break;
+		case R.id.imageView_sign_pic3:
+			imageView_sign_big.setImageResource(R.drawable.sign_big_3);
+			break;
+		case R.id.imageView_sign_pic4:
+			imageView_sign_big.setImageResource(R.drawable.sign_big_4);
+			break;
+		case R.id.imageView_sign_pic5:
+			imageView_sign_big.setImageResource(R.drawable.sign_big_5);
+			break;
+		default:
+			break;
+		}
+	}
+
 }

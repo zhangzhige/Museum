@@ -93,6 +93,15 @@
                 android:layout_marginTop="-15dip" />
 
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/imageView_sign_big"
+            android:layout_width="100dip"
+            android:layout_height="100dip"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="94dp"
+            android:src="@drawable/sign_big_1" />
+
     </RelativeLayout>
 
     <ImageView
