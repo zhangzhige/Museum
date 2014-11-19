@@ -53,7 +53,7 @@
         android:theme="@style/AppBaseTheme" >
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="VQ6jQBgCevBkNlz59sG1Ze9P" />
+            android:value="t5BYrau1GrF2F39t43zyR0Us" />
 
         <activity
             android:name="com.waltz3d.museum.LoadingActivity"
