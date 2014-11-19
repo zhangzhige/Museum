@@ -10,7 +10,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -50,16 +49,22 @@ public class DetailActivity extends Activity implements OnClickListener {
 
 		findViewById(R.id.imageView_back).setOnClickListener(this);
 		findViewById(R.id.imageView_action).setOnClickListener(this);
-
-		mNsdHelper = new NsdHelper(this);
-		mNsdHelper.discoverServices();
-		mConnection = new ChatConnection(mUpdateHandler);
+		if(Build.VERSION.SDK_INT >= 16){
+			mNsdHelper = new NsdHelper(this);
+			mConnection = new ChatConnection(mUpdateHandler);
+			mNsdHelper.discoverServices();
+		}
+		
 	}
 
     @Override
     protected void onDestroy() {
-        mNsdHelper.tearDown();
-        mConnection.tearDown();
+    	if(mNsdHelper!=null){
+    		mNsdHelper.tearDown();
+    	}
+    	if(mConnection!=null){
+    		mConnection.tearDown();
+    	}
         super.onDestroy();
     }
     
@@ -72,7 +77,7 @@ public class DetailActivity extends Activity implements OnClickListener {
             mConnection.sendMessage(mTestMessage);
         } else {
         	log.debug("No service to connect to!");
-            Util.showToast(this, "暂时还未链接到炫立方，请稍后重试", Toast.LENGTH_LONG);
+            Util.showToast(this, "暂时还未连接到炫立方，请稍后重试", Toast.LENGTH_LONG);
         }
     }
     
@@ -83,7 +88,11 @@ public class DetailActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.imageView_action:
-			clickConnect();
+			if(Build.VERSION.SDK_INT >= 16 && mNsdHelper != null){
+				clickConnect();
+			}else{
+				Util.showToast(DetailActivity.this, "抱歉，由于你手机版本过低，暂时无法支持炫立方互动。", Toast.LENGTH_LONG);
+			}
 			break;
 		default:
 			break;

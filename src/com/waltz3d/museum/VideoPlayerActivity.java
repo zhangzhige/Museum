@@ -130,29 +130,6 @@ public class VideoPlayerActivity extends Activity {
     }
 
     /**
-     * Disable pause or seek buttons if the stream cannot be paused or seeked.
-     * This requires the control interface to be a MediaPlayerControlExt
-     */
-    private void disableUnsupportedButtons() {
-        try {
-            if (mPauseButton != null && !mPlayer.canPause()) {
-                mPauseButton.setEnabled(false);
-            }
-            if (mRewButton != null && !mPlayer.canSeekBackward()) {
-                mRewButton.setEnabled(false);
-            }
-            if (mFfwdButton != null && !mPlayer.canSeekForward()) {
-                mFfwdButton.setEnabled(false);
-            }
-        } catch (IncompatibleClassChangeError ex) {
-            // We were given an old version of the interface, that doesn't have
-            // the canPause/canSeekXYZ methods. This is OK, it just means we
-            // assume the media can be paused and seeked, and so we don't disable
-            // the buttons.
-        }
-    }
-
-    /**
      * Show the controller on screen. It will go away
      * automatically after 'timeout' milliseconds of inactivity.
      * @param timeout The timeout in milliseconds. Use 0 to show
@@ -165,7 +142,6 @@ public class VideoPlayerActivity extends Activity {
             if (mPauseButton != null) {
                 mPauseButton.requestFocus();
             }
-            disableUnsupportedButtons();
             mShowing = true;
         }
         updatePausePlay();
