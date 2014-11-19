@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.waltz3d.common.httpclient.AsyncHttpProxy;
+import com.waltz3d.museum.Cultural.ProductPicture;
 import com.waltz3d.museum.HttpManager.OnLoadFinishListener;
 
 public class HomeFragment extends BaseFragment {
@@ -107,7 +108,8 @@ public class HomeFragment extends BaseFragment {
 					int position, long id) {
 				Intent intent = new Intent(getActivity(), DetailActivity.class);
 				Cultural item = mFancyCoverFlowSampleAdapter.getItem(position);
-		        String url = item.ProductPictures.get(Math.min(1, item.ProductPictures.size()-1)).PictureUrl;
+				List<ProductPicture> mList =  item.ProductPictures;
+		        String url = mList.get(Math.min(1, mList.size()-1)).PictureUrl;
 		        intent.putExtra("PictureUrl", url);
 				startActivity(intent);
 			}
