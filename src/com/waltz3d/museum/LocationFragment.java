@@ -84,7 +84,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 	
     private MyLocationListenner myListener = new MyLocationListenner();
 	
-    private LocationMode mCurrentMode = LocationMode.FOLLOWING;
+    private LocationMode mCurrentMode = LocationMode.NORMAL;
 	
     private BitmapDescriptor mCurrentMarker;
     
@@ -145,7 +145,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 			public boolean onMarkerClick(Marker marker) {
 				if (marker == mMarkerA ) {
 					marker.getTitle();
-					Util.showToast(getActivity(), marker.getTitle(), Toast.LENGTH_LONG);
+					Util.showToast(getActivity(), "闽侯县闽江北岸昙石村甘蔗街道昙石村330号昙石山遗址博物馆", Toast.LENGTH_LONG);
 				}
 				return false;
 			}
@@ -163,6 +163,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
         // 初始化搜索模块，注册事件监听
         mSearch = RoutePlanSearch.newInstance();
         mSearch.setOnGetRoutePlanResultListener(this);
+		
         imageView_mylocation = (ImageView) mRootView.findViewById(R.id.imageView_mylocation);
         imageView_mylocation.setOnClickListener(new View.OnClickListener() {
 			
@@ -191,6 +192,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 				mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
 			}
 		});
+        imageView_resume_location.performClick();
     	return mRootView;
     }
     
@@ -208,10 +210,6 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 			MyLocationData locData = new MyLocationData.Builder().accuracy(location.getRadius()).direction(100).latitude(location.getLatitude()).longitude(location.getLongitude()).build();
 			mBaidumap.setMyLocationData(locData);
 			mUserLocation = new LatLng(location.getLatitude(),location.getLongitude());
-			MapStatusUpdate u = MapStatusUpdateFactory.newLatLng(mUserLocation);
-			mBaidumap.animateMapStatus(u);
-			mLocClient.unRegisterLocationListener(myListener);
-			mLocClient.stop();
 		}
 
 		public void onReceivePoi(BDLocation poiLocation) {
