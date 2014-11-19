@@ -375,8 +375,12 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
 	public void onDestroy() {
-        mSearch.destroy();
-        mMapView.onDestroy();
+    	if(mSearch!=null){
+    		mSearch.destroy();
+    	}
+        if(mMapView!=null){
+        	mMapView.onDestroy();
+        }
         super.onDestroy();
     }
 

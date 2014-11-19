@@ -104,7 +104,7 @@ public class MainApplication extends Application {
                 NetworkInfo mNetworkInfo = cm.getNetworkInfo(networkType);
                 log.debug("isNetAvilible=" + isNetAvilible + ",networkType=" + networkType + ",mNetworkInfo=" + mNetworkInfo);
                 NetType mtype = NetType.None;
-                if (mNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                if (mNetworkInfo != null && mNetworkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
                     mtype = NetType.WifiNet;
                 } else {
                     mtype = NetType.MobileNet;
