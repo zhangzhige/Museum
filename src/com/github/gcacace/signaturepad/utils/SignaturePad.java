@@ -16,7 +16,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.example.museum.R;
+import com.waltz3d.museum.R;
 
 public class SignaturePad extends View
 {

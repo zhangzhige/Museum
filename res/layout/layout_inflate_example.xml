@@ -47,7 +47,7 @@
         android:background="@drawable/history_bg"
         android:layout_marginTop="-3dip" >
 
-        <com.example.museum.CoverFlow
+        <com.waltz3d.museum.CoverFlow
             android:id="@+id/fancyCoverFlow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

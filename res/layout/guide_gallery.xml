@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" >
 
-        <com.example.museum.CirclePageIndicator
+        <com.waltz3d.museum.CirclePageIndicator
             android:id="@+id/indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
