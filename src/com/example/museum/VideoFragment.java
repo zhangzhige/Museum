@@ -67,7 +67,7 @@ public class VideoFragment extends BaseFragment {
 			}
 		});
 
-		new HttpManager().loadHistoryVideoData(0,
+		new HttpManager().loadHistoryVideoData(R.raw.history_video,
 				new OnLoadFinishListener<HistoryVideo>() {
 
 					@Override
@@ -107,7 +107,7 @@ public class VideoFragment extends BaseFragment {
 		public View getView(int i, View reuseableView, ViewGroup viewGroup) {
 			Holder holder;
 			if (reuseableView == null) {
-				reuseableView = inflater.inflate(R.layout.item_home, viewGroup,
+				reuseableView = inflater.inflate(R.layout.item_video, viewGroup,
 						false);
 
 				holder = new Holder();

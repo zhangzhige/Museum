@@ -67,7 +67,7 @@ public class MainApplication extends Application {
         File imageCacheDir = StorageUtils.getCacheDirectory(this);
         ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(this)
                 .threadPriority(Thread.NORM_PRIORITY).threadPoolSize(5)
-                .memoryCache(new LruMemoryCache(16 * 1024 * 1024))
+                .memoryCache(new LruMemoryCache(64 * 1024 * 1024))
                 .denyCacheImageMultipleSizesInMemory()
                 .diskCache(new UnlimitedDiscCache(imageCacheDir))
                 .diskCacheFileNameGenerator(new Md5FileNameGenerator())

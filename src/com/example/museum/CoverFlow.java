@@ -19,7 +19,6 @@ import android.widget.ImageView;
  */
 public class CoverFlow extends Gallery {
 
-	private Camera mCamera = new Camera();
 	private int mMaxRotationAngle = 60;
 	private int mMaxZoom = -120;
 	private int mCoveflowCenter;
@@ -93,30 +92,13 @@ public class CoverFlow extends Gallery {
 	}
 
 	private void transformImageBitmap(View child, Transformation t, int rotationAngle) {
-		mCamera.save();
-		final Matrix imageMatrix = t.getMatrix();
-		final int imageHeight = child.getLayoutParams().height;
-		final int imageWidth = child.getLayoutParams().width;
 		final int rotation = Math.abs(rotationAngle);
-
-		// 在Z轴上正向移动camera的视角，实际效果为放大图片。
-		// 如果在Y轴上移动，则图片上下移动；X轴上对应图片左右移动。
-		mCamera.translate(0.0f, 0.0f, 100.0f);
-
 		// As the angle of the view gets less, zoom in
 		if (rotation < mMaxRotationAngle) {
-			float zoomAmount = (float) (mMaxZoom + (rotation * 1.5));
-			mCamera.translate(0.0f, 0.0f, zoomAmount);
+			child.setTranslationX(Math.abs(rotation*3));
 		}
-		// 在Y轴上旋转，对应图片竖向向里翻转。
-		// 如果在X轴上旋转，则对应图片横向向里翻转。
-		ViewHelper.setPivotX(child, child.getWidth() / 2);
-		ViewHelper.setPivotY(child, child.getHeight() / 2);
-		ViewHelper.setRotationY(child, rotationAngle);
-
-		mCamera.getMatrix(imageMatrix);
-		imageMatrix.preTranslate(-(imageWidth / 2), -(imageHeight / 2));
-		imageMatrix.postTranslate((imageWidth / 2), (imageHeight / 2));
-		mCamera.restore();
+		child.setPivotX(child.getWidth() / 2);
+		child.setPivotY(child.getHeight() / 2);
+		child.setRotationY(rotationAngle);
 	}
 }

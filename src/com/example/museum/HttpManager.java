@@ -34,7 +34,7 @@ public class HttpManager {
 
 	private static final String SearchUrl = "http://tss.waltzcn.com/Plugins/RestApi/API/Product/SearchProducts?loginName=apiuser&loginPassword=123456";
 	
-	private final static String HostoryVideoUrl = "http://tss.waltzcn.com/content/videos/GetProducts.txt";
+	private final static String HostoryVideoUrl = "http://tss.waltzcn.com/content/videos/GetProducts.c";
 
 	private AsyncHttpProxy mHttpProxy = AsyncHttpProxy.getInstance();
 
