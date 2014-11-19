@@ -22,6 +22,8 @@ public class CoverFlow extends Gallery {
 	private int mMaxRotationAngle = 60;
 	private int mMaxZoom = -120;
 	private int mCoveflowCenter;
+	
+	public boolean isNeedRotate = true ;
 
 	public CoverFlow(Context context) {
 		super(context);
@@ -63,6 +65,7 @@ public class CoverFlow extends Gallery {
 		return view.getLeft() + view.getWidth() / 2;
 	}
 
+	
 	protected boolean getChildStaticTransformation(View child, Transformation t) {
 
 		final int childCenter = getCenterOfView(child);
@@ -92,6 +95,9 @@ public class CoverFlow extends Gallery {
 	}
 
 	private void transformImageBitmap(View child, Transformation t, int rotationAngle) {
+		if(!isNeedRotate){
+			return;
+		}
 		final int rotation = Math.abs(rotationAngle);
 		// As the angle of the view gets less, zoom in
 		if (rotation < mMaxRotationAngle) {

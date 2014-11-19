@@ -57,13 +57,13 @@ public class SignatureWallFragment extends BaseFragment {
 				layout_sign_save.setDrawingCacheEnabled(true);
 				Bitmap mBitmap = layout_sign_save.getDrawingCache();
 				boolean isSuccess = addSignatureToGallery(mBitmap);
-				if (isSuccess) {
-					Toast.makeText(getActivity(), "Signature saved into the Gallery", Toast.LENGTH_SHORT).show();
+				if (isSuccess && SignActivity.mBitmap != null) {
+					Toast.makeText(getActivity(), "签名已保存在您的相册中！", Toast.LENGTH_SHORT).show();
 					imageView_sign_area.setImageDrawable(new BitmapDrawable());
 					SignActivity.mBitmap.recycle();
 					SignActivity.mBitmap = null;
 				} else {
-					Toast.makeText(getActivity(), "Unable to store the signature", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), "签名保存失败！", Toast.LENGTH_SHORT).show();
 				}
 			}
 		});

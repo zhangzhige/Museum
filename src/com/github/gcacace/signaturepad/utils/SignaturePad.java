@@ -143,7 +143,7 @@ public class SignaturePad extends View
             y += ttt * curve.endPoint.y;
 
             // Set the incremental stroke width and draw.
-            mPaint.setStrokeWidth(startWidth + ttt * widthDelta);
+            mPaint.setStrokeWidth(startWidth + ttt * widthDelta+30);
             mSignatureBitmapCanvas.drawPoint(x, y, mPaint);
             expandDirtyRect(x, y);
         }

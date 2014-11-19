@@ -28,7 +28,7 @@ public class HomeFragment extends BaseFragment {
 	
 	private List<Cultural> mCulturalList;
 	
-	private Gallery fancyCoverFlow;
+	private CoverFlow fancyCoverFlow;
 	
 	private DisplayImageOptions mOptions;
 	
@@ -100,7 +100,8 @@ public class HomeFragment extends BaseFragment {
 
 	private void initUI() {
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
-		fancyCoverFlow = (Gallery) mRootView.findViewById(R.id.fancyCoverFlow);
+		fancyCoverFlow = (CoverFlow) mRootView.findViewById(R.id.fancyCoverFlow);
+		fancyCoverFlow.isNeedRotate = false;
 	    fancyCoverFlow.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override

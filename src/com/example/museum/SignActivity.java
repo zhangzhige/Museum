@@ -27,13 +27,11 @@ public class SignActivity extends Activity {
 		mSignaturePad.setOnSignedListener(new SignaturePad.OnSignedListener() {
 			@Override
 			public void onSigned() {
-				mSaveButton.setEnabled(true);
 				mClearButton.setEnabled(true);
 			}
 
 			@Override
 			public void onClear() {
-				mSaveButton.setEnabled(false);
 				mClearButton.setEnabled(false);
 			}
 		});
