@@ -82,6 +82,22 @@ public class CollectionListActivity extends Activity {
 		});
 	}
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(mGuideGallery!=null){
+			mGuideGallery.onResume();
+		}
+	}
+	
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if(mGuideGallery!=null){
+			mGuideGallery.onStop();
+		}
+	}
+	
 	private class ImageAdapter extends RecyclingPagerAdapter {
 
 		private int[] menu_image_array_common = { R.drawable.collection_1, R.drawable.collection_2, R.drawable.collection_3, R.drawable.collection_4 };

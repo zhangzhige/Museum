@@ -52,7 +52,9 @@
         android:layout_height="wrap_content"
         android:divider="@null"
         android:layout_marginTop="-5dip"
-        android:scrollbars="none" >
-    </ListView>
+        android:scrollbars="none"
+        android:scrollingCache="false"
+        android:cacheColorHint="#00000000"
+        android:fadingEdge="none"></ListView>
 
 </LinearLayout>

@@ -15,6 +15,16 @@
 -->
 
 <resources>
+    
+    <declare-styleable name="MultiViewPager">
+        <!-- Child view inside a page to match the page size against. -->
+        <attr name="matchChildWidth" format="reference" />
+        <!-- Maximum size. -->
+        <attr name="android:maxWidth" />
+        <!-- Maximum size. -->
+        <attr name="android:maxHeight" />
+    </declare-styleable>
+    
     <declare-styleable name="SignaturePad">
         <attr name="minWidth" format="float" />
         <attr name="maxWidth" format="float" />
