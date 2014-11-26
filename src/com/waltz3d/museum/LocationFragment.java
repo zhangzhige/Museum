@@ -133,6 +133,14 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 		getActivity().registerReceiver(mReceiver, iFilter);
 		
         mMapView = (MapView) mRootView.findViewById(R.id.map);
+        int count = mMapView.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = mMapView.getChildAt(i);
+            if (child instanceof ImageView) {
+                child.setVisibility(View.INVISIBLE);
+            }
+        }
+        
         mBaidumap = mMapView.getMap();
         //地图点击事件处理
         mBaidumap.setOnMapClickListener(this);
