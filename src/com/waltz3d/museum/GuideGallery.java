@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
@@ -13,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,7 +23,7 @@ import android.widget.TextView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class GuideGallery extends RelativeLayout {
+public class GuideGallery extends FrameLayout {
 
 	public static final float ASPECT_RATIO = 344.0f / 720;
 
@@ -28,25 +31,13 @@ public class GuideGallery extends RelativeLayout {
 
 	private XL_Log log = new XL_Log(GuideGallery.class);
 
-	private LayoutInflater mInflater;
-
-	private ViewPager mPager;
-
-	private TextView title_textview;
-
 	private ImageTimerTask mImageTimerTask;
 
 	private Timer mTimer;
 
 	private Handler mHandler = new Handler();
-
-	private CirclePageIndicator mIndicator;
-
-	private ImageLoader mImageLoader;
-
-	private DisplayImageOptions mOptions;
-
-	private RecyclingPagerAdapter mImageAdapter;
+	
+	private int currentIndex = 0;
 
 	private Runnable myRunnable = new Runnable() {
 		@Override
@@ -57,24 +48,12 @@ public class GuideGallery extends RelativeLayout {
 
 	public GuideGallery(Context context) {
 		super(context);
-		init();
+		setBackgroundResource(R.drawable.collection_head_bg);
 	}
 
 	public GuideGallery(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		init();
-	}
-
-	void init() {
-		float density = getResources().getDisplayMetrics().density;
-		mInflater = LayoutInflater.from(getContext());
-		mInflater.inflate(R.layout.guide_gallery, this);
-		mPager = (ViewPager) findViewById(R.id.image_wall_gallery);
-
-		title_textview = (TextView) findViewById(R.id.title_textview);
-
-		mImageLoader = ImageLoader.getInstance();
-		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
+		setBackgroundResource(R.drawable.collection_head_bg);
 	}
 
 	private void resumeTimeTaskDelay() {
@@ -98,60 +77,14 @@ public class GuideGallery extends RelativeLayout {
 	}
 	
 	public void setAdapter(RecyclingPagerAdapter mRecyclingPagerAdapter) {
-		mImageAdapter = mRecyclingPagerAdapter;
-		mPager.setAdapter(mImageAdapter);
-		mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
-		mIndicator.setViewPager(mPager);
-		mIndicator.setVisibility(View.INVISIBLE);
-//		title_textview.setText(mImageAdapter.getItem(0).getTitle());
-		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
-
-			@Override
-			public void onPageSelected(int position) {
-//				title_textview.setText(mImageAdapter.getItem(position % mImageAdapter.getRealCount()).getTitle());
-			}
-
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		FrameLayout.LayoutParams mParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		for(int i = 0,size = mRecyclingPagerAdapter.getRealCount();i<size;i++){
+			View v = mRecyclingPagerAdapter.getView(i, null, this);
+			v.setAlpha(i == currentIndex ? 1:0);
+			addView(v, mParams);
+		}
 	}
-	
 
-	public void setDataSource(ArrayList<CmsItemable> mArrayList) {
-		mImageAdapter = new ImageAdapter(mArrayList);
-		mPager.setAdapter(mImageAdapter);
-		mIndicator = (CirclePageIndicator) findViewById(R.id.indicator);
-		mIndicator.setViewPager(mPager);
-//		title_textview.setText(mImageAdapter.getItem(0).getTitle());
-		mIndicator.setOnPageChangeListener(new OnPageChangeListener() {
-
-			@Override
-			public void onPageSelected(int position) {
-//				title_textview.setText(mImageAdapter.getItem(position % mImageAdapter.getRealCount()).getTitle());
-			}
-
-			@Override
-			public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void onPageScrollStateChanged(int state) {
-				// TODO Auto-generated method stub
-
-			}
-		});
-	}
 
 	public void onResume() {
 		onStop();
@@ -176,63 +109,18 @@ public class GuideGallery extends RelativeLayout {
 		public void run() {
 			mHandler.post(new Runnable() {
 				public void run() {
-					int gallerypisition = mPager.getCurrentItem() + 1;
-					mPager.setCurrentItem(gallerypisition, true);
+					View currentV = getChildAt(currentIndex % getChildCount());
+					ObjectAnimator mAnimator = ObjectAnimator.ofFloat(currentV, "alpha", 1,0);
+					mAnimator.setDuration(800);
+					mAnimator.start();
+					
+					currentIndex +=1;
+					View nextV = getChildAt(currentIndex % getChildCount());
+					ObjectAnimator mNextAnimator = ObjectAnimator.ofFloat(nextV, "alpha", 0,1);
+					mNextAnimator.setDuration(800);
+					mNextAnimator.start();
 				}
 			});
-		}
-	}
-
-	private class ImageAdapter extends RecyclingPagerAdapter {
-
-		private ArrayList<CmsItemable> items;
-
-		public ImageAdapter(ArrayList<CmsItemable> mArrayList) {
-			this.items = mArrayList;
-
-		}
-
-		public int getCount() {
-			return Integer.MAX_VALUE;
-		}
-
-		public CmsItemable getItem(int position) {
-			return items.get(position);
-		}
-
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			ViewHolder n = null;
-			if (convertView == null) {
-				convertView = mInflater.inflate(R.layout.item_resource_suggest_head, null);
-				n = new ViewHolder();
-				n.gallery_image = (ImageView) convertView.findViewById(R.id.gallery_image);
-				convertView.setTag(n);
-			} else {
-				n = (ViewHolder) convertView.getTag();
-			}
-			final CmsItemable mItem = getItem(position);
-			if (mItem != null) {
-				String imgUrl = mItem.getPosterUrl();
-				mImageLoader.displayImage(imgUrl, n.gallery_image, mOptions);
-			}
-			n.gallery_image.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-
-				}
-			});
-			return convertView;
-		}
-
-		class ViewHolder {
-			public ImageView gallery_image;
-		}
-
-		@Override
-		public int getRealCount() {
-			if (items != null) {
-				return items.size();
-			}
-			return 0;
 		}
 	}
 }

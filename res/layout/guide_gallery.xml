@@ -9,18 +9,5 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" >
-
-        <com.waltz3d.museum.CirclePageIndicator
-            android:id="@+id/indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="16dip"
-            android:layout_marginTop="7dip" />
-    </RelativeLayout>
 
 </RelativeLayout>

@@ -13,6 +13,7 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DetailActivity extends Activity implements OnClickListener {
@@ -28,6 +29,8 @@ public class DetailActivity extends Activity implements OnClickListener {
 	private ChatConnection mConnection;
 	
 	private String mTestMessage = "<Root><Message ServiceType=\"Waltz3D\" CategoryName=\"Welcome\">11023</Message></Root>";
+	
+	private int comFrom = 0;
 
 	private Handler mUpdateHandler = new Handler() {
 		@Override
@@ -43,7 +46,15 @@ public class DetailActivity extends Activity implements OnClickListener {
 		setContentView(R.layout.activity_detail);
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		imageView_detail = (ImageView) findViewById(R.id.imageView_detail);
-
+		comFrom = getIntent().getIntExtra("comFrom", 0);
+		if(comFrom == 1){
+			TextView textView_title = (TextView) findViewById(R.id.textView_title);
+			textView_title.setText("文物列表");
+			
+			ImageView imageView = (ImageView) findViewById(R.id.imageView_action);
+			imageView.setVisibility(View.INVISIBLE);
+			
+		}
 		String url = getIntent().getStringExtra("PictureUrl");
 		ImageLoader.getInstance().displayImage(url, imageView_detail, mOptions);
 

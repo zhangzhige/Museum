@@ -68,6 +68,7 @@ public class CollectionListActivity extends Activity {
 				Cultural item = mCustomListAdapter.getItem(position);
 				String url = item.ProductPictures.get(1).PictureUrl;
 				intent.putExtra("PictureUrl", url);
+				intent.putExtra("comFrom", 1);
 				startActivity(intent);
 			}
 		});
