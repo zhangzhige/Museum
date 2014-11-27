@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -87,10 +88,12 @@ public class GifView extends View{
         canvas.save();
         matrix.reset();
         rotateAngel -= 0.5f;
-        matrix.postRotate(rotateAngel, mWallDown.getWidth()/2, mWallDown.getHeight()/2);
-        matrix.postTranslate(0, 170 *density/2);
+        
+        matrix.postRotate(rotateAngel, mWallDown.getWidth()/2 - 25 * density/2, mWallDown.getHeight()/2);
+        matrix.postTranslate(25 * density/2, 170 *density/2);
+        
         canvas.drawBitmap(mWallDown, matrix, null);
-        canvas.drawBitmap(currentImage, (getMeasuredWidth() - currentImage.getWidth())/2, 70 * density/2, null);
+        canvas.drawBitmap(currentImage, (getMeasuredWidth() - currentImage.getWidth())/2, 150 * density/2, null);
         canvas.drawBitmap(mWallUp, matrix, null);
         canvas.restoreToCount(saveCount);
     }

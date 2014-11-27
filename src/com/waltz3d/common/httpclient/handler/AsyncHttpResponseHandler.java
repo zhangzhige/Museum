@@ -338,7 +338,7 @@ public class AsyncHttpResponseHandler
             {
                 in = new BufferedInputStream(temp.getContent());
                 
-                responseBody = CharsetConvert.inputStreamToGBK(in);
+                responseBody = CharsetConvert.inputStreamToUTF8(in);
             }
             catch (IOException e)
             {
