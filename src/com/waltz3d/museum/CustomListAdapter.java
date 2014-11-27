@@ -1,5 +1,6 @@
 package com.waltz3d.museum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -15,22 +16,29 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.waltz3d.museum.Cultural.ProductSpecificationAttribute;
 
 public class CustomListAdapter extends BaseAdapter {
-	
+
 	private Context context;
-	
+
 	private List<Cultural> mCulturals;
 	private LayoutInflater inflater;
-	
+
 	public int position;
-	
+
 	public int offset;
-	
+
 	private DisplayImageOptions mOptions;
-	
-	public CustomListAdapter(Context context,List<Cultural> list) {
+
+	public CustomListAdapter(Context context, List<Cultural> list) {
 		super();
 		this.context = context;
-		this.mCulturals = list;
+		this.mCulturals = new ArrayList<Cultural>();
+		for (int i = 0, size = list.size(); i < size; i++) {
+			Cultural mItem = list.get(i);
+			if (mItem != null && mItem.ProductSpecificationAttributes != null && mItem.ProductSpecificationAttributes.size() > 0) {
+				mCulturals.add(mItem);
+			}
+		}
+
 		this.inflater = LayoutInflater.from(context);
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 	}
@@ -49,45 +57,45 @@ public class CustomListAdapter extends BaseAdapter {
 	public View getView(final int position, View convertView, ViewGroup parent) {
 		Holder holder = null;
 		if (convertView == null) {
-			convertView = inflater.inflate(R.layout.item_share_new,parent,false);
-			
+			convertView = inflater.inflate(R.layout.item_share_new, parent, false);
+
 			holder = new Holder();
 			holder.imageView_file_logo = (ImageView) convertView.findViewById(R.id.imageView_file_logo);
-			holder.textView_name_key=(TextView) convertView.findViewById(R.id.textView_name_key);
-			holder.textView_name_value=(TextView) convertView.findViewById(R.id.textView_name_value);
-			
-			holder.textView_location_key=(TextView) convertView.findViewById(R.id.textView_location_key);
-			holder.textView_location_value=(TextView) convertView.findViewById(R.id.textView_location_value);
-			
-			holder.textView_disability_key=(TextView) convertView.findViewById(R.id.textView_disability_key);
-			holder.textView_textView_disability_value=(TextView) convertView.findViewById(R.id.textView_textView_disability_value);
-			
-			holder.textView_level_key=(TextView) convertView.findViewById(R.id.textView_level_key);
-			holder.textView_level_value=(TextView) convertView.findViewById(R.id.textView_level_value);
-			
+			holder.textView_name_key = (TextView) convertView.findViewById(R.id.textView_name_key);
+			holder.textView_name_value = (TextView) convertView.findViewById(R.id.textView_name_value);
+
+			holder.textView_location_key = (TextView) convertView.findViewById(R.id.textView_location_key);
+			holder.textView_location_value = (TextView) convertView.findViewById(R.id.textView_location_value);
+
+			holder.textView_disability_key = (TextView) convertView.findViewById(R.id.textView_disability_key);
+			holder.textView_textView_disability_value = (TextView) convertView.findViewById(R.id.textView_textView_disability_value);
+
+			holder.textView_level_key = (TextView) convertView.findViewById(R.id.textView_level_key);
+			holder.textView_level_value = (TextView) convertView.findViewById(R.id.textView_level_value);
+
 			convertView.setTag(holder);
 
 		} else {
 			holder = (Holder) convertView.getTag();
 		}
 		Cultural mItem = getItem(position);
-	    String url = mItem.ProductPictures.get(0).PictureUrl;
-	    ImageLoader.getInstance().displayImage(url,holder.imageView_file_logo,mOptions);
-	        
+		String url = mItem.ProductPictures.get(0).PictureUrl;
+		ImageLoader.getInstance().displayImage(url, holder.imageView_file_logo, mOptions);
+
 		List<ProductSpecificationAttribute> mProductSpecificationAttributes = mItem.ProductSpecificationAttributes;
-		if(mProductSpecificationAttributes!=null && mProductSpecificationAttributes.size()>0){
+
+		holder.textView_name_value.setText(mItem.Name);
+
+		if (mProductSpecificationAttributes != null && mProductSpecificationAttributes.size() > 0) {
 			try {
-				holder.textView_name_key.setText(mProductSpecificationAttributes.get(0).Name);
-				holder.textView_name_value.setText(mProductSpecificationAttributes.get(0).Value);
-				
-				holder.textView_location_key.setText(mProductSpecificationAttributes.get(1).Name);
-				holder.textView_location_value.setText(mProductSpecificationAttributes.get(1).Value);
-				
-				holder.textView_disability_key.setText(mProductSpecificationAttributes.get(2).Name);
-				holder.textView_textView_disability_value.setText(mProductSpecificationAttributes.get(2).Value);
-				
-				holder.textView_level_key.setText(mProductSpecificationAttributes.get(3).Name);
-				holder.textView_level_value.setText(mProductSpecificationAttributes.get(3).Value);
+				holder.textView_location_key.setText(mProductSpecificationAttributes.get(0).Name);
+				holder.textView_location_value.setText(mProductSpecificationAttributes.get(0).Value);
+
+				holder.textView_disability_key.setText(mProductSpecificationAttributes.get(1).Name);
+				holder.textView_textView_disability_value.setText(mProductSpecificationAttributes.get(1).Value);
+
+				holder.textView_level_key.setText(mProductSpecificationAttributes.get(2).Name);
+				holder.textView_level_value.setText(mProductSpecificationAttributes.get(2).Value);
 			} catch (IndexOutOfBoundsException e) {
 				e.printStackTrace();
 			}
@@ -98,10 +106,10 @@ public class CustomListAdapter extends BaseAdapter {
 	private class Holder {
 		public ImageView imageView_file_logo;
 		public ImageView imageView_menu;
-		public TextView textView_name_key,textView_name_value;
-		public TextView textView_location_key,textView_location_value;
-		public TextView textView_disability_key,textView_textView_disability_value;
-		public TextView textView_level_key,textView_level_value;
+		public TextView textView_name_key, textView_name_value;
+		public TextView textView_location_key, textView_location_value;
+		public TextView textView_disability_key, textView_textView_disability_value;
+		public TextView textView_level_key, textView_level_value;
 
 	}
 

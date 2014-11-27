@@ -4,6 +4,10 @@ import java.util.List;
 
 public class Cultural {
 	
+	public int $id;
+	
+	public String Name;
+	
 	public List<ProductPicture> ProductPictures;
 	
 	public List<ProductSpecificationAttribute> ProductSpecificationAttributes;

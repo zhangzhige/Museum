@@ -13,10 +13,12 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.entity.ByteArrayEntity;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -126,9 +128,22 @@ public class HttpManager {
 
 		mHttpProxy.post(SearchUrl, byteEntity, new AsyncHttpResponseHandler() {
 
-			public void onSuccess(int statusCode, Header[] headers,
-					String content) {
+			public void onSuccess(int statusCode, Header[] headers,String content) {
 				Log.d("TAG", "content=" + content);
+//				try {
+//					JSONArray mJsonArray = new JSONArray(content);
+//					for(int i = 0,size = mJsonArray.length();i<size;i++){
+//						JSONObject mJsonObject = mJsonArray.getJSONObject(i);
+//						Iterator<String> mIterator = mJsonObject.keys();
+//						while (mIterator.hasNext()) { 
+//							Object mObject = mJsonObject.get(mIterator.next());
+//						} 
+//						
+//					}
+//				} catch (JSONException e1) {
+//					e1.printStackTrace();
+//				}
+				
 				Gson gson = new Gson();
 				List<Cultural> mList = null;
 				try {
