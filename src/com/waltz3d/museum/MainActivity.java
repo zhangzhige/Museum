@@ -43,12 +43,18 @@ public class MainActivity extends android.support.v4.app.FragmentActivity {
 	@Override
 	public void onResume() {
 		super.onResume();
+		if(mXlMainView!=null){
+			mXlMainView.onResume();
+		}
 	}
 
 	@Override
 	public void onPause() {
 		log.debug("onPause");
 		super.onPause();
+		if(mXlMainView!=null){
+			mXlMainView.onPause();
+		}
 	}
 
 	@Override

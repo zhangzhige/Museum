@@ -31,8 +31,6 @@ public class GifView extends View{
 	
 	private boolean isRun = true;
 	
-	private boolean pause = false;
-	
 	private int showWidth = -1;
 	private int showHeight = -1;
 	
@@ -113,6 +111,18 @@ public class GifView extends View{
     	}
     };
     
+    public void onStop(){
+    	isRun = false;
+    }
+    
+    public void onResume(){
+    	if(!isRun){
+    		isRun = true;
+        	drawThread = new DrawThread();
+        	drawThread.start();
+    	}
+    }
+    
     /**
      * 动画线程
      *
@@ -122,17 +132,16 @@ public class GifView extends View{
     		if(gifDecoder == null){
     			return;
     		}
-    		log.debug("run="+isRun+",isPause="+pause);
     		while(isRun){
-    			if(!pause){
-	    				currentImage = gifDecoder.next(getContext());
-	    				long sp = 30;	    				
-    					Message msg = redrawHandler.obtainMessage();
-    					redrawHandler.sendMessage(msg);
-    					SystemClock.sleep(sp); 
-    			}else{
-    				SystemClock.sleep(10);
-    			}
+				currentImage = gifDecoder.next(getContext());
+				Message msg = redrawHandler.obtainMessage();
+				redrawHandler.sendMessage(msg);
+				
+				try {
+					Thread.sleep(30);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
     		}
     	}
     }

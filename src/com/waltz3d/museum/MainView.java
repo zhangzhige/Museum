@@ -177,12 +177,27 @@ public class MainView extends LinearLayout implements OnClickListener {
 
 	private void changeBottomUI(int tab_id) {
 		gifView.setVisibility(tab_id < 2 ? View.VISIBLE:View.INVISIBLE);
+		if(tab_id < 2){
+			gifView.onResume();
+		}else{
+			gifView.onStop();
+		}
 		for (int i = 0, size = imageViewArray.length; i < size; i++) {
 			if (i == tab_id) {
 				imageViewArray[i].setImageResource(menu_image_array_click[i]);
 			} else {
 				imageViewArray[i].setImageResource(menu_image_array_common[i]);
 			}
+		}
+	}
+	
+	public void onPause(){
+		gifView.onStop();
+	}
+	
+	public void onResume(){
+		if(gifView.getVisibility() == View.VISIBLE){
+			gifView.onResume();
 		}
 	}
 
