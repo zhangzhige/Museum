@@ -56,6 +56,14 @@ public class MainApplication extends Application {
         this.registerReceiver(mWifiStateReceiver, mWifiStateFilter);
 
         initImageLoader();
+        
+        new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				NsdHelper.getInstance();//初始化nsd
+			}
+		}).start();
     }
 
 

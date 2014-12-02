@@ -1,115 +1,99 @@
 package com.waltz3d.museum;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.net.nsd.NsdManager;
-import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
-import android.util.Log;
+import java.io.IOException;
 
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+import javax.jmdns.JmDNS;
+import javax.jmdns.ServiceEvent;
+import javax.jmdns.ServiceInfo;
+import javax.jmdns.ServiceListener;
+
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.MulticastLock;
+
 public class NsdHelper {
 
 	XL_Log log = new XL_Log(NsdHelper.class);
-
-	public static final String SERVICE_TYPE = "_http._tcp.";
+	
+	private static final String SERVICE_TYPE = "_http._tcp.local.";
 
 	public String mServiceName = "Waltz3D";
+	
+	private static NsdHelper INSTANCE = null;
 
-	NsdManager.DiscoveryListener mDiscoveryListener;
+	private MulticastLock lock;
 
-	NsdManager.ResolveListener mResolveListener;
+	private JmDNS jmdns;
+	private ServiceListener listener;
 
-	NsdManager mNsdManager;
+	private ServiceInfo mServiceInfo;
 
-	private Context mContext;
-
-	NsdServiceInfo mService;
-
-	public NsdHelper(Context context) {
-		mContext = context;
-		mNsdManager = (NsdManager) context.getSystemService(Context.NSD_SERVICE);
-		initializeResolveListener();
-		initializeDiscoveryListener();
+	public static synchronized NsdHelper getInstance() {
+		if (INSTANCE == null) {
+			INSTANCE = new NsdHelper();
+		}
+		return INSTANCE;
 	}
 
-	public void discoverServices() {
-        mNsdManager.discoverServices(SERVICE_TYPE, NsdManager.PROTOCOL_DNS_SD, mDiscoveryListener);
-    }
-	
-	public NsdServiceInfo getChosenServiceInfo() {
-        return mService;
-    }
-	
-    public void tearDown() {
-    }
-	
-	public void initializeDiscoveryListener() {
-		mDiscoveryListener = new NsdManager.DiscoveryListener() {
-
-			@Override
-			public void onDiscoveryStarted(String regType) {
-				log.debug("Service discovery started");
-			}
-
-			@Override
-			public void onServiceFound(NsdServiceInfo service) {
-				log.debug("Service discovery success" + service+"name="+service.getServiceName());
-				if (!service.getServiceType().equals(SERVICE_TYPE)) {
-					log.debug("Unknown Service Type: " + service.getServiceType());
-				} else if (service.getServiceName().equals(mServiceName)) {
-					log.debug("Same machine: " + mServiceName);
-				} else if (service.getServiceName().contains(mServiceName)) {
-					mNsdManager.resolveService(service, mResolveListener);
+	private void startBonjour() {
+		WifiManager wifi = (WifiManager) MainApplication.INSTANCE.getSystemService(android.content.Context.WIFI_SERVICE);
+		lock = wifi.createMulticastLock("lock");
+		lock.setReferenceCounted(true);
+		lock.acquire();
+		try {
+			jmdns = JmDNS.create();
+			jmdns.addServiceListener(SERVICE_TYPE, listener = new ServiceListener() {
+				@Override
+				public void serviceResolved(ServiceEvent event) {
+					log.debug("serviceResolved QualifiedName=" + event.getInfo().getQualifiedName() + ",ip=" + event.getInfo().getInet4Addresses()[0].getHostAddress().toString() + ",port="
+							+ event.getInfo().getPort());
+					if(event != null && event.getInfo() != null && event.getInfo().getQualifiedName().contains(mServiceName)){
+						mServiceInfo = event.getInfo();
+						
+						onStop();
+					}
 				}
-			}
 
-			@Override
-			public void onServiceLost(NsdServiceInfo service) {
-				log.debug("service lost" + service);
-				if (mService == service) {
-					mService = null;
+				@Override
+				public void serviceRemoved(ServiceEvent event) {
+					log.debug("serviceRemoved QualifiedName=" + event.getInfo().getQualifiedName() + ",ip=" + event.getInfo().getInet4Addresses()[0].getHostAddress().toString() + ",port="
+							+ event.getInfo().getPort());
 				}
-			}
 
-			@Override
-			public void onDiscoveryStopped(String serviceType) {
-				log.debug("Discovery stopped: " + serviceType);
-			}
-
-			@Override
-			public void onStartDiscoveryFailed(String serviceType, int errorCode) {
-				log.debug("Discovery failed: Error code:" + errorCode);
-				mNsdManager.stopServiceDiscovery(this);
-			}
-
-			@Override
-			public void onStopDiscoveryFailed(String serviceType, int errorCode) {
-				log.debug("Discovery failed: Error code:" + errorCode);
-				mNsdManager.stopServiceDiscovery(this);
-			}
-		};
+				@Override
+				public void serviceAdded(ServiceEvent event) {
+					log.debug("serviceAdded QualifiedName=" + event.getName() + ",type=" + event.getType());
+					jmdns.requestServiceInfo(event.getType(), event.getName(), 1);
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
 	}
 
-	public void initializeResolveListener() {
-		mResolveListener = new NsdManager.ResolveListener() {
-
-			@Override
-			public void onResolveFailed(NsdServiceInfo serviceInfo, int errorCode) {
-				log.debug("Resolve failed" + errorCode);
+	protected void onStop() {
+		if (jmdns != null) {
+			if (listener != null) {
+				jmdns.removeServiceListener(SERVICE_TYPE, listener);
+				listener = null;
 			}
-
-			@Override
-			public void onServiceResolved(NsdServiceInfo serviceInfo) {
-				log.debug("Resolve Succeeded. " + serviceInfo);
-				log.debug("serviceInfo="+serviceInfo.getServiceName()+",type = "+serviceInfo.getServiceType());
-				if (serviceInfo.getServiceName().equals(mServiceName)) {
-					log.debug("Same IP.");
-					return;
-				}
-				mService = serviceInfo;
+			jmdns.unregisterAllServices();
+			try {
+				jmdns.close();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		};
+			jmdns = null;
+		}
+		lock.release();
+	}
+
+	private NsdHelper() {
+		startBonjour();
+	}
+
+	public ServiceInfo getChosenServiceInfo() {
+		return mServiceInfo;
 	}
 
 }

@@ -47,7 +47,7 @@ public class HomeFragment extends BaseFragment {
 		private LayoutInflater inflater;
 		
 		public FancyCoverFlowSampleAdapter(){
-			this.inflater = LayoutInflater.from(getActivity());
+			this.inflater = LayoutInflater.from(MainApplication.INSTANCE);
 		}
 
 	    @Override

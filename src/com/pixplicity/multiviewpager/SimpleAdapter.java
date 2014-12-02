@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.waltz3d.museum.HistoryVideo;
+import com.waltz3d.museum.MainApplication;
 import com.waltz3d.museum.R;
 import com.waltz3d.museum.TDImagePlayOptionBuilder;
 import com.waltz3d.museum.VideoPlayerActivity;
@@ -27,7 +28,7 @@ public class SimpleAdapter extends RecyclingPagerAdapter {
 	private Context mContext;
 
 	public SimpleAdapter(Context context,List<HistoryVideo> mList) {
-		inflater = LayoutInflater.from(context);
+		inflater = LayoutInflater.from(MainApplication.INSTANCE);
 		this.mContext = context;
 		this.mCulturalList = mList;
 		

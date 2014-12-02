@@ -1,5 +1,7 @@
 package com.waltz3d.museum;
 
+import javax.jmdns.ServiceInfo;
+
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -37,6 +39,7 @@ public class DetailActivity extends Activity implements OnClickListener {
 		public void handleMessage(Message msg) {
 			String chatLine = msg.getData().getString("msg");
 			log.debug(chatLine);
+			Util.showToast(DetailActivity.this, "炫立方互动成功", Toast.LENGTH_LONG);
 		}
 	};
 
@@ -60,31 +63,26 @@ public class DetailActivity extends Activity implements OnClickListener {
 
 		findViewById(R.id.imageView_back).setOnClickListener(this);
 		findViewById(R.id.imageView_action).setOnClickListener(this);
-		if(Build.VERSION.SDK_INT >= 16){
-			mNsdHelper = new NsdHelper(this);
+		if(comFrom != 1){
+			mNsdHelper = NsdHelper.getInstance();
 			mConnection = new ChatConnection(mUpdateHandler);
-			mNsdHelper.discoverServices();
 		}
-		
 	}
 
     @Override
     protected void onDestroy() {
-    	if(mNsdHelper!=null){
-    		mNsdHelper.tearDown();
-    	}
     	if(mConnection!=null){
     		mConnection.tearDown();
     	}
         super.onDestroy();
     }
     
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN) public void clickConnect() {
-        NsdServiceInfo service = mNsdHelper.getChosenServiceInfo();
+    private void clickConnect() {
+    	ServiceInfo service = mNsdHelper.getChosenServiceInfo();
         log.debug("clickConnect service = " + service);
         if (service != null) {
-        	log.debug("Connecting. service = "+ service.getHost()+",port="+service.getPort());
-            mConnection.connectToServer(service.getHost(),service.getPort());
+        	log.debug("Connecting. service = "+ service.getInet4Addresses()[0].getHostAddress().toString()+",port="+service.getPort());
+            mConnection.connectToServer(service.getInet4Addresses()[0],service.getPort());
             mConnection.sendMessage(mTestMessage);
         } else {
         	log.debug("No service to connect to!");
@@ -99,7 +97,7 @@ public class DetailActivity extends Activity implements OnClickListener {
 			finish();
 			break;
 		case R.id.imageView_action:
-			if(Build.VERSION.SDK_INT >= 16 && mNsdHelper != null){
+			if(mNsdHelper != null){
 				clickConnect();
 			}else{
 				Util.showToast(DetailActivity.this, "抱歉，由于你手机版本过低，暂时无法支持炫立方互动。", Toast.LENGTH_LONG);
