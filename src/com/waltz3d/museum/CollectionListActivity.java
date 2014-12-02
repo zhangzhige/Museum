@@ -66,10 +66,13 @@ public class CollectionListActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Intent intent = new Intent(CollectionListActivity.this, DetailActivity.class);
 				Cultural item = mCustomListAdapter.getItem(position);
-				String url = item.ProductPictures.get(1).PictureUrl;
-				intent.putExtra("PictureUrl", url);
-				intent.putExtra("comFrom", 1);
-				startActivity(intent);
+				if(item != null){
+					String url = item.ProductPictures.get(Math.min(1, item.ProductPictures.size() - 1)).PictureUrl;
+					intent.putExtra("PictureUrl", url);
+					intent.putExtra("comFrom", 1);
+					startActivity(intent);
+				}
+				
 			}
 		});
 

@@ -147,7 +147,6 @@ public class ChatConnection {
                     if (getSocket() == null) {
                         setSocket(new Socket(mAddress, PORT));
                         log.debug("Client-side socket initialized.");
-
                     } else {
                     	log.debug("Socket already initialized. skipping!");
                     }
@@ -207,7 +206,9 @@ public class ChatConnection {
             } catch (IOException ioe) {
             	ioe.printStackTrace();
                 log.debug("IOException="+ioe);
-            }
+            } catch (NullPointerException e) {
+				e.printStackTrace();
+			}
         }
 
         public void sendMessage(String msg) {
