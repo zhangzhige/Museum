@@ -64,6 +64,9 @@ public class DetailActivity extends Activity implements OnClickListener {
 		findViewById(R.id.imageView_back).setOnClickListener(this);
 		findViewById(R.id.imageView_action).setOnClickListener(this);
 		if(comFrom != 1){
+			int id = getIntent().getIntExtra("Id", 0);
+			mTestMessage = mTestMessage.replace("11023", ""+id);
+			log.debug("mTestMessage="+mTestMessage);
 			mNsdHelper = NsdHelper.getInstance();
 			mConnection = new ChatConnection(mUpdateHandler);
 		}

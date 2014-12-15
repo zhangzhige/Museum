@@ -4,10 +4,15 @@ import java.util.List;
 
 public class Cultural {
 	
-	public int $id;
+	public int Id;
 	
 	public String Name;
 	
+	@Override
+	public String toString() {
+		return "Cultural [Id=" + Id + ", Name=" + Name + "]";
+	}
+
 	public List<ProductPicture> ProductPictures;
 	
 	public List<ProductSpecificationAttribute> ProductSpecificationAttributes;

@@ -111,11 +111,12 @@ public class HomeFragment extends BaseFragment {
 				List<ProductPicture> mList =  item.ProductPictures;
 		        String url = mList.get(Math.min(1, mList.size()-1)).PictureUrl;
 		        intent.putExtra("PictureUrl", url);
+		        intent.putExtra("Id", item.Id);
 				startActivity(intent);
 			}
 		});
 	    
-	    new HttpManager().loadData(3, R.raw.xinshiqishidai, new OnLoadFinishListener<Cultural>() {
+	    new HttpManager().loadData(3, R.raw.home_default, new OnLoadFinishListener<Cultural>() {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {
