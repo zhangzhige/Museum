@@ -83,6 +83,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity {
 		if (mXlMainView != null) {
 			mXlMainView.onDestroy();
 		}
+		NsdHelper.getInstance().onStop();
 	}
 
 	/**

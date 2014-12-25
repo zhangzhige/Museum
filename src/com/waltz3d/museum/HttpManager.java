@@ -91,8 +91,7 @@ public class HttpManager {
 	 * @param categoryids
 	 *            2:过场动画 3：首页 13 历史视频 5 新石器时代 6 青铜时代
 	 */
-	public void loadData(int categoryids, int rawId,
-			final OnLoadFinishListener<Cultural> mOnLoadFinishListener) {
+	public void loadData(int categoryids, int rawId,final OnLoadFinishListener<Cultural> mOnLoadFinishListener) {
 		JSONObject jsonRequObj = new JSONObject();
 		try {
 			jsonRequObj.put("pageindex", 0);
@@ -102,8 +101,7 @@ public class HttpManager {
 			e.printStackTrace();
 		}
 		final String jsonContent = jsonRequObj.toString();
-		final DiskDataCache mDiskDataCache = new DiskDataCache(
-				MainApplication.INSTANCE);
+		final DiskDataCache mDiskDataCache = new DiskDataCache(MainApplication.INSTANCE);
 		String cacheData = mDiskDataCache.loadDataFromDiskImpl(jsonContent);
 		if (cacheData != null && cacheData.length() > 0) {
 
@@ -113,9 +111,7 @@ public class HttpManager {
 		if (cacheData != null && cacheData.length() > 0) {
 			Gson gson = new Gson();
 			try {
-				List<Cultural> mList = gson.fromJson(cacheData,
-						new TypeToken<List<Cultural>>() {
-						}.getType());
+				List<Cultural> mList = gson.fromJson(cacheData,new TypeToken<List<Cultural>>() {}.getType());
 				mOnLoadFinishListener.onLoad(mList);
 			} catch (JsonSyntaxException e) {
 				e.printStackTrace();
@@ -130,25 +126,11 @@ public class HttpManager {
 
 			public void onSuccess(int statusCode, Header[] headers,String content) {
 				Log.d("TAG", "content=" + content);
-//				try {
-//					JSONArray mJsonArray = new JSONArray(content);
-//					for(int i = 0,size = mJsonArray.length();i<size;i++){
-//						JSONObject mJsonObject = mJsonArray.getJSONObject(i);
-//						Iterator<String> mIterator = mJsonObject.keys();
-//						while (mIterator.hasNext()) { 
-//							Object mObject = mJsonObject.get(mIterator.next());
-//						} 
-//						
-//					}
-//				} catch (JSONException e1) {
-//					e1.printStackTrace();
-//				}
 				
 				Gson gson = new Gson();
 				List<Cultural> mList = null;
 				try {
-					mList = gson.fromJson(content, new TypeToken<List<Cultural>>() {
-					}.getType());
+					mList = gson.fromJson(content, new TypeToken<List<Cultural>>() {}.getType());
 					mDiskDataCache.saveCacheData(content, jsonContent);
 				} catch (JsonSyntaxException e) {
 					e.printStackTrace();
@@ -163,6 +145,45 @@ public class HttpManager {
 			}
 		});
 	}
+	
+	
+	public void loadDataWithNoCache(int categoryids,final OnLoadFinishListener<Cultural> mOnLoadFinishListener) {
+		JSONObject jsonRequObj = new JSONObject();
+		try {
+			jsonRequObj.put("pageindex", 0);
+			jsonRequObj.put("pagesize", 20);
+			jsonRequObj.put("categoryids", categoryids);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		final String jsonContent = jsonRequObj.toString();
+		final DiskDataCache mDiskDataCache = new DiskDataCache(MainApplication.INSTANCE);
+		
+
+		ByteArrayEntity byteEntity = new ByteArrayEntity(jsonContent.getBytes());
+		mHttpProxy.post(SearchUrl, byteEntity, new AsyncHttpResponseHandler() {
+
+			public void onSuccess(int statusCode, Header[] headers,String content) {
+				Log.d("TAG", "content=" + content);
+				Gson gson = new Gson();
+				List<Cultural> mList = null;
+				try {
+					mList = gson.fromJson(content, new TypeToken<List<Cultural>>() {}.getType());
+					mDiskDataCache.saveCacheData(content, jsonContent);
+				} catch (JsonSyntaxException e) {
+					e.printStackTrace();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				mOnLoadFinishListener.onLoad(mList);
+			}
+
+			public void onFailure(Throwable error, String content) {
+				mOnLoadFinishListener.onLoad(null);
+			}
+		});
+	}
+	
 
 	public static String openRawResource(int resourceid) {
 		InputStream is = MainApplication.INSTANCE.getResources()

@@ -1,28 +1,47 @@
 <resources>
 
-    <!--
-        Base application theme for API 14+. This theme completely replaces
-        AppBaseTheme from BOTH res/values/styles.xml and
-        res/values-v11/styles.xml on API 14+ devices.
-    -->
+<!--     <style name="CustomActionBarTheme" parent="@style/Theme.AppCompat.Light"> -->
+<!--         <item name="android:actionBarStyle">@style/MesumeActionBar</item> -->
+<!--         <item name="android:actionBarDivider">@null</item> -->
+<!--         <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item> -->
+<!--         <item name="android:actionBarTabBarStyle">@style/MyActionBarTabBars</item> -->
+<!--         <item name="android:actionMenuTextColor">@android:color/holo_green_light</item> -->
+<!--         <item name="android:homeAsUpIndicator">@drawable/actionbar_back_seletor</item> -->
+<!-- 		<item name="android:actionBarSize">48dp</item> -->
+<!--         <item name="actionBarStyle">@style/MesumeActionBar</item> -->
+<!--         <item name="actionBarDivider">@null</item> -->
+<!--         <item name="actionBarTabTextStyle">@style/MyActionBarTabText</item> -->
+<!--         <item name="actionBarTabBarStyle">@style/MyActionBarTabBars</item> -->
+<!--         <item name="actionMenuTextColor">@android:color/holo_green_light</item> -->
+<!--         <item name="homeAsUpIndicator">@drawable/actionbar_back_seletor</item> -->
+<!--         <item name="actionBarSize">48dp</item> -->
+<!--         <item name="toolbarNavigationButtonStyle">@style/Custom.Widget.AppCompat.Toolbar.Button.Navigation</item> -->
+<!--     </style> -->
     
-    <style name="AppBaseTheme" parent="@android:style/Theme.Holo.Light">
-        <item name="android:actionBarStyle">@style/MyActionBar</item>
-        <item name="android:actionBarDivider">@null</item>
-        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
-        <item name="android:actionBarTabBarStyle">@style/MyActionBarTabBars</item>
-        <item name="android:actionMenuTextColor">@color/white</item>
-        <item name="android:actionMenuTextAppearance">@style/MyMenuTextStyle</item>
-        <item name="android:homeAsUpIndicator">@drawable/actionbar_back_seletor</item>
-    </style>
+<!--     <style name="Custom.Widget.AppCompat.Toolbar.Button.Navigation" parent="Base.Widget.AppCompat.Toolbar.Button.Navigation" > -->
+<!--         <item name="android:minWidth">36dp</item> -->
+<!--     </style> -->
 
     <!-- ActionBar styles -->
-    <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">@color/action_bar_bg</item>
-        <item name="android:titleTextStyle">@style/MyActionBarTitleText</item>
-        <item name="android:backgroundStacked">@android:color/white</item>
-        <item name="android:displayOptions">useLogo|showTitle</item>
-    </style>
+<!--     <style name="MesumeActionBar" parent="@style/Base.Widget.AppCompat.Light.ActionBar.Solid"> -->
+<!--         <item name="android:background">@color/action_bar_bg</item> -->
+<!--         <item name="android:titleTextStyle">@style/MyActionBarTitleText</item> -->
+<!--         <item name="android:backgroundStacked">@android:color/holo_green_dark</item> -->
+
+<!--         Support library compatibility -->
+<!--         <item name="background">@color/action_bar_bg</item> -->
+<!--         <item name="titleTextStyle">@style/MyActionBarTitleText</item> -->
+<!--         <item name="backgroundStacked">@android:color/holo_green_dark</item> -->
+<!--     </style> -->
+
+    <!-- ActionBar tabs text -->
+<!--     <style name="MyActionBarTabText" parent="@style/Widget.AppCompat.ActionBar.TabText"> -->
+<!--         <item name="android:textColor">@android:color/holo_blue_bright</item> -->
+<!--     </style> -->
+
+<!--     <style name="MyActionBarTabBars" parent="@style/Widget.AppCompat.ActionBar.TabBar"> -->
+<!--         <item name="android:showDividers">none</item> -->
+<!--     </style> -->
 
     <!-- ActionBar title text -->
     <style name="MyActionBarTitleText" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
@@ -35,24 +54,13 @@
         <item name="android:textColor">?android:attr/actionMenuTextColor</item>
     </style>
 
-    <!-- ActionBar tabs text -->
-    <style name="MyActionBarTabText" parent="@android:style/Widget.Holo.ActionBar.TabText">
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-    <style name="MyActionBarTabBars" parent="@android:style/Widget.Holo.ActionBar.TabBar">
-        <item name="android:showDividers">none</item>
-    </style>
-
-
     <style name="MyApp.BorderlessButton" parent="@android:style/Widget.Holo.Button.Borderless">
         <item name="android:textSize">16dp</item>
         <item name="android:textColor">@color/black</item>
     </style>
 
-      <style name="PlayerTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
+    <style name="PlayerTheme" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <!-- API 11 theme customizations can go here. -->
     </style>
-    
 
 </resources>

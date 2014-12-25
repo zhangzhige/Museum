@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,23 +42,29 @@ public class CollectionListActivity extends Activity {
 	};
 
 	@Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+	
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_collectionlist);
-
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(false);
+        
 		categoryids = getIntent().getIntExtra("categoryids", 5);
 		textView_listhead =(TextView) findViewById(R.id.textView_listhead);
 		textView_listhead.setText(categoryids == 5?"新石器时代":"青铜时代");
 		mGuideGallery = (GuideGallery) findViewById(R.id.listview_head);
 		mGuideGallery.setAdapter(new ImageAdapter());
-
-		findViewById(R.id.actionbar_layout).setOnClickListener(new View.OnClickListener() {
-			
-			@Override
-			public void onClick(View v) {
-				finish();
-			}
-		});
 		
 		mainlistView = (ListView) findViewById(R.id.mainlistView);
 		mainlistView.setOnItemClickListener(new OnItemClickListener() {
