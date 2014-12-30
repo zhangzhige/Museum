@@ -8,9 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -30,9 +28,6 @@ public class GifView extends View{
 	private Bitmap currentImage = null;
 	
 	private boolean isRun = true;
-	
-	private int showWidth = -1;
-	private int showHeight = -1;
 	
 	private DrawThread drawThread = null;
 	

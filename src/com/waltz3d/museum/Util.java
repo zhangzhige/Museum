@@ -31,9 +31,7 @@ public class Util {
 		if (null == path) {
 			return false;
 		}
-
 		boolean ret = false;
-
 		File file = new File(path);
 		if (!file.exists() || !file.isDirectory()) {
 			try {

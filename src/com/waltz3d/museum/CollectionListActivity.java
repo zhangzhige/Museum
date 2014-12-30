@@ -3,6 +3,7 @@ package com.waltz3d.museum;
 import java.util.List;
 
 import com.waltz3d.museum.HttpManager.OnLoadFinishListener;
+import com.waltz3d.museum.detail.DetailActivity;
 
 import android.app.Activity;
 import android.content.Intent;

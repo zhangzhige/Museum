@@ -79,7 +79,7 @@
         </activity>
         
         <activity
-            android:name="DetailActivity"
+            android:name=".detail.DetailActivity"
             android:label="@string/home_tab"
             android:theme="@style/AppBaseTheme"
             android:screenOrientation="portrait" >

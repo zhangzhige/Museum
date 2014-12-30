@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -20,6 +19,7 @@ import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.waltz3d.museum.Cultural.ProductPicture;
 import com.waltz3d.museum.HttpManager.OnLoadFinishListener;
+import com.waltz3d.museum.detail.DetailActivity;
 
 public class HomeFragment extends BaseFragment {
 	
@@ -87,6 +87,7 @@ public class HomeFragment extends BaseFragment {
 	        Cultural item = getItem(i);
 	        String url = item.ProductPictures.get(0).PictureUrl;
 	        ImageLoader.getInstance().displayImage(url, holder.imageView,mOptions);
+	        log.debug("item="+item);
 	        return reuseableView;
 	    }
 	    
@@ -162,7 +163,7 @@ public class HomeFragment extends BaseFragment {
 			}
 		});
 	   
-	    new HttpManager().loadData(3, R.raw.xinshiqishidai, new OnLoadFinishListener<Cultural>() {
+	    new HttpManager().loadData(3, R.raw.home_default, new OnLoadFinishListener<Cultural>() {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {

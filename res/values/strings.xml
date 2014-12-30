@@ -7,5 +7,5 @@
     <string name="cultural_tab">文物藏品</string>
     <string name="signature_wall">签名墙</string>
     <string name="meseum_location">展馆位置</string>
-
+	<string name="update_loading">正在下载中 ({0}%)</string>
 </resources>
