@@ -1,23 +1,36 @@
 package com.waltz3d.museum;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Cultural {
+public class Cultural implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	public int Id;
 	
 	public String Name;
 	
+	public String Product3D;
+
 	@Override
 	public String toString() {
-		return "Cultural [Id=" + Id + ", Name=" + Name + "]";
+		return "Cultural [Id=" + Id + ", Name=" + Name + ", Product3D=" + Product3D + "]";
 	}
 
 	public List<ProductPicture> ProductPictures;
 	
 	public List<ProductSpecificationAttribute> ProductSpecificationAttributes;
 	
-	class ProductPicture{
+	class ProductPicture implements Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		int ProductId;
 		int PictureId;
 		String PictureUrl;
@@ -31,7 +44,12 @@ public class Cultural {
 		}
 	}
 	
-	public class ProductSpecificationAttribute{
+	public class ProductSpecificationAttribute implements Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		
 		public int SpecificationAttributeOptionId;
 		public String Name;
 		public String Value;

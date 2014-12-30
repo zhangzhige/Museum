@@ -14,7 +14,7 @@ public class NsdHelper {
 
 	XL_Log log = new XL_Log(NsdHelper.class);
 	
-	private static final String SERVICE_TYPE = "_http._tcp.local.";
+	private static final String SERVICE_TYPE = "_Waltz3D._udp.local.";
 
 	public String mServiceName = "Waltz3D";
 	

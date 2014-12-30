@@ -15,15 +15,12 @@ import android.widget.ImageView;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.waltz3d.common.httpclient.AsyncHttpProxy;
 import com.waltz3d.museum.Cultural.ProductPicture;
 import com.waltz3d.museum.HttpManager.OnLoadFinishListener;
 
 public class HomeFragment extends BaseFragment {
 	
 	private View mRootView;
-	
-	private AsyncHttpProxy mHttpProxy = AsyncHttpProxy.getInstance();
 	
 	private List<Cultural> mCulturalList;
 	
@@ -112,6 +109,7 @@ public class HomeFragment extends BaseFragment {
 		        String url = mList.get(Math.min(1, mList.size()-1)).PictureUrl;
 		        intent.putExtra("PictureUrl", url);
 		        intent.putExtra("Id", item.Id);
+		        intent.putExtra("Product3D", item.Product3D);
 				startActivity(intent);
 			}
 		});

@@ -33,6 +33,8 @@ public class DetailActivity extends Activity implements OnClickListener {
 	private String mTestMessage = "<Root><Message ServiceType=\"Waltz3D\" CategoryName=\"Welcome\">11023</Message></Root>";
 	
 	private int comFrom = 0;
+	
+	private String Product3D;
 
 	private Handler mUpdateHandler = new Handler() {
 		@Override
@@ -50,13 +52,14 @@ public class DetailActivity extends Activity implements OnClickListener {
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		imageView_detail = (ImageView) findViewById(R.id.imageView_detail);
 		comFrom = getIntent().getIntExtra("comFrom", 0);
+		Product3D = getIntent().getStringExtra("Product3D");
+		
 		if(comFrom == 1){
 			TextView textView_title = (TextView) findViewById(R.id.textView_title);
 			textView_title.setText("文物列表");
 			
 			ImageView imageView = (ImageView) findViewById(R.id.imageView_action);
 			imageView.setVisibility(View.INVISIBLE);
-			
 		}
 		String url = getIntent().getStringExtra("PictureUrl");
 		ImageLoader.getInstance().displayImage(url, imageView_detail, mOptions);

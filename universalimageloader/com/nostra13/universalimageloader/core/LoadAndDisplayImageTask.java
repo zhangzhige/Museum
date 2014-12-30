@@ -17,6 +17,8 @@ package com.nostra13.universalimageloader.core;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.util.Log;
+
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.FailReason.FailType;
 import com.nostra13.universalimageloader.core.assist.ImageScaleType;
@@ -213,6 +215,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 	private Bitmap tryLoadBitmap() throws TaskCancelledException {
 		Bitmap bitmap = null;
 		try {
+			Log.d("tryLoadBitmap", "uri="+uri);
 			File imageFile = configuration.diskCache.get(uri);
 			if (imageFile != null && imageFile.exists()) {
 				L.d(LOG_LOAD_IMAGE_FROM_DISK_CACHE, memoryCacheKey);
@@ -259,8 +262,7 @@ final class LoadAndDisplayImageTask implements Runnable, IoUtils.CopyListener {
 
 	private Bitmap decodeImage(String imageUri) throws IOException {
 		ViewScaleType viewScaleType = imageAware.getScaleType();
-		ImageDecodingInfo decodingInfo = new ImageDecodingInfo(memoryCacheKey, imageUri, uri, targetSize, viewScaleType,
-				getDownloader(), options);
+		ImageDecodingInfo decodingInfo = new ImageDecodingInfo(memoryCacheKey, imageUri, uri, targetSize, viewScaleType,getDownloader(), options);
 		return decoder.decode(decodingInfo);
 	}
 
