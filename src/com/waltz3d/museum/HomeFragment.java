@@ -2,7 +2,9 @@ package com.waltz3d.museum;
 
 import java.util.List;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -29,6 +32,12 @@ public class HomeFragment extends BaseFragment {
 	private DisplayImageOptions mOptions;
 	
 	private FancyCoverFlowSampleAdapter mFancyCoverFlowSampleAdapter;
+	
+	private ImageView imageView_search;
+	
+	private ImageView imageView_refresh;
+	
+	private ProgressDialog mProgressDialog;
 	
 	private Handler mHandler = new Handler(){
 		public void handleMessage(android.os.Message msg) {
@@ -95,6 +104,7 @@ public class HomeFragment extends BaseFragment {
 	}
 
 	private void initUI() {
+		mProgressDialog = new ProgressDialog(getActivity(),android.R.style.Theme_DeviceDefault_Light_Dialog);
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		fancyCoverFlow = (CoverFlow) mRootView.findViewById(R.id.fancyCoverFlow);
 		fancyCoverFlow.isNeedRotate = false;
@@ -114,7 +124,45 @@ public class HomeFragment extends BaseFragment {
 			}
 		});
 	    
-	    new HttpManager().loadData(3, R.raw.home_default, new OnLoadFinishListener<Cultural>() {
+	    imageView_search = (ImageView) mRootView.findViewById(R.id.imageView_search);
+	    imageView_search.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), WalthListActivity.class);
+				startActivity(intent);
+			}
+		});
+	    
+	    imageView_refresh = (ImageView) mRootView.findViewById(R.id.imageView_refresh); 
+	    imageView_refresh.setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Util.showDialog(mProgressDialog, "正在刷新...");
+				new HttpManager().loadDataWithNoCache(3, new OnLoadFinishListener<Cultural>() {
+					
+					@Override
+					public void onLoad(final List<Cultural> mList) {
+						mHandler.post(new Runnable() {
+							
+							@Override
+							public void run() {
+								Util.dismissDialog(mProgressDialog);
+								if(mList == null || mList.size() == 0){
+									Util.showToast(getActivity(), "刷新失败，请重试", Toast.LENGTH_LONG);
+								}else{
+									mFancyCoverFlowSampleAdapter = new FancyCoverFlowSampleAdapter();
+									fancyCoverFlow.setAdapter(mFancyCoverFlowSampleAdapter);
+								}
+							}
+						});
+					}
+				});
+			}
+		});
+	   
+	    new HttpManager().loadData(3, R.raw.xinshiqishidai, new OnLoadFinishListener<Cultural>() {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {

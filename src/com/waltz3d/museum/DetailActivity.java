@@ -2,21 +2,19 @@ package com.waltz3d.museum;
 
 import javax.jmdns.ServiceInfo;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.net.nsd.NsdServiceInfo;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class DetailActivity extends Activity implements OnClickListener {
 	
@@ -49,22 +47,22 @@ public class DetailActivity extends Activity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowHomeEnabled(false);
+        
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		imageView_detail = (ImageView) findViewById(R.id.imageView_detail);
 		comFrom = getIntent().getIntExtra("comFrom", 0);
 		Product3D = getIntent().getStringExtra("Product3D");
 		
 		if(comFrom == 1){
-			TextView textView_title = (TextView) findViewById(R.id.textView_title);
-			textView_title.setText("文物列表");
-			
+			setTitle("文物列表");
 			ImageView imageView = (ImageView) findViewById(R.id.imageView_action);
 			imageView.setVisibility(View.INVISIBLE);
-		}
+					}
 		String url = getIntent().getStringExtra("PictureUrl");
 		ImageLoader.getInstance().displayImage(url, imageView_detail, mOptions);
 
-		findViewById(R.id.imageView_back).setOnClickListener(this);
 		findViewById(R.id.imageView_action).setOnClickListener(this);
 		if(comFrom != 1){
 			int id = getIntent().getIntExtra("Id", 0);
@@ -74,6 +72,26 @@ public class DetailActivity extends Activity implements OnClickListener {
 			mConnection = new ChatConnection(mUpdateHandler);
 		}
 	}
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.detail_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.to_3d:
+                break;
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onDestroy() {
@@ -99,9 +117,6 @@ public class DetailActivity extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.imageView_back:
-			finish();
-			break;
 		case R.id.imageView_action:
 			if(mNsdHelper != null){
 				clickConnect();
