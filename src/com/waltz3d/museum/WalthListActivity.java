@@ -10,6 +10,7 @@ import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -32,6 +33,8 @@ public class WalthListActivity extends Activity {
 	private TextView textView_empty;
 	
 	private SimpleCustomAdapter mSimpleCustomAdapter;
+	
+	private XL_Log log = new XL_Log(WalthListActivity.class);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class WalthListActivity extends Activity {
 				ServiceInfo mServiceInfo = mSimpleCustomAdapter.getItem(position);
 				if(mServiceInfo != null){
 					NsdHelper.getInstance().setCurrentServiceInfo(mServiceInfo);
-					Util.showToast(WalthListActivity.this, "当前已选中："+mServiceInfo.getQualifiedName(), Toast.LENGTH_SHORT);
+					Util.showToast(WalthListActivity.this, "当前已选中："+mServiceInfo.getName(), Toast.LENGTH_SHORT);
 				}
 			}
 		});
@@ -65,6 +68,7 @@ public class WalthListActivity extends Activity {
 		mainlistView.setAdapter(mSimpleCustomAdapter);
 		
 		List<ServiceInfo> mServiceInfos = NsdHelper.getInstance().getmServiceInfos();
+		log.debug("mServiceInfos="+mServiceInfos.size());
 		if(mServiceInfos == null || mServiceInfos.size() == 0){
 			textView_empty.setVisibility(View.VISIBLE);
 		}else{
@@ -150,7 +154,7 @@ public class WalthListActivity extends Activity {
 				holder = (Holder) convertView.getTag();
 			}
 			ServiceInfo mItem = getItem(position);
-			holder.textView_name.setText(mItem.getQualifiedName());
+			holder.textView_name.setText(mItem.getName());
 			return convertView;
 		}
 		

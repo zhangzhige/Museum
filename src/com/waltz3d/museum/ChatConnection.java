@@ -221,9 +221,7 @@ public class ChatConnection {
                 	log.debug("Socket output stream is null, wtf?");
                 }
 
-                PrintWriter out = new PrintWriter(
-                        new BufferedWriter(
-                                new OutputStreamWriter(getSocket().getOutputStream())), true);
+                PrintWriter out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(getSocket().getOutputStream())), true);
                 out.println(msg);
                 out.flush();
                 updateMessages(msg, true);

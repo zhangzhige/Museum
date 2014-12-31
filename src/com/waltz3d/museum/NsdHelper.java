@@ -1,19 +1,13 @@
 package com.waltz3d.museum;
 
 import java.io.IOException;
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.Map;
 
 import javax.jmdns.JmDNS;
 import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
-import javax.jmdns.ServiceInfo.Fields;
 
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
@@ -65,7 +59,7 @@ public class NsdHelper {
 		this.mCurrentServiceInfo = mCurrentServiceInfo;
 	}
 
-	private List<ServiceInfo> mServiceInfos;
+	private List<ServiceInfo> mServiceInfos = new ArrayList<ServiceInfo>();
 
 	public List<ServiceInfo> getmServiceInfos() {
 		return mServiceInfos;
@@ -92,7 +86,7 @@ public class NsdHelper {
 			listener = new ServiceListener() {
 				@Override
 				public void serviceResolved(ServiceEvent event) {
-					log.debug("serviceResolved QualifiedName=" + event.getInfo().getQualifiedName() + ",ip=" + event.getInfo().getInet4Addresses()[0].getHostAddress().toString() + ",port=" + event.getInfo().getPort());
+					log.debug("serviceResolved QualifiedName=" + event.getInfo().getName() + ",ip=" + event.getInfo().getInet4Addresses()[0].getHostAddress().toString() + ",port=" + event.getInfo().getPort());
 					if(event != null && event.getInfo() != null){
 						mCurrentServiceInfo = event.getInfo();
 						mServiceInfos.add(mCurrentServiceInfo);
@@ -121,6 +115,7 @@ public class NsdHelper {
 					jmdns.requestServiceInfo(event.getType(), event.getName(), 1);
 				}
 			};
+			log.debug("startBonjour SERVICE_TYPE");
 			jmdns.addServiceListener(SERVICE_TYPE, listener);
 		} catch (IOException e) {
 			e.printStackTrace();

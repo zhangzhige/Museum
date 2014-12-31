@@ -101,7 +101,6 @@ public class GifView extends View{
     
     private Handler redrawHandler = new Handler(){
     	public void handleMessage(Message msg) {
-    		log.debug("getTop="+getTop());
     		invalidate(0, getTop(), getWidth(), getHeight());
     	}
     };
