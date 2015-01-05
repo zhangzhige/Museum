@@ -9,6 +9,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -84,11 +85,14 @@ public class CollectionListActivity extends Activity {
 			}
 		});
 
-		new HttpManager().loadData(categoryids, categoryids == 5 ? R.raw.xinshiqishidai : R.raw.qingtongshidai, new OnLoadFinishListener<Cultural>() {
+		new HttpManager().loadData(categoryids, 0, 10, categoryids == 5 ? R.raw.xinshiqishidai : R.raw.qingtongshidai, new OnLoadFinishListener<Cultural>() {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {
 				mCulturalList = mList;
+				for(Cultural mItem:mCulturalList){
+					Log.d("onLoad", mItem.toString());
+				}
 				mHandler.obtainMessage().sendToTarget();
 			}
 		});

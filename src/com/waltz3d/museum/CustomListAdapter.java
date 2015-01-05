@@ -32,13 +32,7 @@ public class CustomListAdapter extends BaseAdapter {
 		super();
 		this.context = context;
 		this.mCulturals = new ArrayList<Cultural>();
-		for (int i = 0, size = list.size(); i < size; i++) {
-			Cultural mItem = list.get(i);
-			if (mItem != null && mItem.ProductSpecificationAttributes != null && mItem.ProductSpecificationAttributes.size() > 0) {
-				mCulturals.add(mItem);
-			}
-		}
-
+		mCulturals.addAll(list);
 		this.inflater = LayoutInflater.from(context);
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 	}
@@ -90,12 +84,13 @@ public class CustomListAdapter extends BaseAdapter {
 			try {
 				holder.textView_location_key.setText(mProductSpecificationAttributes.get(0).Name);
 				holder.textView_location_value.setText(mProductSpecificationAttributes.get(0).Value);
-
-				holder.textView_disability_key.setText(mProductSpecificationAttributes.get(1).Name);
-				holder.textView_textView_disability_value.setText(mProductSpecificationAttributes.get(1).Value);
-
-				holder.textView_level_key.setText(mProductSpecificationAttributes.get(2).Name);
-				holder.textView_level_value.setText(mProductSpecificationAttributes.get(2).Value);
+				
+				holder.textView_level_key.setText(mProductSpecificationAttributes.get(1).Name);
+				holder.textView_level_value.setText(mProductSpecificationAttributes.get(1).Value);
+				
+				holder.textView_disability_key.setText(mProductSpecificationAttributes.get(2).Name);
+				holder.textView_textView_disability_value.setText(mProductSpecificationAttributes.get(2).Value);
+				
 			} catch (IndexOutOfBoundsException e) {
 				e.printStackTrace();
 			}

@@ -163,7 +163,7 @@ public class HomeFragment extends BaseFragment {
 			}
 		});
 	   
-	    new HttpManager().loadData(3, R.raw.home_default, new OnLoadFinishListener<Cultural>() {
+	    new HttpManager().loadData(3, 0, 20, R.raw.home_default, new OnLoadFinishListener<Cultural>() {
 
 			@Override
 			public void onLoad(List<Cultural> mList) {

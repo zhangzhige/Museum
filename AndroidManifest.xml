@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.waltz3d.museum"
     android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionName="1.0.0.1" >
 
     <uses-sdk
         android:minSdkVersion="14" />
@@ -47,7 +47,7 @@
     <application
         android:name="com.waltz3d.museum.MainApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:largeHeap="true"
         android:theme="@style/AppBaseTheme" 

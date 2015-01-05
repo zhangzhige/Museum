@@ -66,7 +66,7 @@ public class AsyncHttpProxy {
 	}
 	
 	public void post(String url,HttpEntity entity, AsyncHttpResponseHandler responseHandler){
-		mClient.post(mContext,url, entity, "application/json",responseHandler);
+		mClient.post(mContext,url, entity, "application/x-www-form-urlencoded; charset=utf-8",responseHandler);
 	}
 	
 	public void get(String url,AsyncHttpResponseHandler responseHandler){

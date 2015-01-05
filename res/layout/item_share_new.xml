@@ -15,10 +15,11 @@
 
         <ImageView
             android:id="@+id/imageView_file_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/icon"
+            android:scaleType="fitXY" />
     </FrameLayout>
 
     <ImageView
@@ -77,7 +78,7 @@
                 android:id="@+id/textView_location_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="产地"
                 android:textColor="@color/collection_text_color"
                 android:textSize="12sp" />
 
@@ -92,7 +93,7 @@
                 android:id="@+id/textView_location_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="昙石山"
                 android:textColor="@color/collection_text_color"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -105,7 +106,7 @@
                 android:id="@+id/textView_disability_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="残度"
                 android:textColor="@color/collection_text_color"
                 android:textSize="12sp" />
 
@@ -120,7 +121,7 @@
                 android:id="@+id/textView_textView_disability_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="残"
                 android:textColor="@color/collection_text_color"
                 android:textSize="12sp" />
         </LinearLayout>
@@ -133,7 +134,7 @@
                 android:id="@+id/textView_level_key"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="级别"
                 android:textColor="@color/collection_text_color"
                 android:textSize="12sp" />
 
@@ -148,7 +149,7 @@
                 android:id="@+id/textView_level_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="一级保护"
                 android:textColor="@color/collection_text_color"
                 android:textSize="12sp" />
         </LinearLayout>

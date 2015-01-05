@@ -20,6 +20,8 @@ import javax.jmdns.impl.constants.DNSRecordClass;
 import javax.jmdns.impl.constants.DNSRecordType;
 import javax.jmdns.impl.constants.DNSResultCode;
 
+import com.waltz3d.museum.XL_Log;
+
 import android.util.Log;
 
 /**
@@ -28,7 +30,9 @@ import android.util.Log;
  * @author Arthur van Hoff, Werner Randelshofer, Pierre Frisch, Daniel Bobbert
  */
 public final class DNSIncoming extends DNSMessage {
-    private static Logger logger                                = Logger.getLogger(DNSIncoming.class.getName());
+    private static Logger logger = Logger.getLogger(DNSIncoming.class.getName());
+    
+    private static XL_Log log = new XL_Log(DNSIncoming.class);
 
     // This is a hack to handle a bug in the BonjourConformanceTest
     // It is sending out target strings that don't follow the "domain name" format.
@@ -190,7 +194,7 @@ public final class DNSIncoming extends DNSMessage {
         this._messageInputStream = new MessageInputStream(packet.getData(), packet.getLength());
         this._receivedTime = System.currentTimeMillis();
         this._senderUDPPayload = DNSConstants.MAX_MSG_TYPICAL;
-
+        log.debug("DNSIncoming _messageInputStream="+_messageInputStream+",_receivedTime="+_receivedTime+",_senderUDPPayload="+_senderUDPPayload);
         try {
             this.setId(_messageInputStream.readUnsignedShort());
             this.setFlags(_messageInputStream.readUnsignedShort());
@@ -198,7 +202,7 @@ public final class DNSIncoming extends DNSMessage {
             int numAnswers = _messageInputStream.readUnsignedShort();
             int numAuthorities = _messageInputStream.readUnsignedShort();
             int numAdditionals = _messageInputStream.readUnsignedShort();
-
+            log.debug("DNSIncoming id="+getId()+",flag="+getFlags()+",numQuestions="+numQuestions+",numAnswers="+numAnswers+",numAuthorities="+numAuthorities+",numAdditionals="+numAdditionals);
             // parse questions
             if (numQuestions > 0) {
                 for (int i = 0; i < numQuestions; i++) {

@@ -46,6 +46,8 @@ import javax.jmdns.impl.constants.DNSRecordType;
 import javax.jmdns.impl.constants.DNSState;
 import javax.jmdns.impl.tasks.DNSTask;
 
+import com.waltz3d.museum.XL_Log;
+
 // REMIND: multiple IP addresses
 
 /**
@@ -56,6 +58,8 @@ import javax.jmdns.impl.tasks.DNSTask;
 public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarter {
     private static Logger logger = Logger.getLogger(JmDNSImpl.class.getName());
 
+    private XL_Log log = new XL_Log(JmDNSImpl.class);
+    
     public enum Operation {
         Remove, Update, Add, RegisterServiceType, Noop
     }
@@ -911,8 +915,10 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
     }
 
     private void addServiceListener(String type, ServiceListener listener, boolean synch) {
+    	log.debug("addServiceListener type="+type+",listener="+listener+",synch="+synch);
         ServiceListenerStatus status = new ServiceListenerStatus(listener, synch);
         final String loType = type.toLowerCase();
+        log.debug("addServiceListener loType="+loType);
         List<ServiceListenerStatus> list = _serviceListeners.get(loType);
         if (list == null) {
             if (_serviceListeners.putIfAbsent(loType, new LinkedList<ServiceListenerStatus>()) == null) {
@@ -935,7 +941,9 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
         Collection<DNSEntry> dnsEntryLits = this.getCache().allValues();
         for (DNSEntry entry : dnsEntryLits) {
             final DNSRecord record = (DNSRecord) entry;
+            log.debug("record.getRecordType()="+record.getRecordType());
             if (record.getRecordType() == DNSRecordType.TYPE_SRV) {
+            	log.debug("record.getKey()="+record.getKey());
                 if (record.getKey().endsWith(loType)) {
                     // Do not used the record embedded method for generating event this will not work.
                     // serviceEvents.add(record.getServiceEvent(this));
@@ -943,8 +951,10 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
                 }
             }
         }
+        log.debug("serviceEvents="+serviceEvents.size());
         // Actually call listener with all service events added above
         for (ServiceEvent serviceEvent : serviceEvents) {
+        	log.debug("serviceEvents="+serviceEvent.getName());
             status.serviceAdded(serviceEvent);
         }
         // Create/start ServiceResolver
@@ -1241,6 +1251,8 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
      */
     public void updateRecord(long now, DNSRecord rec, Operation operation) {
         // We do not want to block the entire DNS while we are updating the record for each listener (service info)
+    	log.debug("updateRecord now="+now+",rec="+rec.getName()+",operation="+operation+",type="+rec.getRecordType());
+    	log.debug("updateRecord DNSRecord="+rec.getServiceInfo());
         {
             List<DNSListener> listenerList = null;
             synchronized (_listeners) {
@@ -1254,6 +1266,7 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
         // if (DNSRecordType.TYPE_PTR.equals(rec.getRecordType()) || DNSRecordType.TYPE_SRV.equals(rec.getRecordType()))
         {
             ServiceEvent event = rec.getServiceEvent(this);
+            log.debug("event="+event.getInfo()+",type="+event.getType());
             if ((event.getInfo() == null) || !event.getInfo().hasData()) {
                 // We do not care about the subtype because the info is only used if complete and the subtype will then be included.
                 ServiceInfo info = this.getServiceInfoFromCache(event.getType(), event.getName(), "", false);
@@ -1274,12 +1287,14 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
             if (logger.isLoggable(Level.FINEST)) {
                 logger.finest(this.getName() + ".updating record for event: " + event + " list " + serviceListenerList + " operation: " + operation);
             }
+            log.debug("isEmpty="+serviceListenerList.size());
             if (!serviceListenerList.isEmpty()) {
                 final ServiceEvent localEvent = event;
 
                 switch (operation) {
                     case Add:
                         for (final ServiceListenerStatus listener : serviceListenerList) {
+                        	log.debug("Add listener="+listener+",localEvent="+localEvent.getName()+",type="+localEvent.getType()+",ip="+localEvent.getInfo()+",isSync="+listener.isSynchronous());
                             if (listener.isSynchronous()) {
                                 listener.serviceAdded(localEvent);
                             } else {
@@ -1295,6 +1310,7 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
                         break;
                     case Remove:
                         for (final ServiceListenerStatus listener : serviceListenerList) {
+                        	log.debug("Remove listener="+listener+",localEvent="+localEvent.getName()+",type="+localEvent.getType()+",ip="+localEvent.getInfo()+",isSync="+listener.isSynchronous());
                             if (listener.isSynchronous()) {
                                 listener.serviceRemoved(localEvent);
                             } else {
@@ -1316,6 +1332,7 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
     }
 
     void handleRecord(DNSRecord record, long now) {
+    	log.debug("handleRecord record="+record);
         DNSRecord newRecord = record;
 
         Operation cacheOperation = Operation.Noop;
@@ -1372,7 +1389,7 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
                 }
             }
         }
-
+        log.debug("newRecord="+newRecord.getRecordType()+",isServicesDiscovery="+newRecord.isServicesDiscoveryMetaQuery());
         // Register new service types
         if (newRecord.getRecordType() == DNSRecordType.TYPE_PTR) {
             // handle DNSConstants.DNS_META_QUERY records
@@ -1389,7 +1406,7 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
                 cacheOperation = Operation.RegisterServiceType;
             }
         }
-
+        log.debug("cacheOperation="+cacheOperation);
         // notify the listeners
         if (cacheOperation != Operation.Noop) {
             this.updateRecord(now, newRecord, cacheOperation);
@@ -1407,8 +1424,10 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
 
         boolean hostConflictDetected = false;
         boolean serviceConflictDetected = false;
-
+        log.debug("handleResponse msg="+msg.toString());
+        log.debug("handleResponse getAllAnswers="+msg.getAllAnswers().size());
         for (DNSRecord newRecord : msg.getAllAnswers()) {
+        	log.debug("newRecord="+newRecord.toString()+",ip="+newRecord.getName());
             this.handleRecord(newRecord, now);
 
             if (DNSRecordType.TYPE_A.equals(newRecord.getRecordType()) || DNSRecordType.TYPE_AAAA.equals(newRecord.getRecordType())) {
@@ -1433,6 +1452,8 @@ public class JmDNSImpl extends JmDNS implements DNSStatefulObject, DNSTaskStarte
      * @exception IOException
      */
     void handleQuery(DNSIncoming in, InetAddress addr, int port) throws IOException {
+    	log.debug("handleQuery="+in.toString());
+    	log.debug("handleQuery addr="+addr.getHostAddress()+",name="+addr.getHostName()+",port="+port);
         if (logger.isLoggable(Level.FINE)) {
             logger.fine(this.getName() + ".handle query: " + in);
         }

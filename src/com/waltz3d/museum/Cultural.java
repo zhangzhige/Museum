@@ -16,9 +16,11 @@ public class Cultural implements Serializable{
 	
 	public String Product3D;
 
+
 	@Override
 	public String toString() {
-		return "Cultural [Id=" + Id + ", Name=" + Name + ", Product3D=" + Product3D + "]";
+		return "Cultural [Id=" + Id + ", Name=" + Name + ", Product3D=" + Product3D + ", ProductPictures=" + ProductPictures + ", ProductSpecificationAttributes=" + ProductSpecificationAttributes
+				+ "]";
 	}
 
 	public List<ProductPicture> ProductPictures;
@@ -55,5 +57,12 @@ public class Cultural implements Serializable{
 		public String Value;
 		public int DisplayOrder;
 		public int Id;
+		@Override
+		public String toString() {
+			return "ProductSpecificationAttribute [SpecificationAttributeOptionId=" + SpecificationAttributeOptionId + ", Name=" + Name + ", Value=" + Value + ", DisplayOrder=" + DisplayOrder
+					+ ", Id=" + Id + "]";
+		}
+		
+		
 	}
 }

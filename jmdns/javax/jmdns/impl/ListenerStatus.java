@@ -14,6 +14,8 @@ import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 import javax.jmdns.ServiceTypeListener;
 
+import com.waltz3d.museum.XL_Log;
+
 /**
  * This class track the status of listener.<br/>
  * The main purpose of this class is to collapse consecutive events so that we can guarantee the correct call back sequence.
@@ -22,10 +24,14 @@ import javax.jmdns.ServiceTypeListener;
  *            listener type
  */
 public class ListenerStatus<T extends EventListener> {
+	
+	
 
     public static class ServiceListenerStatus extends ListenerStatus<ServiceListener> {
         private static Logger                            logger = Logger.getLogger(ServiceListenerStatus.class.getName());
 
+        private XL_Log log = new XL_Log(ListenerStatus.class);
+        
         private final ConcurrentMap<String, ServiceInfo> _addedServices;
 
         /**
@@ -55,10 +61,14 @@ public class ListenerStatus<T extends EventListener> {
          *            The ServiceEvent providing the name and fully qualified type of the service.
          */
         void serviceAdded(ServiceEvent event) {
+        	log.debug("serviceAdded "+event.getName()+",event.getType()="+event.getType());
             String qualifiedName = event.getName() + "." + event.getType();
+            log.debug("serviceAdded qualifiedName="+qualifiedName);
+            
             if (null == _addedServices.putIfAbsent(qualifiedName, event.getInfo().clone())) {
                 this.getListener().serviceAdded(event);
                 ServiceInfo info = event.getInfo();
+                log.debug("serviceAdded info="+info);
                 if ((info != null) && (info.hasData())) {
                     this.getListener().serviceResolved(event);
                 }
