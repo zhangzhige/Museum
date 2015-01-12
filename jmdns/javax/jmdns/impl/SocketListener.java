@@ -42,12 +42,13 @@ class SocketListener extends Thread {
 			DatagramPacket packet = new DatagramPacket(buf, buf.length);
 			while (!this._jmDNSImpl.isCanceling() && !this._jmDNSImpl.isCanceled()) {
 				packet.setLength(buf.length);
-				log.debug("DatagramPacket in:" + packet.getAddress()+",getPort="+packet.getPort());
 				
 				this._jmDNSImpl.getSocket().receive(packet);
 				if (this._jmDNSImpl.isCanceling() || this._jmDNSImpl.isCanceled() || this._jmDNSImpl.isClosing() || this._jmDNSImpl.isClosed()) {
 					break;
 				}
+				log.debug("DatagramPacket in:" + packet.getAddress()+",getPort="+packet.getPort());
+				
 				try {
 					if (this._jmDNSImpl.getLocalHost().shouldIgnorePacket(packet)) {
 						continue;

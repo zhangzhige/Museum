@@ -189,8 +189,9 @@ public final class DNSIncoming extends DNSMessage {
     public DNSIncoming(DatagramPacket packet) throws IOException {
         super(0, 0, packet.getPort() == DNSConstants.MDNS_PORT);
         this._packet = packet;
+        int port = packet.getPort();
         InetAddress source = packet.getAddress();
-        Log.d("DNSIncoming", "getHostAddress="+ source.getHostAddress());
+        Log.d("DNSIncoming", "getHostAddress="+ source.getHostAddress()+",port="+packet.getPort());
         this._messageInputStream = new MessageInputStream(packet.getData(), packet.getLength());
         this._receivedTime = System.currentTimeMillis();
         this._senderUDPPayload = DNSConstants.MAX_MSG_TYPICAL;
@@ -213,7 +214,7 @@ public final class DNSIncoming extends DNSMessage {
             // parse answers
             if (numAnswers > 0) {
                 for (int i = 0; i < numAnswers; i++) {
-                    DNSRecord rec = this.readAnswer(source);
+                    DNSRecord rec = this.readAnswer(source,port);
                     if (rec != null) {
                         // Add a record, if we were able to create one.
                         _answers.add(rec);
@@ -223,7 +224,7 @@ public final class DNSIncoming extends DNSMessage {
 
             if (numAuthorities > 0) {
                 for (int i = 0; i < numAuthorities; i++) {
-                    DNSRecord rec = this.readAnswer(source);
+                    DNSRecord rec = this.readAnswer(source,port);
                     if (rec != null) {
                         // Add a record, if we were able to create one.
                         _authoritativeAnswers.add(rec);
@@ -233,7 +234,7 @@ public final class DNSIncoming extends DNSMessage {
 
             if (numAdditionals > 0) {
                 for (int i = 0; i < numAdditionals; i++) {
-                    DNSRecord rec = this.readAnswer(source);
+                    DNSRecord rec = this.readAnswer(source,port);
                     if (rec != null) {
                         // Add a record, if we were able to create one.
                         _additionals.add(rec);
@@ -283,12 +284,14 @@ public final class DNSIncoming extends DNSMessage {
         int recordClassIndex = _messageInputStream.readUnsignedShort();
         DNSRecordClass recordClass = DNSRecordClass.classForIndex(recordClassIndex);
         boolean unique = recordClass.isUnique(recordClassIndex);
+        log.debug("readQuestion="+domain+",type="+type+",recordClass="+recordClass+",unique="+unique);
         return DNSQuestion.newQuestion(domain, type, recordClass, unique);
     }
 
-    private DNSRecord readAnswer(InetAddress source) {
+    private DNSRecord readAnswer(InetAddress source,int port) {
         String domain = _messageInputStream.readName();
         DNSRecordType type = DNSRecordType.typeForIndex(_messageInputStream.readUnsignedShort());
+        
         if (type == DNSRecordType.TYPE_IGNORE) {
             logger.log(Level.SEVERE, "Could not find record type. domain: " + domain + "\n" + this.print(true));
         }
@@ -301,7 +304,8 @@ public final class DNSIncoming extends DNSMessage {
         int ttl = _messageInputStream.readInt();
         int len = _messageInputStream.readUnsignedShort();
         DNSRecord rec = null;
-
+        log.debug("readAnswer="+type+",unique="+unique+",ttl="+ttl+",len="+len+",source="+source.getHostAddress()+",domain="+domain+",port="+port);
+        log.debug("readAnswer="+type.indexValue());
         switch (type) {
             case TYPE_A: // IPv4
                 rec = new DNSRecord.IPv4Address(domain, recordClass, unique, ttl, _messageInputStream.readBytes(len));
@@ -313,6 +317,7 @@ public final class DNSIncoming extends DNSMessage {
             case TYPE_PTR:
                 String service = "";
                 service = _messageInputStream.readName();
+                log.debug("service="+service);
                 if (service.length() > 0) {
                     rec = new DNSRecord.Pointer(domain, recordClass, unique, ttl, service);
                 } else {
@@ -325,7 +330,7 @@ public final class DNSIncoming extends DNSMessage {
             case TYPE_SRV:
                 int priority = _messageInputStream.readUnsignedShort();
                 int weight = _messageInputStream.readUnsignedShort();
-                int port = _messageInputStream.readUnsignedShort();
+                port = _messageInputStream.readUnsignedShort();
                 String target = "";
                 // This is a hack to handle a bug in the BonjourConformanceTest
                 // It is sending out target strings that don't follow the "domain name" format.
@@ -365,7 +370,7 @@ public final class DNSIncoming extends DNSMessage {
                         if (_messageInputStream.available() >= 2) {
                             optionLength = _messageInputStream.readUnsignedShort();
                         } else {
-                            logger.log(Level.WARNING, "There was a problem reading the OPT record. Ignoring.");
+                            log.debug("There was a problem reading the OPT record. Ignoring.");
                             break;
                         }
                         byte[] optiondata = new byte[0];
@@ -404,22 +409,18 @@ public final class DNSIncoming extends DNSMessage {
                                         ownerPassword = new byte[] { optiondata[14], optiondata[15], optiondata[16], optiondata[17], optiondata[18], optiondata[19], optiondata[20], optiondata[21] };
                                     }
                                 } catch (Exception exception) {
-                                    logger.warning("Malformed OPT answer. Option code: Owner data: " + this._hexString(optiondata));
+                                    log.debug("Malformed OPT answer. Option code: Owner data: " + this._hexString(optiondata));
                                 }
-                                if (logger.isLoggable(Level.FINE)) {
-                                    logger.fine("Unhandled Owner OPT version: " + ownerVersion + " sequence: " + ownerSequence + " MAC address: " + this._hexString(ownerPrimaryMacAddress)
-                                            + (ownerWakeupMacAddress != ownerPrimaryMacAddress ? " wakeup MAC address: " + this._hexString(ownerWakeupMacAddress) : "") + (ownerPassword != null ? " password: " + this._hexString(ownerPassword) : ""));
-                                }
+                            	log.debug("Unhandled Owner OPT version: " + ownerVersion + " sequence: " + ownerSequence + " MAC address: " + this._hexString(ownerPrimaryMacAddress)
+                                        + (ownerWakeupMacAddress != ownerPrimaryMacAddress ? " wakeup MAC address: " + this._hexString(ownerWakeupMacAddress) : "") + (ownerPassword != null ? " password: " + this._hexString(ownerPassword) : ""));
                                 break;
                             case LLQ:
                             case NSID:
                             case UL:
-                                if (logger.isLoggable(Level.FINE)) {
-                                    logger.log(Level.FINE, "There was an OPT answer. Option code: " + optionCode + " data: " + this._hexString(optiondata));
-                                }
+                                log.debug("There was an OPT answer. Option code: " + optionCode + " data: " + this._hexString(optiondata));
                                 break;
                             case Unknown:
-                                logger.log(Level.WARNING, "There was an OPT answer. Not currently handled. Option code: " + optionCodeInt + " data: " + this._hexString(optiondata));
+                            	log.debug("There was an OPT answer. Not currently handled. Option code: " + optionCodeInt + " data: " + this._hexString(optiondata));
                                 break;
                             default:
                                 // This is to keep the compiler happy.
@@ -427,7 +428,7 @@ public final class DNSIncoming extends DNSMessage {
                         }
                     }
                 } else {
-                    logger.log(Level.WARNING, "There was an OPT answer. Wrong version number: " + version + " result code: " + extendedResultCode);
+                	log.debug("There was an OPT answer. Wrong version number: " + version + " result code: " + extendedResultCode);
                 }
                 break;
             default:
@@ -437,8 +438,9 @@ public final class DNSIncoming extends DNSMessage {
                 _messageInputStream.skip(len);
                 break;
         }
+        log.debug("rec="+rec);
         if (rec != null) {
-            rec.setRecordSource(source);
+            rec.setRecordSource(source,port);
         }
         return rec;
     }

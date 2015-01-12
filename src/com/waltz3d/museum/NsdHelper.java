@@ -17,7 +17,7 @@ public class NsdHelper {
 
 	XL_Log log = new XL_Log(NsdHelper.class);
 	
-	private static final String SERVICE_TYPE = "Waltz3D._udp.local.";
+	private static final String SERVICE_TYPE = "_Waltz3D._udp.local.";
 
 	public String mServiceName = "Waltz3D";
 	
@@ -85,22 +85,26 @@ public class NsdHelper {
 			jmdns = JmDNS.create();
 			listener = new ServiceListener() {
 				@Override
-				public void serviceResolved(ServiceEvent event) {
-					log.debug("serviceResolved QualifiedName=" + event.getInfo().getName() + ",ip=" + event.getInfo().getInet4Addresses()[0].getHostAddress().toString() + ",port=" + event.getInfo().getPort());
+				public void serviceResolved(final ServiceEvent event) {
 					if(event != null && event.getInfo() != null){
-						mCurrentServiceInfo = event.getInfo();
-						mServiceInfos.add(mCurrentServiceInfo);
-						log.debug("mServiceInfos="+mServiceInfos.size());
-						mHandler.post(new Runnable() {
-							
-							@Override
-							public void run() {
-								for(OnNsdChangeListener onNsdChangeListener : mChangeListeners){
-									log.debug("onNsdChangeListener="+onNsdChangeListener);
-									onNsdChangeListener.onChange();
+						log.debug("serviceResolved ServiceEvent="+event.getInfo().getName()+",port="+event.getInfo().getPort());
+						if(event.getInfo().getName().contains("Waltz3D")){
+							mHandler.post(new Runnable() {
+								
+								@Override
+								public void run() {
+									mCurrentServiceInfo = event.getInfo();
+									mServiceInfos.add(mCurrentServiceInfo);
+									log.debug("serviceResolved QualifiedName=" + event.getInfo().getName() + ",ip=" + event.getInfo().getInet4Addresses()[0].getHostAddress().toString() + ",port=" + event.getInfo().getPort());
+									log.debug("mServiceInfos="+mServiceInfos.size());
+									
+									for(OnNsdChangeListener onNsdChangeListener : mChangeListeners){
+										log.debug("onNsdChangeListener="+onNsdChangeListener);
+										onNsdChangeListener.onChange();
+									}
 								}
-							}
-						});
+							});
+						}
 					}
 				}
 
@@ -110,9 +114,11 @@ public class NsdHelper {
 				}
 
 				@Override
-				public void serviceAdded(ServiceEvent event) {
-					log.debug("serviceAdded QualifiedName=" + event.getName() + ",type=" + event.getType());
-					jmdns.requestServiceInfo(event.getType(), event.getName(), 1);
+				public void serviceAdded(final ServiceEvent event) {
+					log.debug("serviceAdded QualifiedName=" + event.getName() + ",type=" + event.getType()+",event="+event.getInfo().getPort());
+					if(event != null && event.getInfo() != null){
+						jmdns.requestServiceInfo(event.getType(), event.getName(), 1);
+					}
 				}
 			};
 			log.debug("startBonjour SERVICE_TYPE");

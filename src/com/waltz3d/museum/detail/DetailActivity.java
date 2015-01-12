@@ -1,5 +1,8 @@
 package com.waltz3d.museum.detail;
 
+import java.net.Inet4Address;
+import java.net.Inet6Address;
+import java.net.InetAddress;
 import java.util.List;
 
 import javax.jmdns.ServiceInfo;
@@ -137,19 +140,39 @@ public class DetailActivity extends Activity implements OnClickListener {
 
     @Override
     protected void onDestroy() {
-    	if(mConnection!=null){
-    		mConnection.tearDown();
-    	}
     	imageView_detail.onStop();
         super.onDestroy();
     }
     
     private void clickConnect() {
-    	ServiceInfo service = mNsdHelper.getChosenServiceInfo();
+    	final ServiceInfo service = mNsdHelper.getChosenServiceInfo();
         log.debug("clickConnect service = " + service);
         if (service != null) {
         	log.debug("Connecting. service = "+ service.getInet4Addresses()[0].getHostAddress().toString()+",port="+service.getPort());
-            mConnection.connectToServer(service.getInet4Addresses()[0],service.getPort());
+        	new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					Inet4Address[] mInet4Addresses = service.getInet4Addresses();
+		        	if(mInet4Addresses != null){
+		        		for(Inet4Address mItem:mInet4Addresses){
+		        			log.debug("mItem="+mItem.getHostAddress()+",port="+mItem.getHostName());
+		        		}
+		        	}
+		        	Inet6Address[] mInet6Addresses = service.getInet6Addresses();
+		        	if(mInet6Addresses != null){
+		        		for(Inet6Address mItem:mInet6Addresses){
+		        			log.debug("mItem="+mItem.getHostAddress()+",port="+mItem.getHostName());
+		        		}
+		        	}
+				}
+			}).start();
+        	
+        	InetAddress mInetAddress = service.getInet4Address();
+        	if(mInetAddress == null){
+        		mInetAddress = service.getInet6Address();
+        	}
+            mConnection.connectToServer(mInetAddress,service.getPort());
             mConnection.sendMessage(mTestMessage);
         } else {
         	log.debug("No service to connect to!");

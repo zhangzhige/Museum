@@ -6,6 +6,7 @@ package javax.jmdns;
 import java.net.Inet4Address;
 import java.net.Inet6Address;
 import java.net.InetAddress;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
 
@@ -76,9 +77,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            string describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final int port, final String text) {
-        return new ServiceInfoImpl(type, name, "", port, 0, 0, false, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS.
@@ -95,9 +93,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            string describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final String text) {
-        return new ServiceInfoImpl(type, name, subtype, port, 0, 0, false, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS.
@@ -116,9 +111,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            string describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final String text) {
-        return new ServiceInfoImpl(type, name, "", port, weight, priority, false, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS.
@@ -139,9 +131,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            string describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final String text) {
-        return new ServiceInfoImpl(type, name, subtype, port, weight, priority, false, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS. The properties hashtable must map property names to either Strings or byte arrays describing the property values.
@@ -160,9 +149,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            properties describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final Map<String, ?> props) {
-        return new ServiceInfoImpl(type, name, "", port, weight, priority, false, props);
-    }
 
     /**
      * Construct a service description for registering with JmDNS. The properties hashtable must map property names to either Strings or byte arrays describing the property values.
@@ -183,9 +169,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            properties describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final Map<String, ?> props) {
-        return new ServiceInfoImpl(type, name, subtype, port, weight, priority, false, props);
-    }
 
     /**
      * Construct a service description for registering with JmDNS.
@@ -204,56 +187,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            bytes describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final byte[] text) {
-        return new ServiceInfoImpl(type, name, "", port, weight, priority, false, text);
-    }
-
-    /**
-     * Construct a service description for registering with JmDNS.
-     * 
-     * @param type
-     *            fully qualified service type name, such as <code>_http._tcp.local.</code>.
-     * @param name
-     *            unqualified service instance name, such as <code>foobar</code>
-     * @param subtype
-     *            service subtype see draft-cheshire-dnsext-dns-sd-06.txt chapter 7.1 Selective Instance Enumeration
-     * @param port
-     *            the local port on which the service runs
-     * @param weight
-     *            weight of the service
-     * @param priority
-     *            priority of the service
-     * @param text
-     *            bytes describing the service
-     * @return new service info
-     */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final byte[] text) {
-        return new ServiceInfoImpl(type, name, subtype, port, weight, priority, false, text);
-    }
-
-    /**
-     * Construct a service description for registering with JmDNS.
-     * 
-     * @param type
-     *            fully qualified service type name, such as <code>_http._tcp.local.</code>.
-     * @param name
-     *            unqualified service instance name, such as <code>foobar</code>
-     * @param port
-     *            the local port on which the service runs
-     * @param weight
-     *            weight of the service
-     * @param priority
-     *            priority of the service
-     * @param persistent
-     *            if <code>true</code> ServiceListener.resolveService will be called whenever new new information is received.
-     * @param text
-     *            string describing the service
-     * @return new service info
-     */
-    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final boolean persistent, final String text) {
-        return new ServiceInfoImpl(type, name, "", port, weight, priority, persistent, text);
-    }
-
     /**
      * Construct a service description for registering with JmDNS.
      * 
@@ -275,9 +208,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            string describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final boolean persistent, final String text) {
-        return new ServiceInfoImpl(type, name, subtype, port, weight, priority, persistent, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS. The properties hashtable must map property names to either Strings or byte arrays describing the property values.
@@ -298,9 +228,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            properties describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final boolean persistent, final Map<String, ?> props) {
-        return new ServiceInfoImpl(type, name, "", port, weight, priority, persistent, props);
-    }
 
     /**
      * Construct a service description for registering with JmDNS. The properties hashtable must map property names to either Strings or byte arrays describing the property values.
@@ -323,9 +250,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            properties describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final boolean persistent, final Map<String, ?> props) {
-        return new ServiceInfoImpl(type, name, subtype, port, weight, priority, persistent, props);
-    }
 
     /**
      * Construct a service description for registering with JmDNS.
@@ -346,9 +270,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            bytes describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final int port, final int weight, final int priority, final boolean persistent, final byte[] text) {
-        return new ServiceInfoImpl(type, name, "", port, weight, priority, persistent, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS.
@@ -371,9 +292,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            bytes describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final String type, final String name, final String subtype, final int port, final int weight, final int priority, final boolean persistent, final byte[] text) {
-        return new ServiceInfoImpl(type, name, subtype, port, weight, priority, persistent, text);
-    }
 
     /**
      * Construct a service description for registering with JmDNS. The properties hashtable must map property names to either Strings or byte arrays describing the property values.
@@ -392,9 +310,6 @@ public abstract class ServiceInfo implements Cloneable {
      *            properties describing the service
      * @return new service info
      */
-    public static ServiceInfo create(final Map<Fields, String> qualifiedNameMap, final int port, final int weight, final int priority, final boolean persistent, final Map<String, ?> props) {
-        return new ServiceInfoImpl(qualifiedNameMap, port, weight, priority, persistent, props);
-    }
 
     /**
      * Returns true if the service info is filled with data.
@@ -723,5 +638,17 @@ public abstract class ServiceInfo implements Cloneable {
             return null;
         }
     }
+
+	@Override
+	public String toString() {
+		return "ServiceInfo [hasData()=" + hasData() + ", getType()=" + getType() + ", getTypeWithSubtype()=" + getTypeWithSubtype() + ", getName()=" + getName() + ", getKey()=" + getKey()
+				+ ", getQualifiedName()=" + getQualifiedName() + ", getServer()=" + getServer() + ", getHostAddress()=" + getHostAddress() + ", getHostAddresses()="
+				+ Arrays.toString(getHostAddresses()) + ", getAddress()=" + getAddress() + ", getInetAddress()=" + getInetAddress() + ", getInet4Address()=" + getInet4Address()
+				+ ", getInet6Address()=" + getInet6Address() + ", getInetAddresses()=" + Arrays.toString(getInetAddresses()) + ", getInet4Addresses()=" + Arrays.toString(getInet4Addresses())
+				+ ", getInet6Addresses()=" + Arrays.toString(getInet6Addresses()) + ", getPort()=" + getPort() + ", getPriority()=" + getPriority() + ", getWeight()=" + getWeight()
+				+ ", getTextBytes()=" + Arrays.toString(getTextBytes()) + ", getTextString()=" + getTextString() + ", getURL()=" + getURL() + ", getURLs()=" + Arrays.toString(getURLs())
+				+ ", getPropertyNames()=" + getPropertyNames() + ", getNiceTextString()=" + getNiceTextString() + ", isPersistent()=" + isPersistent() + ", getDomain()=" + getDomain()
+				+ ", getProtocol()=" + getProtocol() + ", getApplication()=" + getApplication() + ", getSubtype()=" + getSubtype() + ", getQualifiedNameMap()=" + getQualifiedNameMap() + "]";
+	}
 
 }

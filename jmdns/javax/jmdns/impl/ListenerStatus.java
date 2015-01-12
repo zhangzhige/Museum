@@ -68,7 +68,7 @@ public class ListenerStatus<T extends EventListener> {
             if (null == _addedServices.putIfAbsent(qualifiedName, event.getInfo().clone())) {
                 this.getListener().serviceAdded(event);
                 ServiceInfo info = event.getInfo();
-                log.debug("serviceAdded info="+info);
+                log.debug("serviceAdded info="+info+",infohasdata="+info.hasData());
                 if ((info != null) && (info.hasData())) {
                     this.getListener().serviceResolved(event);
                 }
@@ -101,9 +101,11 @@ public class ListenerStatus<T extends EventListener> {
          */
         synchronized void serviceResolved(ServiceEvent event) {
             ServiceInfo info = event.getInfo();
+            log.debug("serviceResolved="+info+",infohasdata="+info.hasData());
             if ((info != null) && (info.hasData())) {
                 String qualifiedName = event.getName() + "." + event.getType();
                 ServiceInfo previousServiceInfo = _addedServices.get(qualifiedName);
+                log.debug("previousServiceInfo="+previousServiceInfo+",qualifiedName="+qualifiedName);
                 if (!_sameInfo(info, previousServiceInfo)) {
                     if (null == previousServiceInfo) {
                         if (null == _addedServices.putIfAbsent(qualifiedName, info.clone())) {
@@ -115,11 +117,10 @@ public class ListenerStatus<T extends EventListener> {
                         }
                     }
                 } else {
-                    logger.finer("Service Resolved called for a service already resolved: " + event);
+                    log.debug("Service Resolved called for a service already resolved: " + event);
                 }
             } else {
-                logger.warning("Service Resolved called for an unresolved event: " + event);
-
+            	log.debug("Service Resolved called for an unresolved event: " + event);
             }
         }
 

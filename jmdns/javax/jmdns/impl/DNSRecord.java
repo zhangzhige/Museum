@@ -24,6 +24,10 @@ import javax.jmdns.impl.constants.DNSConstants;
 import javax.jmdns.impl.constants.DNSRecordClass;
 import javax.jmdns.impl.constants.DNSRecordType;
 
+import android.util.Log;
+
+import com.waltz3d.museum.XL_Log;
+
 /**
  * DNS record
  *
@@ -38,6 +42,8 @@ public abstract class DNSRecord extends DNSEntry {
      * This source is mainly for debugging purposes, should be the address that sent this record.
      */
     private InetAddress   _source;
+    
+    protected int port = 0 ;
 
     /**
      * Create a DNSRecord with a name, type, class, and ttl.
@@ -171,6 +177,8 @@ public abstract class DNSRecord extends DNSEntry {
     abstract void write(MessageOutputStream out);
 
     public static class IPv4Address extends Address {
+    	
+    	private XL_Log log  = new XL_Log(IPv4Address.class);
 
         IPv4Address(String name, DNSRecordClass recordClass, boolean unique, int ttl, InetAddress addr) {
             super(name, DNSRecordType.TYPE_A, recordClass, unique, ttl, addr);
@@ -204,9 +212,10 @@ public abstract class DNSRecord extends DNSEntry {
          */
         @Override
         public ServiceInfo getServiceInfo(boolean persistent) {
-
+        	log.debug("getServiceInfo="+persistent);
             ServiceInfoImpl info = (ServiceInfoImpl) super.getServiceInfo(persistent);
             info.addAddress((Inet4Address) _addr);
+            log.debug("getServiceInfo="+_addr.getHostAddress()+",info="+info.getInet4Address());
             return info;
         }
 
@@ -214,6 +223,8 @@ public abstract class DNSRecord extends DNSEntry {
 
     public static class IPv6Address extends Address {
 
+    	private XL_Log log  = new XL_Log(IPv6Address.class);
+    	
         IPv6Address(String name, DNSRecordClass recordClass, boolean unique, int ttl, InetAddress addr) {
             super(name, DNSRecordType.TYPE_AAAA, recordClass, unique, ttl, addr);
         }
@@ -249,9 +260,10 @@ public abstract class DNSRecord extends DNSEntry {
          */
         @Override
         public ServiceInfo getServiceInfo(boolean persistent) {
-
+        	log.debug("getServiceInfo="+persistent);
             ServiceInfoImpl info = (ServiceInfoImpl) super.getServiceInfo(persistent);
             info.addAddress((Inet6Address) _addr);
+            log.debug("getServiceInfo="+_addr+",info="+info.getInet6Address());
             return info;
         }
 
@@ -391,7 +403,7 @@ public abstract class DNSRecord extends DNSEntry {
          */
         @Override
         public ServiceInfo getServiceInfo(boolean persistent) {
-            ServiceInfoImpl info = new ServiceInfoImpl(this.getQualifiedNameMap(), 0, 0, 0, persistent, (byte[]) null);
+            ServiceInfoImpl info = new ServiceInfoImpl(this.getQualifiedNameMap(), port, 0, 0, persistent, (byte[]) null);
             // info.setAddress(_addr); This is done in the sub class so we don't have to test for class type
             return info;
         }
@@ -425,7 +437,9 @@ public abstract class DNSRecord extends DNSEntry {
     public static class Pointer extends DNSRecord {
         // private static Logger logger = Logger.getLogger(Pointer.class.getName());
         private final String _alias;
-
+        
+        private XL_Log log = new XL_Log(Pointer.class);
+        
         public Pointer(String name, DNSRecordClass recordClass, boolean unique, int ttl, String alias) {
             super(name, DNSRecordType.TYPE_PTR, recordClass, unique, ttl);
             this._alias = alias;
@@ -491,19 +505,29 @@ public abstract class DNSRecord extends DNSEntry {
          */
         @Override
         public ServiceInfo getServiceInfo(boolean persistent) {
+        	ServiceInfoImpl mServiceInfo = null;
             if (this.isServicesDiscoveryMetaQuery()) {
                 // The service name is in the alias
                 Map<Fields, String> map = ServiceInfoImpl.decodeQualifiedNameMapForType(this.getAlias());
-                return new ServiceInfoImpl(map, 0, 0, 0, persistent, (byte[]) null);
+                mServiceInfo =new ServiceInfoImpl(map, port, 0, 0, persistent, (byte[]) null);
             } else if (this.isReverseLookup()) {
-                return new ServiceInfoImpl(this.getQualifiedNameMap(), 0, 0, 0, persistent, (byte[]) null);
+            	mServiceInfo = new ServiceInfoImpl(this.getQualifiedNameMap(), port, 0, 0, persistent, (byte[]) null);
             } else if (this.isDomainDiscoveryQuery()) {
                 // FIXME [PJYF Nov 16 2010] We do not currently support domain discovery
-                return new ServiceInfoImpl(this.getQualifiedNameMap(), 0, 0, 0, persistent, (byte[]) null);
+            	mServiceInfo = new ServiceInfoImpl(this.getQualifiedNameMap(), port, 0, 0, persistent, (byte[]) null);
+            }else{
+            	Map<Fields, String> map = ServiceInfoImpl.decodeQualifiedNameMapForType(this.getAlias());
+                map.put(Fields.Subtype, this.getQualifiedNameMap().get(Fields.Subtype));
+                mServiceInfo = new ServiceInfoImpl(map, port, 0, 0, persistent, this.getAlias());
             }
-            Map<Fields, String> map = ServiceInfoImpl.decodeQualifiedNameMapForType(this.getAlias());
-            map.put(Fields.Subtype, this.getQualifiedNameMap().get(Fields.Subtype));
-            return new ServiceInfoImpl(map, 0, 0, 0, persistent, this.getAlias());
+            InetAddress mInetAddress = getRecordSource();
+            if(mInetAddress instanceof Inet4Address){
+            	mServiceInfo.addAddress((Inet4Address)mInetAddress);
+            }else{
+            	mServiceInfo.addAddress((Inet6Address)mInetAddress);
+            }
+            log.debug("getServiceInfo mInetAddress="+mInetAddress.getHostAddress()+",mServiceInfo="+mServiceInfo.hasData());
+            return mServiceInfo;
         }
 
         /*
@@ -539,6 +563,7 @@ public abstract class DNSRecord extends DNSEntry {
 
         public Text(String name, DNSRecordClass recordClass, boolean unique, int ttl, byte text[]) {
             super(name, DNSRecordType.TYPE_TXT, recordClass, unique, ttl);
+            log.debug("name="+name+",recordClass="+recordClass+",unique="+unique+",ttl="+ttl);
             this._text = (text != null && text.length > 0 ? text : EMPTY_TXT);
         }
 
@@ -600,14 +625,23 @@ public abstract class DNSRecord extends DNSEntry {
         DNSOutgoing addAnswer(JmDNSImpl dns, DNSIncoming in, InetAddress addr, int port, DNSOutgoing out) throws IOException {
             return out;
         }
-
+        
+        XL_Log log = new XL_Log(Text.class);
         /*
          * (non-Javadoc)
          * @see javax.jmdns.impl.DNSRecord#getServiceInfo(boolean)
          */
         @Override
         public ServiceInfo getServiceInfo(boolean persistent) {
-            return new ServiceInfoImpl(this.getQualifiedNameMap(), 0, 0, 0, persistent, _text);
+        	ServiceInfoImpl mServiceInfo = new ServiceInfoImpl(this.getQualifiedNameMap(), port, 0, 0, persistent, _text);
+            InetAddress mInetAddress = getRecordSource();
+            if(mInetAddress instanceof Inet4Address){
+            	mServiceInfo.addAddress((Inet4Address)mInetAddress);
+            }else{
+            	mServiceInfo.addAddress((Inet6Address)mInetAddress);
+            }
+            log.debug("getServiceInfo mInetAddress="+mInetAddress.getHostAddress()+",mServiceInfo="+mServiceInfo.hasData());
+            return mServiceInfo;
         }
 
         /*
@@ -645,6 +679,7 @@ public abstract class DNSRecord extends DNSEntry {
 
         public Service(String name, DNSRecordClass recordClass, boolean unique, int ttl, int priority, int weight, int port, String server) {
             super(name, DNSRecordType.TYPE_SRV, recordClass, unique, ttl);
+            log.debug("name="+name+",recordClass="+recordClass+",unique="+unique+",ttl="+ttl+",priority="+priority+",weight="+weight+",server="+server);
             this._priority = priority;
             this._weight = weight;
             this._port = port;
@@ -802,13 +837,23 @@ public abstract class DNSRecord extends DNSEntry {
             return out;
         }
 
+        XL_Log log = new XL_Log(Service.class);
+        
         /*
          * (non-Javadoc)
          * @see javax.jmdns.impl.DNSRecord#getServiceInfo(boolean)
          */
         @Override
         public ServiceInfo getServiceInfo(boolean persistent) {
-            return new ServiceInfoImpl(this.getQualifiedNameMap(), _port, _weight, _priority, persistent, _server);
+        	ServiceInfoImpl mServiceInfoImpl = new ServiceInfoImpl(this.getQualifiedNameMap(), _port, _weight, _priority, persistent, _server);
+	    	 InetAddress mInetAddress = getRecordSource();
+	         if(mInetAddress instanceof Inet4Address){
+	        	 mServiceInfoImpl.addAddress((Inet4Address)mInetAddress);
+	         }else{
+	        	 mServiceInfoImpl.addAddress((Inet6Address)mInetAddress);
+	         }
+             log.debug("getServiceInfo mInetAddress="+mInetAddress.getHostAddress()+",mServiceInfo="+mServiceInfoImpl.hasData());
+            return mServiceInfoImpl;
         }
 
         /*
@@ -928,6 +973,8 @@ public abstract class DNSRecord extends DNSEntry {
             out.writeUTF(hostInfo, 0, hostInfo.length());
         }
 
+        XL_Log log = new XL_Log(HostInformation.class);
+        
         /*
          * (non-Javadoc)
          * @see javax.jmdns.impl.DNSRecord#getServiceInfo(boolean)
@@ -937,7 +984,15 @@ public abstract class DNSRecord extends DNSEntry {
             Map<String, String> hinfo = new HashMap<String, String>(2);
             hinfo.put("cpu", _cpu);
             hinfo.put("os", _os);
-            return new ServiceInfoImpl(this.getQualifiedNameMap(), 0, 0, 0, persistent, hinfo);
+            ServiceInfoImpl mServiceInfoImpl = new ServiceInfoImpl(this.getQualifiedNameMap(), port, 0, 0, persistent, hinfo);
+            InetAddress mInetAddress = getRecordSource();
+            if(mInetAddress instanceof Inet4Address){
+            	mServiceInfoImpl.addAddress((Inet4Address)mInetAddress);
+            }else{
+            	mServiceInfoImpl.addAddress((Inet6Address)mInetAddress);
+            }
+            log.debug("getServiceInfo mInetAddress="+mInetAddress.getHostAddress()+",mServiceInfo="+mServiceInfoImpl.hasData());
+            return mServiceInfoImpl; 
         }
 
         /*
@@ -997,8 +1052,9 @@ public abstract class DNSRecord extends DNSEntry {
      */
     public abstract ServiceEvent getServiceEvent(JmDNSImpl dns);
 
-    public void setRecordSource(InetAddress source) {
+    public void setRecordSource(InetAddress source,int port) {
         this._source = source;
+        this.port = port;
     }
 
     public InetAddress getRecordSource() {

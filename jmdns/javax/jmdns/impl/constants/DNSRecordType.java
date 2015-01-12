@@ -5,6 +5,8 @@ package javax.jmdns.impl.constants;
 
 import java.util.logging.Logger;
 
+import com.waltz3d.museum.XL_Log;
+
 /**
  * DNS Record Type
  * 
@@ -298,7 +300,9 @@ public enum DNSRecordType {
      */
     public static DNSRecordType typeForIndex(int index) {
         for (DNSRecordType aType : DNSRecordType.values()) {
-            if (aType._index == index) return aType;
+            if (aType._index == index) {
+            	return aType;
+            }
         }
         logger.severe("Could not find record type for index: " + index);
         return TYPE_IGNORE;
@@ -308,5 +312,4 @@ public enum DNSRecordType {
     public String toString() {
         return this.name() + " index " + this.indexValue();
     }
-
 }
