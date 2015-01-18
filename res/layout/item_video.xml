@@ -23,7 +23,7 @@
             android:layout_marginTop="60dip"/>
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/imageView_play"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/trailer_ic_play"

@@ -50,7 +50,7 @@ public class SimpleAdapter extends RecyclingPagerAdapter {
 			holder = new ViewHolder(view);
 			view.setTag(holder);
 		}
-		view.setOnClickListener(new View.OnClickListener() {
+		holder.imageView_play.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
@@ -75,9 +75,11 @@ public class SimpleAdapter extends RecyclingPagerAdapter {
 
 	private static class ViewHolder {
 		public ImageView imageView;
+		public ImageView imageView_play;
 
 		public ViewHolder(View view) {
 			imageView = (ImageView) view.findViewById(R.id.imageView1);
+			imageView_play = (ImageView) view.findViewById(R.id.imageView_play);
 		}
 	}
 }
