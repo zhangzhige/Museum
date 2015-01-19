@@ -139,7 +139,7 @@ public class HomeFragment extends BaseFragment {
 			@Override
 			public void onClick(View v) {
 				Util.showDialog(mProgressDialog, "正在刷新...");
-				new HttpManager().loadDataWithNoCache(3, new OnLoadFinishListener<Cultural>() {
+				new HttpManager().loadDataWithNoCache(3,0,10, new OnLoadFinishListener<Cultural>() {
 					
 					@Override
 					public void onLoad(final List<Cultural> mList) {

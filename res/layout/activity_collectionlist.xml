@@ -25,16 +25,22 @@
             android:textSize="18sp" />
     </RelativeLayout>
 
-    <ListView
-        android:id="@+id/mainlistView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
-        android:divider="@null"
-        android:layout_marginTop="-5dip"
-        android:scrollbars="none"
-        android:scrollingCache="false"
-        android:cacheColorHint="#00000000"
-        android:fadingEdge="none"></ListView>
+        android:layout_marginTop="-5dip">
+
+        <com.waltz3d.museum.FootListView
+            android:id="@+id/mainlistView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:cacheColorHint="#00000000"
+            android:divider="@null"
+            android:fadingEdge="none"
+            android:scrollbars="none"
+            android:scrollingCache="false" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </LinearLayout>

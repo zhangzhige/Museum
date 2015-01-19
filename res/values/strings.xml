@@ -8,4 +8,13 @@
     <string name="signature_wall">签名墙</string>
     <string name="meseum_location">展馆位置</string>
 	<string name="update_loading">正在下载中 ({0}%)</string>
+	
+	<string name="more">更多</string>
+	<string name="loading">正在加载&#8230;</string>
+	<string name="pull_to_refresh_pull_label">下拉刷新</string>
+    <string name="pull_to_refresh_release_label">松开后刷新</string>
+    <string name="pull_to_refresh_refreshing_label">正在刷新\u2026</string>
+    <string name="ptr_last_updated">最近更新: %1$s</string>
+    <string name="click_to_retry">获取失败，点击重试</string>
+    <string name="loading_more">加载更多</string>
 </resources>

@@ -119,8 +119,7 @@ public class HttpManager {
 					Gson gson = new Gson();
 					List<Cultural> mList = null;
 					try {
-						mList = gson.fromJson(responseData, new TypeToken<List<Cultural>>() {
-						}.getType());
+						mList = gson.fromJson(responseData, new TypeToken<List<Cultural>>() {}.getType());
 						log.debug("mList=" + mList.size());
 						mOnLoadFinishListener.onLoad(mList);
 						mDiskDataCache.saveCacheData(responseData, postData);
@@ -135,13 +134,11 @@ public class HttpManager {
 		}).start();
 	}
 
-	public void loadDataWithNoCache(final int categoryids, final OnLoadFinishListener<Cultural> mOnLoadFinishListener) {
+	public void loadDataWithNoCache(final int categoryids, final int pageIndex,final int pageSize,final OnLoadFinishListener<Cultural> mOnLoadFinishListener) {
 		new Thread(new Runnable() {
 
 			@Override
 			public void run() {
-				int pageSize = 5;
-				int pageIndex = 0;
 				String postData = "pageSize=" + pageSize + "&categoryids=" + categoryids + "&pageIndex=" + pageIndex;
 				final DiskDataCache mDiskDataCache = new DiskDataCache(MainApplication.INSTANCE);
 				String responseData = getNetData(postData);
@@ -243,6 +240,7 @@ public class HttpManager {
 	}
 
 	public static String getNetData(String jsonData) {
+		Log.d("getNetData", "jsonData="+jsonData);
 		HttpURLConnection httpurlconnection = null;
 		InputStream in = null;
 		ByteArrayOutputStream swapStream = null;

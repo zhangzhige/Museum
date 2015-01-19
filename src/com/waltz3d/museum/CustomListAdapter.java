@@ -28,13 +28,23 @@ public class CustomListAdapter extends BaseAdapter {
 
 	private DisplayImageOptions mOptions;
 
-	public CustomListAdapter(Context context, List<Cultural> list) {
+	public CustomListAdapter(Context context) {
 		super();
 		this.context = context;
 		this.mCulturals = new ArrayList<Cultural>();
-		mCulturals.addAll(list);
+		
 		this.inflater = LayoutInflater.from(context);
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
+	}
+	
+	public void refreshData(List<Cultural> list,boolean isAppend){
+		if(isAppend){
+			mCulturals.addAll(list);
+		}else{
+			mCulturals.clear();
+			mCulturals.addAll(list);
+		}
+		notifyDataSetChanged();
 	}
 
 	@Override
