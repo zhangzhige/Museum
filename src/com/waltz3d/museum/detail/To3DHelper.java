@@ -204,7 +204,9 @@ public class To3DHelper {
 			boolean isSuccess = readByZipInputStream(mFilePath, mFileSaveDir);
 			if(isSuccess){
 				List<DownloadInfo> mImgList = mDownloadSQLiteHelper.getZipFileList(mUrlHashKey);
-				selectList(mImgList);
+				if(selectList(mImgList)){
+					return;
+				};
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

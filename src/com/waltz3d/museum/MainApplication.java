@@ -61,13 +61,14 @@ public class MainApplication extends Application {
 			
 			@Override
 			public void run() {
-				NsdHelper.getInstance();//初始化nsd
+				AndroidNsdHelper.getInstance().discoverServices();//初始化nsd
 			}
 		}).start();
     }
 
 
     public void killSelf() {
+    	AndroidNsdHelper.getInstance().stopDiscovery();
         INSTANCE = null;
     }
 

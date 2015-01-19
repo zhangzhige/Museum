@@ -1,13 +1,11 @@
 package com.waltz3d.museum.detail;
 
-import java.net.Inet4Address;
-import java.net.Inet6Address;
-import java.net.InetAddress;
 import java.util.List;
 
-import javax.jmdns.ServiceInfo;
-
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,17 +18,13 @@ import android.widget.Toast;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.waltz3d.museum.AndroidNsdHelper;
 import com.waltz3d.museum.ChatConnection;
 import com.waltz3d.museum.DownloadInfo;
-import com.waltz3d.museum.NsdHelper;
 import com.waltz3d.museum.R;
 import com.waltz3d.museum.TDImagePlayOptionBuilder;
 import com.waltz3d.museum.Util;
 import com.waltz3d.museum.XL_Log;
-import com.waltz3d.museum.R.drawable;
-import com.waltz3d.museum.R.id;
-import com.waltz3d.museum.R.layout;
-import com.waltz3d.museum.R.menu;
 import com.waltz3d.museum.detail.To3DHelper.OnloadSuccessListenr;
 
 public class DetailActivity extends Activity implements OnClickListener {
@@ -41,11 +35,11 @@ public class DetailActivity extends Activity implements OnClickListener {
 
 	private DetailGifView imageView_detail;
 
-	private NsdHelper mNsdHelper;
+	private AndroidNsdHelper mNsdHelper;
 
 	private ChatConnection mConnection;
 	
-	private String mTestMessage = "<Root><Message ServiceType=\"Waltz3D\" CategoryName=\"Welcome\">11023</Message></Root>";
+	private String mTestMessage = "<Root><Message ServiceType=\"Waltz3D\" CategoryName=\"Welcome\">Medias/Welcome/11023</Message></Root>";
 	
 	private int comFrom = 0;
 	
@@ -107,7 +101,7 @@ public class DetailActivity extends Activity implements OnClickListener {
 			int id = getIntent().getIntExtra("Id", 0);
 			mTestMessage = mTestMessage.replace("11023", ""+id);
 			log.debug("mTestMessage="+mTestMessage);
-			mNsdHelper = NsdHelper.getInstance();
+			mNsdHelper = AndroidNsdHelper.getInstance();
 			mConnection = new ChatConnection(mUpdateHandler);
 		}
 	}
@@ -144,35 +138,11 @@ public class DetailActivity extends Activity implements OnClickListener {
         super.onDestroy();
     }
     
-    private void clickConnect() {
-    	final ServiceInfo service = mNsdHelper.getChosenServiceInfo();
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN) private void clickConnect() {
+    	final NsdServiceInfo service = mNsdHelper.getChosenServiceInfo();
         log.debug("clickConnect service = " + service);
         if (service != null) {
-        	log.debug("Connecting. service = "+ service.getInet4Addresses()[0].getHostAddress().toString()+",port="+service.getPort());
-        	new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					Inet4Address[] mInet4Addresses = service.getInet4Addresses();
-		        	if(mInet4Addresses != null){
-		        		for(Inet4Address mItem:mInet4Addresses){
-		        			log.debug("mItem="+mItem.getHostAddress()+",port="+mItem.getHostName());
-		        		}
-		        	}
-		        	Inet6Address[] mInet6Addresses = service.getInet6Addresses();
-		        	if(mInet6Addresses != null){
-		        		for(Inet6Address mItem:mInet6Addresses){
-		        			log.debug("mItem="+mItem.getHostAddress()+",port="+mItem.getHostName());
-		        		}
-		        	}
-				}
-			}).start();
-        	
-        	InetAddress mInetAddress = service.getInet4Address();
-        	if(mInetAddress == null){
-        		mInetAddress = service.getInet6Address();
-        	}
-            mConnection.connectToServer(mInetAddress,service.getPort());
+            mConnection.connectToServer(service.getHost(),service.getPort());
             mConnection.sendMessage(mTestMessage);
         } else {
         	log.debug("No service to connect to!");

@@ -83,7 +83,8 @@ public class MainActivity extends android.support.v4.app.FragmentActivity {
 		if (mXlMainView != null) {
 			mXlMainView.onDestroy();
 		}
-		NsdHelper.getInstance().onStop();
+		MainApplication.INSTANCE.killSelf();
+		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 
 	/**
@@ -92,6 +93,5 @@ public class MainActivity extends android.support.v4.app.FragmentActivity {
 	private void releaseAll() {
 		// 置空静态对象
 		finish();
-		android.os.Process.killProcess(android.os.Process.myPid());
 	}
 }

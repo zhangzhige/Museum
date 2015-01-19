@@ -2,16 +2,13 @@ package com.waltz3d.museum;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.jmdns.ServiceInfo;
-
+import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.content.res.Resources;
+import android.net.nsd.NsdServiceInfo;
+import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,10 +20,9 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.waltz3d.museum.AndroidNsdHelper.OnNsdChangeListener;
 
-import com.waltz3d.museum.NsdHelper.OnNsdChangeListener;
-
-public class WalthListActivity extends Activity {
+@TargetApi(Build.VERSION_CODES.JELLY_BEAN) public class WalthListActivity extends Activity {
 	
 	private ListView mainlistView;
 	
@@ -56,10 +52,10 @@ public class WalthListActivity extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				ServiceInfo mServiceInfo = mSimpleCustomAdapter.getItem(position);
+				NsdServiceInfo mServiceInfo = mSimpleCustomAdapter.getItem(position);
 				if(mServiceInfo != null){
-					NsdHelper.getInstance().setCurrentServiceInfo(mServiceInfo);
-					Util.showToast(WalthListActivity.this, "当前已选中："+mServiceInfo.getName(), Toast.LENGTH_SHORT);
+					AndroidNsdHelper.getInstance().setCurrentServiceInfo(mServiceInfo);
+					Util.showToast(WalthListActivity.this, "当前已选中："+mServiceInfo.getServiceName(), Toast.LENGTH_SHORT);
 				}
 			}
 		});
@@ -67,7 +63,7 @@ public class WalthListActivity extends Activity {
 		mSimpleCustomAdapter = new SimpleCustomAdapter();
 		mainlistView.setAdapter(mSimpleCustomAdapter);
 		
-		List<ServiceInfo> mServiceInfos = NsdHelper.getInstance().getmServiceInfos();
+		List<NsdServiceInfo> mServiceInfos = AndroidNsdHelper.getInstance().getmServiceInfos();
 		log.debug("mServiceInfos="+mServiceInfos.size());
 		if(mServiceInfos == null || mServiceInfos.size() == 0){
 			textView_empty.setVisibility(View.VISIBLE);
@@ -75,7 +71,7 @@ public class WalthListActivity extends Activity {
 			mSimpleCustomAdapter.refreshData(mServiceInfos);
 			textView_empty.setVisibility(View.GONE);
 		}
-		NsdHelper.getInstance().setmChangeListeners(mOnNsdChangeListener);
+		AndroidNsdHelper.getInstance().setmChangeListeners(mOnNsdChangeListener);
 	}
 	
 	@Override
@@ -94,7 +90,7 @@ public class WalthListActivity extends Activity {
 
 		@Override
 		public void onChange() {
-			List<ServiceInfo> mServiceInfos = NsdHelper.getInstance().getmServiceInfos();
+			List<NsdServiceInfo> mServiceInfos = AndroidNsdHelper.getInstance().getmServiceInfos();
 			if(mServiceInfos != null && mServiceInfos.size() > 0){
 				mSimpleCustomAdapter.refreshData(mServiceInfos);
 				textView_empty.setVisibility(View.GONE);
@@ -107,21 +103,21 @@ public class WalthListActivity extends Activity {
 	
 	protected void onDestroy() {
 		super.onDestroy();
-		NsdHelper.getInstance().removeChangeListeners(mOnNsdChangeListener);
+		AndroidNsdHelper.getInstance().removeChangeListeners(mOnNsdChangeListener);
 	};
 	
-	private class SimpleCustomAdapter extends BaseAdapter {
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN) private class SimpleCustomAdapter extends BaseAdapter {
 		
-		private List<ServiceInfo> mServiceInfos;
+		private List<NsdServiceInfo> mServiceInfos;
 		
 		private LayoutInflater inflater;
 
 		public SimpleCustomAdapter() {
-			this.mServiceInfos = new ArrayList<ServiceInfo>();
+			this.mServiceInfos = new ArrayList<NsdServiceInfo>();
 			this.inflater = LayoutInflater.from(WalthListActivity.this);
 		}
 
-		public void refreshData(List<ServiceInfo> items){
+		public void refreshData(List<NsdServiceInfo> items){
 			mServiceInfos = items;
 			notifyDataSetChanged();
 		}
@@ -132,7 +128,7 @@ public class WalthListActivity extends Activity {
 		}
 
 		@Override
-		public ServiceInfo getItem(int position) {
+		public NsdServiceInfo getItem(int position) {
 			return mServiceInfos.get(position);
 		}
 
@@ -153,8 +149,8 @@ public class WalthListActivity extends Activity {
 			} else {
 				holder = (Holder) convertView.getTag();
 			}
-			ServiceInfo mItem = getItem(position);
-			holder.textView_name.setText(mItem.getName());
+			NsdServiceInfo mItem = getItem(position);
+			holder.textView_name.setText(mItem.getServiceName());
 			return convertView;
 		}
 		
