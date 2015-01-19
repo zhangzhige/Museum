@@ -125,7 +125,6 @@ public class DetailGifView extends ImageView {
 				Message msg = redrawHandler.obtainMessage();
 				redrawHandler.sendMessage(msg);
 			}
-			mLastX = event.getX();
 			break;
 		case MotionEvent.ACTION_CANCEL:
 		case MotionEvent.ACTION_UP:
