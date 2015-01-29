@@ -101,7 +101,7 @@ public class CollectionListActivity extends Activity {
 			
 			@Override
 			public void onLoadData() {
-				int pageIndex = mCustomListAdapter.getCount();
+				int pageIndex = mCustomListAdapter.getCount()/DEFINE_SIZE;
 				loadData(pageIndex,true);	
 			}
 		});
@@ -124,7 +124,12 @@ public class CollectionListActivity extends Activity {
 					public void run() {
 						if(mList != null && mList.size() > 0){
 							mCustomListAdapter.refreshData(mList, isAppend);
-							mainlistView.setFootStatus(FootStatus.Common);
+							if(mList.size() < DEFINE_SIZE){
+								mainlistView.setFootStatus(FootStatus.Gone);
+							}else{
+								mainlistView.setFootStatus(FootStatus.Common);
+							}
+							
 						}else{//拉取数据失败，则设置不可见
 							mainlistView.setFootStatus(FootStatus.Gone);
 						}

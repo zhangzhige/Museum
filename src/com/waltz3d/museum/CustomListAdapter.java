@@ -89,22 +89,9 @@ public class CustomListAdapter extends BaseAdapter {
 		List<ProductSpecificationAttribute> mProductSpecificationAttributes = mItem.ProductSpecificationAttributes;
 
 		holder.textView_name_value.setText(mItem.Name);
-
-		if (mProductSpecificationAttributes != null && mProductSpecificationAttributes.size() > 0) {
-			try {
-				holder.textView_location_key.setText(mProductSpecificationAttributes.get(0).Name);
-				holder.textView_location_value.setText(mProductSpecificationAttributes.get(0).Value);
-				
-				holder.textView_level_key.setText(mProductSpecificationAttributes.get(1).Name);
-				holder.textView_level_value.setText(mProductSpecificationAttributes.get(1).Value);
-				
-				holder.textView_disability_key.setText(mProductSpecificationAttributes.get(2).Name);
-				holder.textView_textView_disability_value.setText(mProductSpecificationAttributes.get(2).Value);
-				
-			} catch (IndexOutOfBoundsException e) {
-				e.printStackTrace();
-			}
-		}
+		holder.textView_location_value.setText(mItem.getLocation());
+		holder.textView_level_value.setText(mItem.getLevel());
+		holder.textView_textView_disability_value.setText(mItem.getdisability());
 		return convertView;
 	}
 

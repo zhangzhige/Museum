@@ -27,6 +27,44 @@ public class Cultural implements Serializable{
 	
 	public List<ProductSpecificationAttribute> ProductSpecificationAttributes;
 	
+	
+	public String getLocation(){
+		if(ProductSpecificationAttributes != null && ProductSpecificationAttributes.size() > 0){
+			for(ProductSpecificationAttribute mItem:ProductSpecificationAttributes){
+				if(mItem.Name.equals("产地")){
+					return mItem.Value;
+				}
+			}
+		}
+		return "昙石山";
+	}
+	
+	/**
+	 * 获取保护程度
+	 * @return
+	 */
+	public String getLevel(){
+		if(ProductSpecificationAttributes != null && ProductSpecificationAttributes.size() > 0){
+			for(ProductSpecificationAttribute mItem:ProductSpecificationAttributes){
+				if(mItem.Name.equals("级别")){
+					return mItem.Value;
+				}
+			}
+		}
+		return "一级保护";
+	}
+	
+	public String getdisability(){
+		if(ProductSpecificationAttributes != null && ProductSpecificationAttributes.size() > 0){
+			for(ProductSpecificationAttribute mItem:ProductSpecificationAttributes){
+				if(mItem.Name.equals("残度")){
+					return mItem.Value;
+				}
+			}
+		}
+		return "残";
+	}
+	
 	class ProductPicture implements Serializable{
 		/**
 		 * 
