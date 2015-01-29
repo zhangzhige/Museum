@@ -8,7 +8,8 @@
     <com.waltz3d.museum.CoverFlow
         android:id="@+id/fancyCoverFlow"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="150dp"
+        android:layout_centerVertical="true" />
 
     <ImageView
         android:id="@+id/imageView_search"

@@ -87,19 +87,19 @@ public class HomeFragment extends BaseFragment {
 	        final Cultural item = getItem(position);
 	        String url = item.ProductPictures.get(0).PictureUrl;
 	        ImageLoader.getInstance().displayImage(url, holder.imageView,mOptions);
-	        holder.imageView.setOnClickListener(new View.OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(getActivity(), DetailActivity.class);
-					List<ProductPicture> mList =  item.ProductPictures;
-			        String url = mList.get(Math.min(1, mList.size()-1)).PictureUrl;
-			        intent.putExtra("PictureUrl", url);
-			        intent.putExtra("Id", item.Id);
-			        intent.putExtra("Product3D", item.Product3D);
-					startActivity(intent);
-				}
-			});
+//	        holder.imageView.setOnClickListener(new View.OnClickListener() {
+//				
+//				@Override
+//				public void onClick(View v) {
+//					Intent intent = new Intent(getActivity(), DetailActivity.class);
+//					List<ProductPicture> mList =  item.ProductPictures;
+//			        String url = mList.get(Math.min(1, mList.size()-1)).PictureUrl;
+//			        intent.putExtra("PictureUrl", url);
+//			        intent.putExtra("Id", item.Id);
+//			        intent.putExtra("Product3D", item.Product3D);
+//					startActivity(intent);
+//				}
+//			});
 	        log.debug("item="+item);
 	        return reuseableView;
 	    }
@@ -122,7 +122,22 @@ public class HomeFragment extends BaseFragment {
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		fancyCoverFlow = (CoverFlow) mRootView.findViewById(R.id.fancyCoverFlow);
 		fancyCoverFlow.isNeedRotate = false;
-	    
+		fancyCoverFlow.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				Intent intent = new Intent(getActivity(), DetailActivity.class);
+				Cultural item = mFancyCoverFlowSampleAdapter.getItem(position);
+				List<ProductPicture> mList =  item.ProductPictures;
+		        String url = mList.get(Math.min(1, mList.size()-1)).PictureUrl;
+		        intent.putExtra("PictureUrl", url);
+		        intent.putExtra("Id", item.Id);
+		        intent.putExtra("Product3D", item.Product3D);
+				startActivity(intent);
+			}
+		});
+		
 	    imageView_search = (ImageView) mRootView.findViewById(R.id.imageView_search);
 	    imageView_search.setOnClickListener(new View.OnClickListener() {
 			
