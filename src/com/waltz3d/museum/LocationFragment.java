@@ -1,6 +1,7 @@
 package com.waltz3d.museum;
 
 
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -96,12 +97,14 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
     
     private LatLng ptCenter = new LatLng(26.150757f,119.164128f);
     
+    private ProgressDialog mProgressDialog;
+    
     @Override
     public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	mRootView = inflater.inflate(R.layout.activity_routeplan, container, false);
         Log.d(LTAG, "onCreateView");
     	//初始化地图
-		
+        mProgressDialog = new ProgressDialog(getActivity());
 		mGeoCoder = GeoCoder.newInstance();
 		mGeoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
 			
@@ -197,10 +200,11 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 			
 			@Override
 			public void onClick(View v) {
+				Util.showDialog(mProgressDialog, "正在导航...");
 				mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
 			}
 		});
-        imageView_resume_location.performClick();
+        mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
     	return mRootView;
     }
     
@@ -229,6 +233,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
     public void onGetWalkingRouteResult(WalkingRouteResult result) {
+    	Util.dismissDialog(mProgressDialog);
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(getActivity(), "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
         }
@@ -250,7 +255,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
     public void onGetTransitRouteResult(TransitRouteResult result) {
-
+    	Util.dismissDialog(mProgressDialog);
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(getActivity(), "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
         }
@@ -271,6 +276,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
     public void onGetDrivingRouteResult(DrivingRouteResult result) {
+    	Util.dismissDialog(mProgressDialog);
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(getActivity(), "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
         }

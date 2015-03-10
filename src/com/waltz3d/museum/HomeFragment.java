@@ -107,7 +107,7 @@ public class HomeFragment extends BaseFragment {
 	}
 
 	private void initUI() {
-		mProgressDialog = new ProgressDialog(getActivity(), android.R.style.Theme_DeviceDefault_Light_Dialog);
+		mProgressDialog = new ProgressDialog(getActivity());
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		fancyCoverFlow = (CoverFlow) mRootView.findViewById(R.id.fancyCoverFlow);
 		fancyCoverFlow.isNeedRotate = false;
