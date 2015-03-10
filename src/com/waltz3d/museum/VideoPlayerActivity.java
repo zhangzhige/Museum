@@ -4,10 +4,13 @@ import java.io.File;
 import java.util.Formatter;
 import java.util.Locale;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
+import android.media.MediaPlayer.OnInfoListener;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -35,6 +38,7 @@ public class VideoPlayerActivity extends Activity {
     private ProgressBar mProgress;
     private TextView mEndTime, mCurrentTime;
     private LinearLayout control_layout;
+    private LinearLayout loading_layout;
     
     private boolean mShowing;
     private boolean mDragging;
@@ -49,6 +53,7 @@ public class VideoPlayerActivity extends Activity {
 	
     private String url;
     
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -73,6 +78,24 @@ public class VideoPlayerActivity extends Activity {
 				finish();
 			}
 		});
+		mPlayer.setOnInfoListener(new OnInfoListener() {
+			
+			@Override
+			public boolean onInfo(MediaPlayer mp, int what, int extra) {
+				switch (what) {
+                case MediaPlayer.MEDIA_INFO_VIDEO_RENDERING_START://开始播放
+                	loading_layout.setVisibility(View.GONE);
+                    break;
+                case MediaPlayer.MEDIA_INFO_BUFFERING_START://开始缓冲
+                	loading_layout.setVisibility(View.VISIBLE);
+                    break;
+                case MediaPlayer.MEDIA_INFO_BUFFERING_END://缓冲结束
+                	loading_layout.setVisibility(View.GONE);
+                    break;
+            }
+				return false;
+			}
+		});
 		mPauseButton.performClick();
 	}
 
@@ -89,6 +112,7 @@ public class VideoPlayerActivity extends Activity {
 
     private void initControllerView(View v) {
     	control_layout = (LinearLayout) v.findViewById(R.id.control_layout);
+    	loading_layout = (LinearLayout) findViewById(R.id.loading_layout);
     	
         mPauseButton = (ImageButton) v.findViewById(R.id.pause);
         if (mPauseButton != null) {

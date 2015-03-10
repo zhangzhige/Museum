@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#CC000000"
     android:orientation="vertical" >
 
-    <VideoView 
+    <VideoView
         android:id="@+id/surfaceView1"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
-    </VideoView >
+    </VideoView>
 
     <LinearLayout
         android:id="@+id/control_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical"
-        android:background="@drawable/bg_player_footerbar" >
+        android:layout_gravity="bottom"
+        android:background="@drawable/bg_player_footerbar"
+        android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -25,7 +25,6 @@
             android:gravity="center"
             android:orientation="horizontal"
             android:paddingTop="4dip" >
-
 
             <ImageButton
                 android:id="@+id/rew"
@@ -38,7 +37,6 @@
             <ImageButton
                 android:id="@+id/ffwd"
                 style="@android:style/MediaButton.Ffwd" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -62,8 +60,6 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="0dip"
                 android:layout_height="32dip"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
                 android:layout_weight="1" />
 
             <TextView
@@ -79,4 +75,25 @@
         </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+    <LinearLayout
+        android:id="@+id/loading_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="正在努力加载视频..."
+            android:textColor="@color/white" />
+    </LinearLayout>
+
+</FrameLayout>
