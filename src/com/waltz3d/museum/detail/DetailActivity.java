@@ -4,6 +4,8 @@ import java.util.List;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.net.nsd.NsdServiceInfo;
 import android.os.Build;
 import android.os.Bundle;
@@ -123,7 +125,30 @@ public class DetailActivity extends Activity implements OnClickListener {
             case R.id.to_3d:
             	if(!hasTo3D){
             		hasTo3D = true;
-            		new To3DHelper(DetailActivity.this, Product3D,mOnloadSuccessListenr);
+            		if(Util.isWifiNet(DetailActivity.this)){
+            			new To3DHelper(DetailActivity.this, Product3D,mOnloadSuccessListenr);
+            		}else{
+            			AlertDialog.Builder mBuidler = new AlertDialog.Builder(DetailActivity.this);
+            			mBuidler.setTitle("网络环境提示");
+            			mBuidler.setMessage("检测到您的网络环境是移动网络，浏览3D效果需要耗费较大流量，建议在wifi环境浏览");
+            			mBuidler.setNegativeButton("继续浏览", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								new To3DHelper(DetailActivity.this, Product3D,mOnloadSuccessListenr);
+							}
+						});
+            			mBuidler.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+							
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+            			mBuidler.create().show();
+            		}
+            		
             	}
                 break;
             default:

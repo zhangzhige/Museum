@@ -2,7 +2,9 @@ package com.pixplicity.multiviewpager;
 
 import java.util.List;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +17,10 @@ import com.waltz3d.museum.HistoryVideo;
 import com.waltz3d.museum.MainApplication;
 import com.waltz3d.museum.R;
 import com.waltz3d.museum.TDImagePlayOptionBuilder;
+import com.waltz3d.museum.Util;
 import com.waltz3d.museum.VideoPlayerActivity;
+import com.waltz3d.museum.detail.DetailActivity;
+import com.waltz3d.museum.detail.To3DHelper;
 
 public class SimpleAdapter extends RecyclingPagerAdapter {
 
@@ -54,11 +59,39 @@ public class SimpleAdapter extends RecyclingPagerAdapter {
 			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(mContext, VideoPlayerActivity.class);
-				HistoryVideo item = getItem(position);
-				String url = item.url;
-				intent.putExtra("url", url);
-				mContext.startActivity(intent);
+				if(Util.isWifiNet(mContext)){
+					Intent intent = new Intent(mContext, VideoPlayerActivity.class);
+					HistoryVideo item = getItem(position);
+					String url = item.url;
+					intent.putExtra("url", url);
+					mContext.startActivity(intent);
+        		}else{
+        			AlertDialog.Builder mBuidler = new AlertDialog.Builder(mContext);
+        			mBuidler.setTitle("网络环境提示");
+        			mBuidler.setMessage("检测到您的网络环境是移动网络，播放视频需要耗费较大流量，建议在wifi环境下播放");
+        			mBuidler.setNegativeButton("继续播放", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							Intent intent = new Intent(mContext, VideoPlayerActivity.class);
+							HistoryVideo item = getItem(position);
+							String url = item.url;
+							intent.putExtra("url", url);
+							mContext.startActivity(intent);
+						}
+					});
+        			mBuidler.setPositiveButton("取消", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+        			mBuidler.create().show();
+        		}
+				
+				
 			}
 		});
 		HistoryVideo item = getItem(position);

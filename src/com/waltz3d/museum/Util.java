@@ -5,6 +5,8 @@ import java.io.File;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -73,4 +75,13 @@ public class Util {
 		}
 	}
 
+	public static boolean isWifiNet(Context context) {
+		boolean bRet = false;
+		ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+		if (wifiInfo.isConnectedOrConnecting()) {
+			bRet = true;
+		}
+		return bRet;
+	}
 }

@@ -68,7 +68,7 @@
         </activity>
         <activity
             android:name="MainActivity"
-            android:theme="@android:style/Theme.Black.NoTitleBar"
+            android:theme="@style/AppBaseTheme"
             android:screenOrientation="portrait" >
         </activity>
         

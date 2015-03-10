@@ -21,6 +21,7 @@ public class MainActivity extends android.support.v4.app.FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		log.debug("onCreate==" + this);
+		getActionBar().hide();
 		mXlMainView = new MainView(this, savedInstanceState);
 		setContentView(mXlMainView);
 	}

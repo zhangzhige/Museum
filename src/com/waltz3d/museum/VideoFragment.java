@@ -33,10 +33,8 @@ public class VideoFragment extends BaseFragment {
 	};
 
 	@Override
-	public View onCreateContentView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		mRootView = inflater.inflate(R.layout.layout_inflate_example,
-				container, false);
+	public View onCreateContentView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
+		mRootView = inflater.inflate(R.layout.layout_inflate_example,container, false);
 		initUI();
 		return mRootView;
 	}
