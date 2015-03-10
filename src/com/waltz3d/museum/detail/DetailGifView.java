@@ -31,6 +31,12 @@ public class DetailGifView extends ImageView {
 
 	private List<DownloadInfo> mList;
 
+	private ImageView imageView_src;
+	
+	public void setImageView_src(ImageView imageView_src) {
+		this.imageView_src = imageView_src;
+	}
+
 	private Handler redrawHandler = new Handler() {
 		public void handleMessage(Message msg) {
 			if (currentImage != null) {

@@ -14,13 +14,27 @@
         android:src="@drawable/icon_3d_normal" >
     </ImageView>
 
-    <com.waltz3d.museum.detail.DetailGifView
-        android:id="@+id/imageView_detail"
+    <FrameLayout
         android:layout_width="300dip"
         android:layout_height="300dip"
         android:layout_above="@+id/imageView_action"
-        android:layout_marginBottom="20dip"
-        android:layout_centerInParent="true"
-        android:scaleType="fitXY"/>
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dip" >
+
+        <com.waltz3d.museum.detail.DetailGifView
+            android:id="@+id/imageView_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_gravity="center" />
+
+        <ImageView
+            android:id="@+id/imageView_src"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/buttom_tab"
+            android:scaleType="fitXY" />
+    </FrameLayout>
 
 </RelativeLayout>

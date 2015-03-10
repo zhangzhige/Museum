@@ -49,6 +49,8 @@ public class DetailActivity extends Activity implements OnClickListener {
 	
 	private boolean hasTo3D = false;
 	
+	private ImageView imageView_src;
+	
 	private OnloadSuccessListenr mOnloadSuccessListenr = new OnloadSuccessListenr() {
 		
 		@Override
@@ -60,6 +62,11 @@ public class DetailActivity extends Activity implements OnClickListener {
 					if(mList != null && mList.size() > 0){
 						imageView_detail.setResList(mList);
 						imageView_detail.start();
+						
+						imageView_detail.setMinimumWidth(imageView_src.getWidth());
+						imageView_detail.setMinimumHeight(imageView_src.getHeight());
+						
+						imageView_src.setVisibility(View.GONE);
 					}else{
 						hasTo3D = false;
 						Util.showToast(DetailActivity.this, "播放3D失败", Toast.LENGTH_SHORT);
@@ -87,6 +94,8 @@ public class DetailActivity extends Activity implements OnClickListener {
         
 		mOptions = new TDImagePlayOptionBuilder().setDefaultImage(R.drawable.default_logo).build();
 		imageView_detail = (DetailGifView) findViewById(R.id.imageView_detail);
+		imageView_src = (ImageView) findViewById(R.id.imageView_src);
+		imageView_detail.setImageView_src(imageView_src);
 		comFrom = getIntent().getIntExtra("comFrom", 0);
 		Product3D = getIntent().getStringExtra("Product3D");
 		log.debug("Product3D="+Product3D);
@@ -96,7 +105,7 @@ public class DetailActivity extends Activity implements OnClickListener {
 			imageView.setVisibility(View.INVISIBLE);
 		}
 		String url = getIntent().getStringExtra("PictureUrl");
-		ImageLoader.getInstance().displayImage(url, imageView_detail, mOptions);
+		ImageLoader.getInstance().displayImage(url, imageView_src, mOptions);
 
 		findViewById(R.id.imageView_action).setOnClickListener(this);
 		if(comFrom != 1){
