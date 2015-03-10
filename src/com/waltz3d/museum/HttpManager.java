@@ -133,7 +133,41 @@ public class HttpManager {
 			}
 		}).start();
 	}
+	
+	/**
+	 * 只加载首页数据
+	 * @param categoryids
+	 * @param pageIndex
+	 * @param pageSize
+	 * @param rawId
+	 * @param mOnLoadFinishListener
+	 */
+	public void loadHomeCache(final int categoryids, final int pageIndex,final int pageSize,final int rawId, final OnLoadFinishListener<Cultural> mOnLoadFinishListener){
+		new Thread(new Runnable() {
 
+			@Override
+			public void run() {
+				String postData = "pageSize=" + pageSize + "&categoryids=" + categoryids + "&pageIndex=" + pageIndex;
+				final DiskDataCache mDiskDataCache = new DiskDataCache(MainApplication.INSTANCE);
+				String cacheData = mDiskDataCache.loadDataFromDiskImpl(postData);
+				if ((cacheData == null || cacheData.length() == 0) && rawId != 0) {
+					cacheData = openRawResource(rawId);
+				}
+				if (cacheData != null && cacheData.length() > 0) {
+					Gson gson = new Gson();
+					try {
+						List<Cultural> mList = gson.fromJson(cacheData, new TypeToken<List<Cultural>>() {}.getType());
+						mOnLoadFinishListener.onLoad(mList);
+					} catch (JsonSyntaxException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}).start();
+	}
+	
 	public void loadDataWithNoCache(final int categoryids, final int pageIndex,final int pageSize,final OnLoadFinishListener<Cultural> mOnLoadFinishListener) {
 		new Thread(new Runnable() {
 
@@ -248,8 +282,8 @@ public class HttpManager {
 			byte[] asedata = jsonData.getBytes("utf-8");
 			URL url = new URL(SearchUrl);
 			httpurlconnection = (HttpURLConnection) url.openConnection();
-			httpurlconnection.setConnectTimeout(15000);
-			httpurlconnection.setReadTimeout(15000);
+			httpurlconnection.setConnectTimeout(30000);
+			httpurlconnection.setReadTimeout(30000);
 			httpurlconnection.setDoOutput(true);
 			httpurlconnection.setDoInput(true);
 			httpurlconnection.setUseCaches(false);
@@ -257,8 +291,8 @@ public class HttpManager {
 			httpurlconnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=utf-8");
 			httpurlconnection.setRequestProperty("Accept-Encoding", "gzip");
 
-			httpurlconnection.setRequestProperty("User-Agent", "Mozilla/4.0");
-			httpurlconnection.setRequestProperty("Content-Length", Integer.toString(asedata.length));
+			//httpurlconnection.setRequestProperty("User-Agent", "Mozilla/4.0");
+			//httpurlconnection.setRequestProperty("Content-Length", Integer.toString(asedata.length));
 			httpurlconnection.setRequestMethod("POST");
 
 			DataOutputStream out = new DataOutputStream(httpurlconnection.getOutputStream());
