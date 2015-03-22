@@ -13,9 +13,9 @@ import de.mindpipe.android.logging.log4j.LogConfigurator;
 public class XL_Log {
     public static boolean isSDCanRead = false;//sd卡可读，由于其他地方调用，使用static
 
-    public static final boolean DEBUG = true;//是否打日志
+    public static final boolean DEBUG = false;//是否打日志
     
-	public static final String LOG_PATH = "Waltz3D/log/";
+	public static final String LOG_PATH = "Mesume/log/";
 
     static {
         if (isSdcardExist()) {
@@ -34,7 +34,7 @@ public class XL_Log {
             logConfigurator.setFileName(filepath);
             // Set log level of a specific logger
             //等级可分为OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL   设置为OFF即关闭,开发调试时一般设置成DEBUG
-            String packageName="com.example.museum";
+            String packageName="com.waltz3d.museum";
             if (DEBUG) {
                 logConfigurator.setLevel(packageName, Level.ALL);
             } else {

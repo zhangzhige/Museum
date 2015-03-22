@@ -63,6 +63,16 @@ public class Util {
 
 		return true;
 	}
+	
+    public static boolean isMobileNet(final Context context) {
+        boolean bRet = false;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo wifiInfo = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+        if (wifiInfo != null && wifiInfo.isConnectedOrConnecting()) {
+            bRet = true;
+        }
+        return bRet;
+    }
 
 	public static void dismissDialog(ProgressDialog dialog) {
 		if (null != dialog) {

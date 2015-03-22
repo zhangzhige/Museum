@@ -1,15 +1,16 @@
 package com.waltz3d.museum;
 
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.pm.Signature;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -23,13 +24,6 @@ import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.waltz3d.museum.MainApplication.OnNetWorkChangeListener.NetType;
-
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainApplication extends Application {
 
@@ -51,6 +45,9 @@ public class MainApplication extends Application {
     }
 
     private void init() {
+    	CrashHandler crashHandler = CrashHandler.getInstance();
+        crashHandler.init(this);
+        
     	SDKInitializer.initialize(this);
         mWifiStateFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         this.registerReceiver(mWifiStateReceiver, mWifiStateFilter);
