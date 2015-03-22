@@ -1,17 +1,19 @@
 package com.waltz3d.museum;
 
 
-import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -23,8 +25,9 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BaiduMap.OnMarkerClickListener;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.InfoWindow.OnInfoWindowClickListener;
 import com.baidu.mapapi.map.MapPoi;
-import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
@@ -77,9 +80,9 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
     
     private View mRootView;
     
-    private ImageView imageView_mylocation;
+    private TextView imageView_mylocation;
     
-    private ImageView imageView_resume_location;
+    private TextView imageView_resume_location;
     
     private LocationClient mLocClient;
 	
@@ -114,7 +117,12 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 				mBaidumap.clear();
 				MarkerOptions mMarkerOptions = new MarkerOptions().position(result.getLocation());
 				Log.d(LTAG, "getAddress="+result.getAddress()+",la="+result.getLocation().latitude);
-				mMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marka));
+				TextView button = new TextView(getActivity());
+				button.setBackgroundResource(R.drawable.bg_player_box);
+				button.setTextColor(Color.WHITE);
+				button.setText("昙石山博物馆");
+				
+				mMarkerOptions.icon(BitmapDescriptorFactory.fromView(button));
 				mMarkerOptions.title(result.getAddress());
 				mMarkerA = (Marker) mBaidumap.addOverlay(mMarkerOptions);
 				mBaidumap.setMapStatus(MapStatusUpdateFactory.newLatLng(result.getLocation()));
@@ -173,7 +181,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
         mSearch = RoutePlanSearch.newInstance();
         mSearch.setOnGetRoutePlanResultListener(this);
 		
-        imageView_mylocation = (ImageView) mRootView.findViewById(R.id.imageView_mylocation);
+        imageView_mylocation = (TextView) mRootView.findViewById(R.id.imageView_mylocation);
         imageView_mylocation.setOnClickListener(new View.OnClickListener() {
 			
 			@Override
@@ -193,7 +201,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 			}
 		});
         
-        imageView_resume_location = (ImageView) mRootView.findViewById(R.id.imageView_resume_location);
+        imageView_resume_location = (TextView) mRootView.findViewById(R.id.imageView_resume_location);
         imageView_resume_location.setOnClickListener(new View.OnClickListener() {
 			
 			@Override

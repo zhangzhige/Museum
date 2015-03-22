@@ -7,7 +7,7 @@
     <RelativeLayout
         android:id="@+id/actionbar_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="53dp"
         android:background="@drawable/bg_top" >
 
         <TextView
@@ -19,25 +19,39 @@
             android:textColor="@color/white"
             android:textSize="19sp" />
 
-        <ImageView
+        <TextView
             android:id="@+id/imageView_mylocation"
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:layout_below="@+id/textView_title"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@drawable/baidu_location_self" />
+            android:text="导航"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textSize="17sp"
+            android:background="@drawable/regetpwd_back_selector" 
+            android:gravity="center"
+	        android:layout_alignParentLeft="true"
+	        android:layout_centerVertical="true"
+	        android:clickable="true"
+	     	android:focusable="true"
+	     	android:textColor="@drawable/search_cancel_search_textcolor_selector"
+	     	android:layout_marginBottom="4dp"/>
 
-        <ImageView
+        <TextView
             android:id="@+id/imageView_resume_location"
-            android:layout_width="30dip"
-            android:layout_height="30dip"
-            android:layout_alignParentRight="true"
-            android:layout_below="@+id/textView_title"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dip"
-            android:src="@drawable/museum" />
+            android:text="详细地址"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textSize="17sp"
+            android:background="@drawable/regetpwd_back_selector" 
+            android:gravity="center"
+	        android:layout_alignParentRight="true"
+	        android:layout_centerVertical="true"
+	        android:clickable="true"
+	     	android:focusable="true"
+	     	android:textColor="@drawable/search_cancel_search_textcolor_selector"
+	     	android:layout_marginBottom="4dp" />
     </RelativeLayout>
 
     <com.baidu.mapapi.map.MapView
