@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.waltz3d.museum"
     android:versionCode="1"
-    android:versionName="1.0.0.12" >
+    android:versionName="1.0.0.18" >
 
     <uses-sdk
         android:minSdkVersion="14" />
@@ -54,7 +54,7 @@
 		android:hardwareAccelerated="true">
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="t5BYrau1GrF2F39t43zyR0Us" />
+            android:value="0yCGYXDqtUF4z4Au3sw87mdU" />
 
         <activity
             android:name="com.waltz3d.museum.LoadingActivity"

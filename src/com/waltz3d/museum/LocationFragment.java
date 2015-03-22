@@ -97,14 +97,11 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
     
     private LatLng ptCenter = new LatLng(26.150757f,119.164128f);
     
-    private ProgressDialog mProgressDialog;
-    
     @Override
     public View onCreateContentView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     	mRootView = inflater.inflate(R.layout.activity_routeplan, container, false);
         Log.d(LTAG, "onCreateView");
     	//初始化地图
-        mProgressDialog = new ProgressDialog(getActivity());
 		mGeoCoder = GeoCoder.newInstance();
 		mGeoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
 			
@@ -116,6 +113,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 				}
 				mBaidumap.clear();
 				MarkerOptions mMarkerOptions = new MarkerOptions().position(result.getLocation());
+				Log.d(LTAG, "getAddress="+result.getAddress()+",la="+result.getLocation().latitude);
 				mMarkerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_marka));
 				mMarkerOptions.title(result.getAddress());
 				mMarkerA = (Marker) mBaidumap.addOverlay(mMarkerOptions);
@@ -190,7 +188,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 				if(distance >= 2000){//大于2k取驾车路线
 					mSearch.drivingSearch((new DrivingRoutePlanOption()).from(stNode).to(enNode));
 				}else{
-					 mSearch.walkingSearch((new WalkingRoutePlanOption()).from(stNode).to(enNode));
+					mSearch.walkingSearch((new WalkingRoutePlanOption()).from(stNode).to(enNode));
 				}
 			}
 		});
@@ -200,7 +198,7 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 			
 			@Override
 			public void onClick(View v) {
-				Util.showDialog(mProgressDialog, "正在导航...");
+				Util.showToast(getActivity(), "闽侯县闽江北岸昙石村甘蔗街道昙石村330号昙石山遗址博物馆", Toast.LENGTH_LONG);
 				mGeoCoder.reverseGeoCode(new ReverseGeoCodeOption().location(ptCenter));
 			}
 		});
@@ -233,7 +231,6 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
     public void onGetWalkingRouteResult(WalkingRouteResult result) {
-    	Util.dismissDialog(mProgressDialog);
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(getActivity(), "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
         }
@@ -255,7 +252,6 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
     public void onGetTransitRouteResult(TransitRouteResult result) {
-    	Util.dismissDialog(mProgressDialog);
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(getActivity(), "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
         }
@@ -276,7 +272,6 @@ public class LocationFragment extends BaseFragment implements BaiduMap.OnMapClic
 
     @Override
     public void onGetDrivingRouteResult(DrivingRouteResult result) {
-    	Util.dismissDialog(mProgressDialog);
         if (result == null || result.error != SearchResult.ERRORNO.NO_ERROR) {
             Toast.makeText(getActivity(), "抱歉，未找到结果", Toast.LENGTH_SHORT).show();
         }

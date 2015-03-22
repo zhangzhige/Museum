@@ -38,8 +38,6 @@ public class CollectionListActivity extends Activity {
 	private TextView textView_listhead;
 	
 	private static final int DEFINE_SIZE = 5;
-	
-	private SwipeRefreshLayout swipeLayout;
 
 	private Handler mHandler = new Handler();
 
@@ -67,18 +65,15 @@ public class CollectionListActivity extends Activity {
 		textView_listhead.setText(categoryids == 5?"新石器时代":"青铜时代");
 		mGuideGallery = (GuideGallery) findViewById(R.id.listview_head);
 		mGuideGallery.setAdapter(new ImageAdapter());
-		
-		swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
-		swipeLayout.setColorSchemeResources(R.color.holo_red_light, R.color.holo_green_light, R.color.holo_blue_bright, R.color.holo_orange_light);  
 	  
-		swipeLayout.setOnRefreshListener(new OnRefreshListener() {
-			
-			@Override
-			public void onRefresh() {
-				loadData(0,false);	
-			}
-		});
-		swipeLayout.setRefreshing(true);
+//		swipeLayout.setOnRefreshListener(new OnRefreshListener() {
+//			
+//			@Override
+//			public void onRefresh() {
+//				loadData(0,false);	
+//			}
+//		});
+//		swipeLayout.setRefreshing(true);
 		
 		mainlistView = (FootListView) findViewById(R.id.mainlistView);
 		mainlistView.setOnItemClickListener(new OnItemClickListener() {
@@ -133,7 +128,6 @@ public class CollectionListActivity extends Activity {
 						}else{//拉取数据失败，则设置不可见
 							mainlistView.setFootStatus(FootStatus.Gone);
 						}
-						swipeLayout.setRefreshing(false); 
 					}
 				});
 			}
