@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.waltz3d.museum"
     android:versionCode="1"
-    android:versionName="1.0.0.18" >
+    android:versionName="1.0.0.19" >
 
     <uses-sdk
         android:minSdkVersion="14" />
