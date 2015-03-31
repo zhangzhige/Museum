@@ -2,6 +2,10 @@ package com.waltz3d.museum;
 
 import java.util.Formatter;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
+
+import com.waltz3d.museum.ScreenObserver.ScreenStateListener;
 
 import android.app.Activity;
 import android.media.AudioManager;
@@ -27,9 +31,12 @@ import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class VideoPlayerActivity extends Activity {
-
+	
+	private XL_Log log = new XL_Log(VideoPlayerActivity.class);
+	
 	private MediaPlayer mediaPlayer;
 	private SurfaceView mSurfaceView;
 	private SeekBar mSeekBar;
@@ -47,6 +54,8 @@ public class VideoPlayerActivity extends Activity {
 	private ImageButton mPauseButton;
 	private ImageButton mFfwdButton;
 	private ImageButton mRewButton;
+	
+	ScreenObserver mScreenObserver;
 
 	private String url;
 
@@ -56,19 +65,19 @@ public class VideoPlayerActivity extends Activity {
 
 	private int mScreenWidth;
 	private int mScreenHeight;
+	private Timer mTimer; //刷新播放进度定时器
 
 	private Callback callback = new Callback() {
-
+		
 		@Override
 		public void surfaceDestroyed(SurfaceHolder holder) {
-			if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-				currentPosition = mediaPlayer.getCurrentPosition();
-				mediaPlayer.stop();
-			}
+			currentPosition = mediaPlayer.getCurrentPosition();
+			pausePlayer();
 		}
 
 		@Override
 		public void surfaceCreated(SurfaceHolder holder) {
+			log.debug("surfaceCreated");
 			play(currentPosition);
 		}
 
@@ -80,15 +89,25 @@ public class VideoPlayerActivity extends Activity {
 
 	protected void play(final int msec) {
 		try {
+			if (mediaPlayer != null) {
+				try {
+					mediaPlayer.stop();
+					mediaPlayer.release();
+					mediaPlayer = null;
+				} catch (IllegalStateException e) {
+					e.printStackTrace();
+				}
+			}
+			loading_layout.setVisibility(View.VISIBLE);
 			mediaPlayer = new MediaPlayer();
 			mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 			mediaPlayer.setOnPreparedListener(new OnPreparedListener() {
 
 				@Override
 				public void onPrepared(MediaPlayer mp) {
-					mediaPlayer.start();
-					mediaPlayer.seekTo(msec);
+					onResumePlayer();
 					mSeekBar.setMax(mediaPlayer.getDuration());
+					mediaPlayer.seekTo(msec);
 				}
 			});
 
@@ -115,6 +134,8 @@ public class VideoPlayerActivity extends Activity {
 
 				@Override
 				public void onCompletion(MediaPlayer mp) {
+					log.debug("onCompletion");
+					Util.showToast(VideoPlayerActivity.this, "播放完成", Toast.LENGTH_LONG);
 					finish();
 				}
 			});
@@ -129,7 +150,9 @@ public class VideoPlayerActivity extends Activity {
 
 				@Override
 				public boolean onError(MediaPlayer mp, int what, int extra) {
+					log.debug("onError="+what);
 					if (what != -38) {
+						Util.showToast(VideoPlayerActivity.this, "播放出错，错误码："+what, Toast.LENGTH_LONG);
 						finish();
 					}
 					return false;
@@ -166,6 +189,36 @@ public class VideoPlayerActivity extends Activity {
 
 	}
 
+    private void startTimer() {
+        if (null == mTimer) {
+            mTimer = new Timer();
+            mTimer.schedule(new PlayTimerTask(), 0, 1000);
+        }
+    }
+    
+    private void stopTimer() {
+        if (null != mTimer) {
+            mTimer.cancel();
+            mTimer = null;
+        }
+    }
+
+    private class PlayTimerTask extends TimerTask {
+        @Override
+        public void run() {
+            if (mediaPlayer == null) {
+                return;
+            }
+            try {
+                if (mediaPlayer.isPlaying()) {
+                	mHandler.obtainMessage(SHOW_PROGRESS).sendToTarget();
+                }
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -183,8 +236,63 @@ public class VideoPlayerActivity extends Activity {
 
 		mSurfaceView = (SurfaceView) findViewById(R.id.play_surface_view);
 		mSurfaceView.getHolder().addCallback(callback);
+		
+        mScreenObserver = new ScreenObserver(this);
+        mScreenObserver.requestScreenStateUpdate(new ScreenStateListener() {
+            @Override
+            public void onScreenOn() {
+
+            }
+
+            @Override
+            public void onScreenOff() {
+                if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                	doPauseResume();
+                }
+            }
+        });
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		log.debug("onResume");
+		mScreenObserver.tryAndWaitWhileScreenLocked(this);
+	    mScreenObserver.keepScreenLightOn(this); //保持屏幕一直高亮
 	}
 
+	@Override
+	protected void onPause() {
+		super.onPause();
+		mScreenObserver.keepScreenLightOff();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mScreenObserver != null) {
+            mScreenObserver.stopScreenStateUpdate();
+            mScreenObserver = null;
+        }
+		stopTimer();
+		if (mediaPlayer != null) {
+			new Thread(new Runnable() {
+				
+				@Override
+				public void run() {
+					try {
+						mediaPlayer.stop();
+						mediaPlayer.release();
+						mediaPlayer = null;
+					} catch (IllegalStateException e) {
+						e.printStackTrace();
+					}
+				}
+			}).start();
+		}
+	
+	}
+	
 	private void initControllerView() {
 		control_layout = (LinearLayout) findViewById(R.id.control_layout);
 		loading_layout = (LinearLayout) findViewById(R.id.loading_layout);
@@ -277,11 +385,8 @@ public class VideoPlayerActivity extends Activity {
 		int percent = mCurrentBufferPercentage;
 		mSeekBar.setSecondaryProgress(percent * 10);
 
-		if (mEndTime != null)
-			mEndTime.setText(stringForTime(duration));
-		if (mCurrentTime != null)
-			mCurrentTime.setText(stringForTime(position));
-
+		mEndTime.setText(stringForTime(duration));
+		mCurrentTime.setText(stringForTime(position));
 		return position;
 	}
 
@@ -325,12 +430,29 @@ public class VideoPlayerActivity extends Activity {
 	}
 
 	private void doPauseResume() {
-		if (mediaPlayer.isPlaying()) {
-			mediaPlayer.pause();
+		if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+			pausePlayer();
 		} else {
-			mediaPlayer.start();
+			onResumePlayer();
 		}
 		updatePausePlay();
+	}
+	
+	private void pausePlayer(){
+		try {
+			if(mediaPlayer != null && mediaPlayer.isPlaying()){
+				mediaPlayer.pause();
+			}
+			stopTimer();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void onResumePlayer(){
+		log.debug("onResumePlayer");
+		mediaPlayer.start();
+		startTimer();
 	}
 
 	private OnSeekBarChangeListener mSeekListener = new OnSeekBarChangeListener() {
@@ -346,8 +468,7 @@ public class VideoPlayerActivity extends Activity {
 				return;
 			}
 			mediaPlayer.seekTo(progress);
-			if (mCurrentTime != null)
-				mCurrentTime.setText(stringForTime((int) progress));
+			mCurrentTime.setText(stringForTime((int) progress));
 		}
 
 		public void onStopTrackingTouch(SeekBar bar) {

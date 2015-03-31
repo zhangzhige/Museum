@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.waltz3d.museum"
     android:versionCode="1"
-    android:versionName="1.0.0.19" >
+    android:versionName="1.0.0.20" >
 
     <uses-sdk
         android:minSdkVersion="14" />
@@ -98,7 +98,8 @@
         <activity
             android:name="VideoPlayerActivity"
             android:screenOrientation="landscape"
-            android:theme="@style/PlayerTheme" >
+            android:theme="@style/PlayerTheme"
+            android:launchMode="singleTask" >
         </activity>
         <service
             android:name="com.baidu.location.f"

@@ -13,7 +13,7 @@ import de.mindpipe.android.logging.log4j.LogConfigurator;
 public class XL_Log {
     public static boolean isSDCanRead = false;//sd卡可读，由于其他地方调用，使用static
 
-    public static final boolean DEBUG = false;//是否打日志
+    public static final boolean DEBUG = true;//是否打日志
     
 	public static final String LOG_PATH = "Mesume/log/";
 
